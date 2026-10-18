@@ -1,0 +1,34 @@
+model: mlp
+seed: 42
+input: tabular
+data:
+  samples: data/processed/v1/samples.parquet
+  tabular: data/processed/v1/tabular.npz
+  sequences: data/processed/v1/sequences.npz
+  preprocess: data/processed/v1/preprocess.json
+output_dir: runs
+architecture:
+  input_size: 15
+  hidden_sizes: [64, 32]
+  output_size: 1
+  activation: relu
+  dropout: 0.2
+  output_bias: train_log_odds
+training:
+  optimizer: adamw
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss: bce_with_logits
+  pos_weight: 1.0
+  batch_size: 512
+  max_epochs: 50
+  patience: 8
+  gradient_clip_norm: null
+  device: cpu
+selection:
+  split: val
+  metric: average_precision
+threshold:
+  split: val
+  metric: f1
+  tie_break: largest

@@ -1,0 +1,41 @@
+model: tcn
+seed: 42
+input: sequences
+data:
+  samples: data/processed/v1/samples.parquet
+  tabular: data/processed/v1/tabular.npz
+  sequences: data/processed/v1/sequences.npz
+  preprocess: data/processed/v1/preprocess.json
+output_dir: runs
+architecture:
+  input_size: 16
+  window: 15
+  blocks: 3
+  convolutions_per_block: 2
+  channels: 32
+  kernel_size: 3
+  dilations: [1, 2, 4]
+  causal: true
+  residual: true
+  dropout: 0.1
+  head: last_step
+  output_size: 1
+  output_bias: train_log_odds
+training:
+  optimizer: adamw
+  learning_rate: 0.002
+  weight_decay: 0.0001
+  loss: bce_with_logits
+  pos_weight: 1.0
+  batch_size: 256
+  max_epochs: 40
+  patience: 8
+  gradient_clip_norm: null
+  device: cpu
+selection:
+  split: val
+  metric: average_precision
+threshold:
+  split: val
+  metric: f1
+  tie_break: largest

@@ -1,0 +1,34 @@
+seed: 42
+seasons: [2022, 2023, 2024, 2025]
+session: R
+window: 15
+paths:
+  raw: data/raw
+  processed: data/processed/v1
+  cache: data/cache
+  data_manifest: manifests/data.json
+  splits: manifests/splits.json
+splits:
+  train:
+    seasons: [2022, 2023, 2024]
+  val:
+    season: 2025
+    rounds: [1, 12]
+  test:
+    season: 2025
+    rounds: [13, 24]
+cleaning:
+  max_feature_gap: 3
+  max_missing_compound_or_tyre_life_fraction: 0.10
+  exclude_compounds: [INTERMEDIATE, WET]
+  exclude_track_status: "5"
+special_tyre_rules:
+  - season: 2023
+    event_name: Qatar Grand Prix
+    rule: At most 18 laps per tyre set.
+  - season: 2025
+    event_name: Monaco Grand Prix
+    rule: At least three tyre sets.
+  - season: 2025
+    event_name: Qatar Grand Prix
+    rule: At most 25 laps per tyre set.

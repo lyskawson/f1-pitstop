@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "f1-pitstop"
+version = "0.1.0"
+description = "Predict next-lap F1 tyre stops using information available at lap end."
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "fastf1>=3.8.3,<3.9",
+    "pandas",
+    "numpy",
+    "pyarrow",
+    "pyyaml",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+train = ["torch>=2,<3", "lightgbm"]
+
+[project.scripts]
+pitstop = "pitstop.cli:main"
+
+[dependency-groups]
+dev = ["pytest", "pytest-socket", "ruff"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pitstop"]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--disable-socket --allow-unix-socket"
