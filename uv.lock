@@ -238,7 +238,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "fastf1", specifier = ">=3.8.3,<3.9" },
+    { name = "fastf1", specifier = ">=3.9.0a0,<3.10" },
     { name = "lightgbm", marker = "extra == 'train'" },
     { name = "numpy" },
     { name = "pandas" },
@@ -258,7 +258,7 @@ dev = [
 
 [[package]]
 name = "fastf1"
-version = "3.8.3"
+version = "3.9.0a0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
@@ -272,14 +272,15 @@ dependencies = [
     { name = "rapidfuzz" },
     { name = "requests" },
     { name = "requests-cache" },
+    { name = "requests-oauthlib" },
     { name = "scipy" },
     { name = "signalrcore" },
     { name = "timple" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f9/8f/3281f9add386bcd7f20f2f487917d5dc2422ec32581b22ec42a5a5c8a670/fastf1-3.8.3.tar.gz", hash = "sha256:9277e1a759debfcf63e65c248b9d440c561724147512fd5e95115dd8a71ac350", size = 137053, upload-time = "2026-04-29T21:24:04.164Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/31/63/e187b5ef79f2a65107590273afde92bd49f9a0302ee6904cf9cf62b3ac28/fastf1-3.9.0a0.tar.gz", hash = "sha256:65234b0d7bd60f89f2c26e953c654069eae904dc2990efbeb8cb4eed48ad61f3", size = 147895, upload-time = "2026-10-18T21:14:35.995Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0e/7b/fd211595db7d433c7180184559e5c1aad5621a964fc1c8724218fa3690d5/fastf1-3.8.3-py3-none-any.whl", hash = "sha256:e3270f6d60838662dd3e15cf6236519228a7fcfcc009f5edb195798769c845ad", size = 135960, upload-time = "2026-04-29T21:24:01.912Z" },
+    { url = "https://files.pythonhosted.org/packages/43/4f/56b8bbb42104b4b3eb1915c86b06af4dfb79edac24108b0827ef3fbe38a0/fastf1-3.9.0a0-py3-none-any.whl", hash = "sha256:aeaf70bb986a08648254f531523ecb3dbf33895ecbb89b0674741072fb98a2ab", size = 150785, upload-time = "2026-10-18T21:14:34.615Z" },
 ]
 
 [[package]]
@@ -513,6 +514,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/6f/c9/47094f597015009f310b8c900def59065ef1ff5a6fe7b51fc65ec58ec2c6/numpy-2.5.4-cp312-cp312-win32.whl", hash = "sha256:9968ab7e49b93ac6e1c3b2239732183152c9150f16308d30b66a372cffe3483c", size = 6138936, upload-time = "2026-10-10T20:03:01.626Z" },
     { url = "https://files.pythonhosted.org/packages/12/33/fefe62073dc8acfd0f2b9ed7c003af2f50aa61555e113e6db02b8f79f145/numpy-2.5.4-cp312-cp312-win_amd64.whl", hash = "sha256:a7b1b6353e36a7e50de2973a38d705c88ee93adcf120673cee7f45a4a3fa223a", size = 12573091, upload-time = "2026-10-10T20:03:04.349Z" },
     { url = "https://files.pythonhosted.org/packages/1a/07/161270b0c2eec56e4c905f6d6d22e1b836887b2cb189d3f5820aa588e9dd/numpy-2.5.4-cp312-cp312-win_arm64.whl", hash = "sha256:aa1cce2ff3f8d953de38b76bf44602caeb69f101430208f64a10067f7cb4b1d3", size = 10521630, upload-time = "2026-10-10T20:03:06.767Z" },
+]
+
+[[package]]
+name = "oauthlib"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/7a/d8/a1bcc8ba112a627f8ffbdc212a78ce18d3ac07e91a5ca65d27918eee25a1/oauthlib-4.0.0.tar.gz", hash = "sha256:efb274799819440f95b4ab3b818869f1ce9ae26c5beacba0201d1a1b76b54f86", size = 187232, upload-time = "2026-09-28T06:01:18.77Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d9/f4/78229a1066068ca14fc60fb26cf7381cabe4382261392b90e5f9552722d4/oauthlib-4.0.0-py3-none-any.whl", hash = "sha256:624c28c13a0a59cabf9747dfa52af63be3e512a7f2714df16e91b5b3a145e6cd", size = 159715, upload-time = "2026-09-28T06:01:17.008Z" },
 ]
 
 [[package]]
@@ -801,6 +811,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/32/ab/a340c7f529646f16e5656a8ba1424ed0de406203e4554868491786628730/requests_cache-1.3.3.tar.gz", hash = "sha256:79b72d5ac5143992d1836ad78f4d8e65666061dd44e220548caab3723089826b", size = 101179, upload-time = "2026-07-03T19:48:57.963Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a5/bf/c1775e49b350225bd851576ba75263bc728d8f05c0e31439a45f3429cc7b/requests_cache-1.3.3-py3-none-any.whl", hash = "sha256:c8df20ff874ebfc026959e3874e6c12bd6724934cdb10925915908453d4b17e4", size = 70788, upload-time = "2026-07-03T19:48:56.693Z" },
+]
+
+[[package]]
+name = "requests-oauthlib"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "oauthlib" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/42/f2/05f29bc3913aea15eb670be136045bf5c5bbf4b99ecb839da9b422bb2c85/requests-oauthlib-2.0.0.tar.gz", hash = "sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9", size = 55650, upload-time = "2024-03-22T20:32:29.939Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl", hash = "sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36", size = 24179, upload-time = "2024-03-22T20:32:28.055Z" },
 ]
 
 [[package]]
