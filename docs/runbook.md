@@ -42,6 +42,16 @@ Only a human runs download. Training/model selection and threshold selection
 use train/val only. Test evaluation remains locked until explicit human approval
 after configurations are frozen. Export the test demo only after that approval.
 
+### FastF1 authentication
+
+Only the human downloading data needs their own F1 TV Access (or higher) account
+and logs in locally. See the [FastF1 authentication documentation](https://docs.fastf1.dev/versions/dev/api_reference/accounts_auth.html);
+exact login steps will be confirmed in T0. Tokens stay in the user's FastF1 data
+directory. Never commit or paste tokens or credentials, or put them in CI, configs
+or agent prompts. Tests and CI never need them.
+
+Keep `data/cache/` after the download so later runs work offline.
+
 ## Later tasks
 
 - T0: check FastF1 stint behavior on drive-throughs and total_laps on shortened

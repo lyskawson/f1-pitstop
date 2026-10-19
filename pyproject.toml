@@ -9,7 +9,7 @@ description = "Predict next-lap F1 tyre stops using information available at lap
 readme = "README.md"
 requires-python = "==3.12.*"
 dependencies = [
-    "fastf1>=3.8.3,<3.9",
+    "fastf1>=3.9.0a0,<3.10",
     "pandas",
     "numpy",
     "pyarrow",
