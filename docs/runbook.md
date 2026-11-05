@@ -45,8 +45,38 @@ after configurations are frozen. Export the test demo only after that approval.
 ### FastF1 authentication
 
 Only the human downloading data needs their own F1 TV Access (or higher) account
-and logs in locally. See the [FastF1 authentication documentation](https://docs.fastf1.dev/versions/dev/api_reference/accounts_auth.html);
-exact login steps will be confirmed in T0. Tokens stay in the user's FastF1 data
+and logs in locally. See the [FastF1 authentication documentation](https://docs.fastf1.dev/versions/dev/api_reference/accounts_auth.html).
+The human runs these commands locally (agents never run authentication):
+
+```sh
+uv run python -m fastf1 auth f1tv --authenticate
+uv run python -m fastf1 auth f1tv --status
+uv run python notebooks/t0_fastf1_spike.py download
+```
+
+To remove the local login when it is no longer needed:
+
+```sh
+uv run python -m fastf1 auth f1tv --clear
+```
+
+The download can be interrupted and rerun; successful requests are cached. It
+loads Race sessions only, including race-control messages and Jolpica pit stops,
+without telemetry or weather. Rate limits cause a wait and retry. Per-race
+successes and errors are recorded in `data/t0/download_log.json`.
+
+After the human confirms completion, run the cache-only analysis:
+
+```sh
+uv run python notebooks/t0_fastf1_spike.py analyze
+```
+
+This writes evidence to `data/t0/summary.json` and exports two dry races without
+red flags to `tests/fixtures/raw/`. It blocks network connections and returns a
+nonzero status for missing sources or incomplete coverage. Review penalty
+message context before concluding whether a pit-lane pass changed Stint.
+
+Tokens stay in the user's FastF1 data
 directory. Never commit or paste tokens or credentials, or put them in CI, configs
 or agent prompts. Tests and CI never need them.
 
