@@ -163,7 +163,7 @@ Key K = (race_id: str `YYYY_RR_R`, driver_number: str, lap_number: int). Times a
 ## D10 — Environment
 
 - Python 3.12, uv, `pyproject.toml` and a committed `uv.lock`. Install: `uv sync --locked` (extra `train` for torch and lightgbm).
-- `fastf1>=3.8.3,<3.9`; PyTorch CPU build as reference.
+- `fastf1>=3.9.0a0,<3.10` (pre-release; the first version that supports the archive's F1 TV authentication); PyTorch CPU build as reference.
 - ruff (lint and format) and pytest.
 - GitHub Actions on every PR: `ruff check`, `ruff format --check`, pytest on fixtures and a short training run on fixtures. No network in CI.
 - Experiment tracking: JSON per run plus `reports/results.csv`. No MLflow, W&B or DVC.
@@ -185,6 +185,7 @@ Key K = (race_id: str `YYYY_RR_R`, driver_number: str, lap_number: int). Times a
 - One short branch per task; PR to a protected `main`; squash merge; green CI and review by a human team member. The only exception is T1, which creates the repository with an initial commit on `main`.
 - The reviewer re-runs the acceptance command. Agent reports are not evidence.
 - FastF1 data is downloaded by a human on a local machine (`pitstop download`) and shared as a versioned archive (GitHub Release or shared drive). The manifest with SHA-256 is committed.
+- Downloading FastF1 data needs the downloader's own F1 TV Access (or higher) account; the downloader logs in locally. The token stays in the user's FastF1 data directory and never goes into the repository, CI, configs or agent prompts; tests and CI never need it.
 - The test split stays locked until a human approves its evaluation (D4).
 
 ## Leakage rules (enforced by tests)
@@ -204,3 +205,4 @@ Key K = (race_id: str `YYYY_RR_R`, driver_number: str, lap_number: int). Times a
 ## Change log
 
 - 2026-10-19: v1 accepted.
+- 2026-10-19: D10 — FastF1 pin changed from >=3.8.3,<3.9 to >=3.9.0a0,<3.10 because the F1 live-timing archive requires F1 TV authentication since about 2026-10-15 (theOehrly/Fast-F1#978); 3.9.0a0 is the first version that supports it. D12 — the data downloader needs an F1 TV Access account. Statements verified against FastF1 3.8.3 (status line, D2, Leakage rule 5) are re-checked on 3.9 in T0. Approved by a human team member.
