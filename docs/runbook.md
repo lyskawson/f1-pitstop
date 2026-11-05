@@ -61,9 +61,17 @@ uv run python -m fastf1 auth f1tv --clear
 ```
 
 The download can be interrupted and rerun; successful requests are cached. It
-loads Race sessions only, including race-control messages and Jolpica pit stops,
-without telemetry or weather. Rate limits cause a wait and retry. Per-race
-successes and errors are recorded in `data/t0/download_log.json`.
+loads Race sessions only, including race-control messages, weather and Jolpica pit
+stops, without telemetry. Weather is cached for later exploration only and is not
+used as a feature or added to the raw-laps fixtures. Rerun download to add weather
+to races cached before this option was enabled.
+
+Rate limits cause a wait and retry. Other schedule failures are retried up to
+three times, with waits of 60 and 120 seconds. Per-race successes and errors are
+recorded in `data/t0/download_log.json`. The final log includes `missing_seasons`
+and `complete`; any missing season, empty schedule or failed race produces a
+clear error and a nonzero exit status. Rerunning retries all requested seasons,
+including previously failed schedules, while reusing cached data.
 
 After the human confirms completion, run the cache-only analysis:
 

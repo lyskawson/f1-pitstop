@@ -21,6 +21,7 @@ OUTPUT = ROOT / "data/t0"
 SPECIAL = {"2023_18_R", "2025_08_R", "2025_23_R"}
 RED_EXAMPLES = {"2022_10_R", "2023_03_R", "2024_08_R"}
 RATE_LIMIT_WORDS = ("rate limit", "ratelimit", "429", "too many requests")
+SEASONS = (2022, 2023, 2024, 2025)
 
 
 def write_json(path, value):
@@ -90,15 +91,38 @@ def pit_stops(year, round_number):
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
+def load_schedule(year, online):
+    """Retry transient schedule failures; offline analysis never waits or downloads."""
+    attempts = 3 if online else 1
+    for attempt in range(1, attempts + 1):
+        try:
+            schedule = retry(
+                lambda: fastf1.get_event_schedule(year, include_testing=False, backend="fastf1"),
+                online,
+            )
+            if schedule.empty or not schedule.RoundNumber.gt(0).all():
+                raise ValueError("Empty or invalid race schedule")
+            return schedule
+        except Exception as exc:
+            print(f"Season {year}: schedule attempt {attempt}/{attempts} failed: {exc}", flush=True)
+            if attempt == attempts:
+                raise
+            delay = 60 * attempt
+            print(f"Retrying season {year} schedule in {delay} seconds.", flush=True)
+            time.sleep(delay)
+
+
 def load_race(event, year):
     session = event.get_session("R")
-    session.load(laps=True, messages=True, telemetry=False, weather=False)
+    session.load(laps=True, messages=True, telemetry=False, weather=True)
     if session.laps.empty:
         raise ValueError("No laps loaded")
     # Access each required source: Session.load can suppress individual failures.
     messages = session.race_control_messages
     if messages.empty:
         raise ValueError("No race-control messages loaded")
+    if session.weather_data.empty:
+        raise ValueError("No weather data loaded")
     counts = pd.DataFrame(_api.lap_count(session.api_path))
     if counts.empty or counts.TotalLaps.dropna().empty:
         raise ValueError("No total-lap announcements loaded")
@@ -289,14 +313,9 @@ def run(online):
         "special_tyre_rule_race_ids": sorted(SPECIAL),
     }
     fixture_laps = []
-    for year in range(2022, 2026):
+    for year in SEASONS:
         try:
-            schedule = retry(
-                lambda y=year: fastf1.get_event_schedule(
-                    y, include_testing=False, backend="fastf1"
-                ),
-                online,
-            )
+            schedule = load_schedule(year, online)
         except Exception as exc:
             error = {"season": year, "error": f"{type(exc).__name__}: {exc}"}
             log["schedule_errors"].append(error)
@@ -337,7 +356,20 @@ def run(online):
                 log if online else summary,
             )
     if online:
-        return int(bool(log["schedule_errors"] or any(r["status"] != "ok" for r in log["races"])))
+        log["seasons_requested"] = list(SEASONS)
+        log["missing_seasons"] = [error["season"] for error in log["schedule_errors"]]
+        failed = [r["race_id"] for r in log["races"] if r["status"] != "ok"]
+        log["complete"] = not log["missing_seasons"] and not failed
+        write_json(OUTPUT / "download_log.json", log)
+        if log["missing_seasons"]:
+            print(f"ERROR: missing season schedules: {log['missing_seasons']}", flush=True)
+        if failed:
+            print(f"ERROR: incomplete races: {', '.join(failed)}", flush=True)
+        print(
+            "Download complete." if log["complete"] else "Download INCOMPLETE; rerun download.",
+            flush=True,
+        )
+        return int(not log["complete"])
     summary["coverage"] = {
         "loaded": len(summary["races"]),
         "failed": len(summary["errors"]),
