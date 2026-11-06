@@ -3,6 +3,7 @@
 import argparse
 import json
 import logging
+import re
 import socket
 import time
 from datetime import UTC, datetime
@@ -177,6 +178,22 @@ def audit(session, messages, counts, stops, drivers, race_id):
     announcements = counts.copy()
     announcements["Time"] = pd.to_timedelta(announcements.Time).dt.total_seconds()
     announced = counts.TotalLaps.dropna().astype(int)
+    timed = original[
+        [
+            "DriverNumber",
+            "LapNumber",
+            "LapStartTime",
+            "Time",
+            "PitInTime",
+            "PitOutTime",
+            "Stint",
+            "Compound",
+            "FastF1Generated",
+        ]
+    ].copy()
+    timed["LapNumber"] = timed.LapNumber.astype("int64")
+    for name in ("LapStartTime", "Time", "PitInTime", "PitOutTime"):
+        timed[name] = timed[name].dt.total_seconds()
     # Validate pit timestamps against the lap interval, without filtering any rows.
     boundaries = {}
     for column in ("PitInTime", "PitOutTime"):
@@ -188,33 +205,41 @@ def audit(session, messages, counts, stops, drivers, race_id):
         boundaries[column] = {
             "marked": int(marked.sum()),
             "unverifiable": int((marked & ~known).sum()),
-            "outside_lap": records(original.loc[outside, ["DriverNumber", "LapNumber", column]]),
-            "examples": records(
-                original.loc[known].head(3)[
-                    ["DriverNumber", "LapNumber", "LapStartTime", "Time", column]
-                ]
-            ),
+            "outside_lap": records(timed.loc[outside]),
+            "examples": records(timed.loc[known].head(3)),
         }
     penalty_messages = messages.loc[
         messages.Message.str.contains(
-            r"DRIVE[ -]?THROUGH|STOP[ -]?AND[ -]?GO", case=False, na=False
+            r"DRIVE[ -]?THROUGH|STOP[ /-]*(?:AND[ /-]*)?GO", case=False, na=False
         )
     ]
     penalties = []
     for message in records(penalty_messages):
         driver = message.get("RacingNumber")
+        if not driver:
+            car = re.search(r"\bCAR\s+(\d+)\b", message["Message"])
+            driver = car.group(1) if car else None
         lap = message.get("Lap")
         # Message times are UTC while raw lap times are session seconds.
         # Use the explicit message lap; do not guess which stop served a penalty.
         penalties.append(
             {
                 "message": message,
+                "driver_number": driver,
                 "context": lap_context(laps, driver, lap, radius=5) if driver and lap else [],
+                # Served messages may arrive much later than the actual pass.
+                "all_pit_passes": [
+                    lap_context(laps, driver, int(number), radius=1)
+                    for number in laps.loc[
+                        laps.DriverNumber.eq(driver) & laps.PitInTime.notna(), "LapNumber"
+                    ]
+                ],
                 "interpretation": "Review issuance/served wording and surrounding stops manually",
             }
         )
     accuracy = {}
     previous_status = original.groupby("DriverNumber").TrackStatus.shift(1)
+    accuracy_laps = original.assign(PreviousTrackStatus=previous_status)
     for name, mask in {
         "in_laps": original.PitInTime.notna(),
         "out_laps": original.PitOutTime.notna(),
@@ -227,9 +252,15 @@ def audit(session, messages, counts, stops, drivers, race_id):
             "observations": int(mask.sum()),
             "accurate": int((mask & original.IsAccurate).sum()),
             "counterexamples": records(
-                original.loc[
+                accuracy_laps.loc[
                     mask & original.IsAccurate,
-                    ["DriverNumber", "LapNumber", "TrackStatus", "IsAccurate"],
+                    [
+                        "DriverNumber",
+                        "LapNumber",
+                        "TrackStatus",
+                        "PreviousTrackStatus",
+                        "IsAccurate",
+                    ],
                 ]
             ),
         }
@@ -241,7 +272,10 @@ def audit(session, messages, counts, stops, drivers, race_id):
             following = by_lap.loc[row.LapNumber + 1] if row.LapNumber + 1 in by_lap.index else None
             if following is not None and following.Stint > row.Stint:
                 changes.append({"DriverNumber": driver, "lap": row.LapNumber})
-    mapping = dict(zip(drivers.driverId, drivers.driverNumber.astype(str), strict=True))
+    # Jolpica permanent numbers can reflect a later season. Use the historical
+    # number from this race's laps, joined by driver code, never session.results.
+    numbers = dict(zip(original.Driver, original.DriverNumber, strict=True))
+    mapping = {row.driverId: numbers.get(row.driverCode) for row in drivers.itertuples()}
     unmatched = list(range(len(changes)))
     matched = []
     missing = []
@@ -268,10 +302,23 @@ def audit(session, messages, counts, stops, drivers, race_id):
         "event": event,
         "exclusion_reasons": reasons,
         "lap_rows": len(laps),
+        "weather_rows": len(session.weather_data),
+        "driver_coverage": [
+            {
+                "driver_number": driver,
+                "rows": len(group),
+                "first_lap": int(group.LapNumber.min()),
+                "last_lap": int(group.LapNumber.max()),
+                "missing": {name: int(value) for name, value in group.isna().sum().items()},
+            }
+            for driver, group in laps.groupby("DriverNumber")
+        ],
         "a_pit_boundaries": boundaries,
         "b_penalties": penalties,
         "c_total_laps": {
             "loader": event["total_laps"],
+            "maximum_recorded_lap": int(laps.LapNumber.max()),
+            "loader_matches_last_nonnull": event["total_laps"] == int(announced.iloc[-1]),
             "changes": announced.nunique() > 1,
             "announcements": records(announcements),
         },
@@ -289,6 +336,20 @@ def audit(session, messages, counts, stops, drivers, race_id):
             "pairs": matched,
             "unmatched_jolpica": missing,
             "unmatched_fastf1": [changes[i] for i in unmatched],
+            "unmapped_driver_ids": sorted(
+                {s["driverId"] for s in records(stops) if mapping.get(s["driverId"]) is None}
+            ),
+            "per_driver": [
+                {
+                    "driver_number": driver,
+                    "fastf1_changes": sum(c["DriverNumber"] == driver for c in changes),
+                    "jolpica_stops": sum(
+                        mapping.get(s["driverId"]) == driver for s in records(stops)
+                    ),
+                    "matched": sum(p["fastf1"]["DriverNumber"] == driver for p in matched),
+                }
+                for driver in sorted(laps.DriverNumber.unique())
+            ],
         },
         "g_accuracy": accuracy,
         "FastF1Generated_exists": "FastF1Generated" in original,

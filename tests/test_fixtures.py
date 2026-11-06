@@ -1,4 +1,4 @@
-"""Offline checks for the T0 acquisition script; race fixture checks follow export."""
+"""Offline checks for T0 acquisition, evidence and the two real race fixtures."""
 
 import importlib.util
 import json
@@ -8,6 +8,31 @@ from unittest.mock import Mock
 
 import pandas as pd
 import pytest
+
+from pitstop.contracts import RAW_LAPS_DTYPES, validate_raw_laps
+
+FIXTURES = Path(__file__).resolve().parent / "fixtures/raw"
+
+
+def test_real_fixtures_follow_raw_contract_and_exclusion_rules():
+    laps = pd.read_parquet(FIXTURES / "laps.parquet")
+    events = json.loads((FIXTURES / "events.json").read_text())
+    validate_raw_laps(laps)
+    assert set(laps.columns) == set(RAW_LAPS_DTYPES)
+    assert set(laps.race_id) == {event["race_id"] for event in events} == {"2022_01_R", "2022_02_R"}
+    assert len(events) == 2
+    assert not laps.Compound.isin(["INTERMEDIATE", "WET"]).any()
+    assert not laps.TrackStatus.str.contains("5", na=False).any()
+    for event in events:
+        assert event["session"] == "R"
+        assert event["season"] == 2022
+        assert event["round_number"] == int(event["race_id"][5:7])
+        assert isinstance(event["total_laps"], int) and event["total_laps"] > 0
+        assert event["total_laps_source"]
+        assert isinstance(event["special_tyre_rule"], bool)
+        race = laps.loc[laps.race_id.eq(event["race_id"])]
+        assert race.LapNumber.max() == event["total_laps"]
+        assert race.PitInTime.notna().any() and race.PitOutTime.notna().any()
 
 
 @pytest.fixture
@@ -94,3 +119,48 @@ def test_weather_is_requested_and_required(spike, monkeypatch, has_weather):
         with pytest.raises(ValueError, match="No weather data loaded"):
             spike.load_race(event, 2024)
     session.load.assert_called_once_with(laps=True, messages=True, telemetry=False, weather=True)
+
+
+def test_audit_uses_historical_numbers_and_finds_stop_go_messages(spike):
+    laps = pd.DataFrame(
+        {
+            "race_id": ["2022_01_R"] * 3,
+            "DriverNumber": ["1"] * 3,
+            "LapNumber": [1, 2, 3],
+            "Time": [100.0, 200.0, 300.0],
+            "LapTime": [100.0] * 3,
+            "PitInTime": [None, 190.0, None],
+            "PitOutTime": [None, None, 210.0],
+            "Stint": [1.0, 1.0, 2.0],
+            "Compound": ["HARD"] * 3,
+            "TyreLife": [1.0, 2.0, 3.0],
+            "Position": [1.0] * 3,
+            "TrackStatus": ["1"] * 3,
+            "IsAccurate": [True, False, False],
+            "FastF1Generated": [False] * 3,
+        }
+    ).astype(RAW_LAPS_DTYPES)
+    for name in ("Time", "LapTime", "PitInTime", "PitOutTime"):
+        laps[name] = pd.to_timedelta(laps[name], unit="s")
+    laps["Driver"] = "VER"
+    laps["LapStartTime"] = pd.to_timedelta([0, 100, 200], unit="s")
+    session = SimpleNamespace(
+        laps=laps,
+        total_laps=3,
+        event=SimpleNamespace(RoundNumber=1, EventName="Test race"),
+        weather_data=pd.DataFrame({"AirTemp": [20.0]}),
+    )
+    messages = pd.DataFrame(
+        {"Message": ["10 SECOND STOP/GO PENALTY FOR CAR 1"], "Lap": [2], "RacingNumber": [None]}
+    )
+    counts = pd.DataFrame({"Time": pd.to_timedelta([0], unit="s"), "TotalLaps": [3]})
+    stops = pd.DataFrame({"driverId": ["max_verstappen"], "lap": [2]})
+    drivers = pd.DataFrame(
+        {"driverId": ["max_verstappen"], "driverCode": ["VER"], "driverNumber": [3.0]}
+    )
+    evidence, _ = spike.audit(session, messages, counts, stops, drivers, "2022_01_R")
+    assert evidence["e_pit_matches"]["matched"] == 1
+    assert evidence["e_pit_matches"]["unmapped_driver_ids"] == []
+    penalty = evidence["b_penalties"][0]
+    assert penalty["driver_number"] == "1"
+    assert penalty["context"] and penalty["all_pit_passes"]

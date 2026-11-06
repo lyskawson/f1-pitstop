@@ -84,6 +84,12 @@ red flags to `tests/fixtures/raw/`. It blocks network connections and returns a
 nonzero status for missing sources or incomplete coverage. Review penalty
 message context before concluding whether a pit-lane pass changed Stint.
 
+Read [the T0 findings](fastf1-findings.md) before implementing labels or features.
+The audit contradicts the assumption that Stint increases identify tyre changes
+without exception. It also finds changing planned lap counts and a narrower
+post-SC accuracy mask than the decisions describe. Human decisions and a
+dedicated contract change are needed before implementing the affected rules.
+
 Tokens stay in the user's FastF1 data
 directory. Never commit or paste tokens or credentials, or put them in CI, configs
 or agent prompts. Tests and CI never need them.
