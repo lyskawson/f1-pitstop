@@ -121,7 +121,8 @@ def test_weather_is_requested_and_required(spike, monkeypatch, has_weather):
     session.load.assert_called_once_with(laps=True, messages=True, telemetry=False, weather=True)
 
 
-def test_audit_uses_historical_numbers_and_finds_stop_go_messages(spike):
+@pytest.fixture
+def synthetic_race():
     laps = pd.DataFrame(
         {
             "race_id": ["2022_01_R"] * 3,
@@ -158,9 +159,36 @@ def test_audit_uses_historical_numbers_and_finds_stop_go_messages(spike):
     drivers = pd.DataFrame(
         {"driverId": ["max_verstappen"], "driverCode": ["VER"], "driverNumber": [3.0]}
     )
-    evidence, _ = spike.audit(session, messages, counts, stops, drivers, "2022_01_R")
+    return session, messages, counts, stops, drivers
+
+
+def test_audit_uses_historical_numbers_and_finds_stop_go_messages(spike, synthetic_race):
+    evidence, _ = spike.audit(*synthetic_race, "2022_01_R")
     assert evidence["e_pit_matches"]["matched"] == 1
     assert evidence["e_pit_matches"]["unmapped_driver_ids"] == []
     penalty = evidence["b_penalties"][0]
     assert penalty["driver_number"] == "1"
     assert penalty["context"] and penalty["all_pit_passes"]
+
+
+@pytest.mark.parametrize("field,valid", [("Compound", "HARD"), ("TrackStatus", "145")])
+@pytest.mark.parametrize("missing", ["nan", "None", None, float("nan"), pd.NA])
+def test_adapter_and_coverage_normalize_text_nulls(spike, synthetic_race, field, valid, missing):
+    session, messages, counts, stops, drivers = synthetic_race
+    session.laps.loc[2, "FastF1Generated"] = True
+    expected = spike.raw_laps(session, "2022_01_R")
+    session.laps[field] = pd.Series([missing, valid, "None"], dtype=object)
+    source = session.laps.copy(deep=True)
+
+    evidence, normalized = spike.audit(session, messages, counts, stops, drivers, "2022_01_R")
+
+    assert normalized[field].isna().tolist() == [True, False, True]
+    assert normalized.loc[1, field] == valid
+    assert not normalized[field].isin(["nan", "None"]).any()
+    assert evidence["driver_coverage"][0]["missing"][field] == 2
+    assert evidence["driver_coverage"][0]["rows"] == len(source)
+    assert evidence["c_total_laps"]["maximum_recorded_lap"] == 3
+    assert evidence["c_total_laps"]["maximum_non_generated_lap"] == 2
+    # Preserve every other measurement, raw key, generated flag and pit marker.
+    pd.testing.assert_frame_equal(normalized.drop(columns=field), expected.drop(columns=field))
+    pd.testing.assert_frame_equal(session.laps, source)

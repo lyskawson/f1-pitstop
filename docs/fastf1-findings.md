@@ -17,7 +17,7 @@ below. Decisions and contracts have not been edited.
 | --- | --- | --- | --- |
 | a | PitInTime marks the in-lap and PitOutTime the out-lap. | Yes for row association; no strict timestamp-containment guarantee. | `a_pit_boundaries`: 3,469 in-lap markers and 3,467 out-lap markers. No marked row lacks timing bounds. All out-lap timestamps lie inside their lap; 97 in-lap timestamps exceed the recorded lap end. For example, `2023_13_R`, driver `1`, lap 2: PitInTime 3925.519 s, lap end 3924.644 s. The following lap carries PitOutTime. Keep the raw association; do not move markers to another row merely to enforce timestamp containment. |
 | b | Stint stays unchanged on drive-through and stop/go penalties. | **No.** | `b_penalties`: `2022_08_R`, driver `6`, laps 3–4; `2024_23_R`, driver `4`, laps 45–46 and driver `44`, laps 47–48; `2025_20_R`, driver `55`, laps 56–57. Stint increases despite continuing Compound and TyreLife at the penalty pass. In contrast, `2025_08_R`, driver `63`, laps 62–63 preserves Stint. See the detailed table below. |
-| c | The loader uses the last non-null total_laps; is that safe at every earlier lap? | Yes to last-non-null; **no** to a constant count across all races. | `c_total_laps`: every loaded race agrees with the last non-null announcement. Japan `2022_18_R` reports 53 planned laps while the maximum recorded lap is 28; its only non-null announcement is 53. Other races change their planned count, including retained races `2023_14_R` and `2025_11_R`. Preserve timestamped announcements before using laps_remaining. |
+| c | The loader uses the last non-null total_laps; is that safe at every earlier lap? | Yes to last-non-null; **no** to a constant count across all races. | `c_total_laps`: every loaded race agrees with the last non-null announcement. Japan `2022_18_R` reports 53 planned laps, a raw maximum of 29 and a non-generated maximum of 28; its only non-null announcement is 53. Other races change their planned count, including retained races `2023_14_R` and `2025_11_R`. Their last announcements precede all recorded lap ends, so those two cases establish mutable metadata, not an observed future-count leak into those samples. |
 | d | Red-flag interruptions remain visible in laps and TrackStatus. | Yes. | `d_red_flags.lap_context`: `2022_10_R`, driver `1`, lap 1 has `125`, followed by lap 2 with `1`; `2023_03_R`, driver `1`, laps 8, 55 and 57 contain `5`; `2024_08_R`, driver `1`, lap 1 has `1254`, followed by lap 2 with `14`. Restart gaps and pit markers remain in the raw rows. These whole races are excluded. |
 | e | The D2 Stint-increase proxy equals every Jolpica pit stop within ±1 lap. | No exact equality. | `e_pit_matches`: 3,339 proxy events; 3,363 Jolpica stops; 3,339 one-to-one matches, or 99.286% of Jolpica stops. Every proxy event matches, with 24 Jolpica-only stops. This measures agreement of recorded visits, not proof of tyre changes: penalties also appear in both sources. Per-driver counts, matched pairs and every mismatch are retained. |
 | f | Wet/red races and special tyre rule races can be identified. | Yes. | `exclusion_reasons` identifies 18 whole-race exclusions, listed below. `special_tyre_rule_race_ids` identifies `2023_18_R`, `2025_08_R`, `2025_23_R`; a special rule is a flag, not an exclusion. |
@@ -72,7 +72,25 @@ timestamps and current-lap values remain in `c_total_laps.announcements`.
 | 2025_11_R | 71 → 70 |
 
 Japan shows why the reported planned count must also be distinguished from
-completed laps. Do not replace planned counts with a final observed lap maximum.
+raw and non-generated lap maxima. In its `c_total_laps` evidence,
+`maximum_recorded_lap` is 29 over all raw rows and
+`maximum_non_generated_lap` is 28 over rows with `FastF1Generated == False`.
+Driver `1`, lap 29, is a generated raw row at Time 14809.835 s and is preserved.
+Neither maximum may silently replace the planned count of 53.
+
+The temporal qualification matters for the retained races:
+
+| race_id | Last non-null announcement Time | Earliest recorded lap-end Time |
+| --- | --- | --- |
+| 2023_14_R | 4411.732 s | 5028.992 s |
+| 2025_11_R | 3485.191 s | 4357.412 s |
+
+Selectors: the last `c_total_laps.announcements` item with non-null `TotalLaps`,
+and `c_total_laps.earliest_recorded_lap_end`. A final count would be future
+information at a cutoff before its announcement, but that condition is not
+observed among these two races' recorded lap-end samples. The timestamped
+payload and pre-first-announcement policy remain unresolved; no new policy is
+approved by this audit.
 
 ## Jolpica-only stops
 
@@ -92,12 +110,50 @@ correction is inferred from this table.
 | 2025_08_R | 63: 62 |
 | 2025_15_R | 16: 52 |
 
-Miami `2025_06_R` has missing Stint and TyreLife values recorded in
+Miami `2025_06_R` has missing Compound, Stint and TyreLife values recorded in
 `driver_coverage`, so a successful session load is not a guarantee of usable
-labels. Russell's unmatched Monaco visit is the unchanged-Stint penalty pass
+labels. After correcting the adapter's textual-null handling, Miami has 354
+genuine Compound nulls. Driver `4` has 24 of them on laps 1–24 of 57, alongside
+24 missing Stint and TyreLife values. At the unmatched stop on laps 29–30,
+however, Stint is non-null and stays 1 → 1, Compound stays MEDIUM and TyreLife
+increases 5 → 6. The record is incomplete; a null comparison at that particular
+stop is not an established cause of its mismatch. Unknown tyre histories remain
+unknown and have not been turned into labels.
+
+Russell's unmatched Monaco visit is the unchanged-Stint penalty pass
 shown above. Remaining discrepancies need ingestion-level review of retirements,
 pit-lane visits and missing timing/tyre data; do not silently turn them into
 negative labels or describe all Jolpica visits as tyre changes.
+
+## Corrected text missingness
+
+The raw adapter maps literal `"nan"` and `"None"` measurements to genuine nulls
+in Compound and TrackStatus, as required by the existing raw contract. It keeps
+valid values, keys, row counts, generated rows and pit markers; no measurement
+is filled. The previous adapter incorrectly counted these textual placeholders
+as present. Regenerated Compound missingness is:
+
+| race_id | Previously counted nulls | Corrected nulls |
+| --- | --- | --- |
+| 2022_07_R | 0 | 35 |
+| 2022_11_R | 0 | 299 |
+| 2023_08_R | 0 | 35 |
+| 2025_06_R | 0 | 354 |
+| 2025_13_R | 0 | 57 |
+| All audited races | 0 | 780 |
+
+Selector: for each race, sum `driver_coverage[].missing.Compound`; for the
+concrete Miami driver, select `driver_number == "4"` and
+`missing.Compound == 24`. Across all audited races, TrackStatus null counts
+remain zero. Synthetic offline regressions exercise literal and actual nulls
+in both fields through the real adapter and coverage path, beyond merely
+passing the shared validator.
+
+Reproducible source-row probes, the Japan population selectors, before/after
+summary evidence and correction check logs are retained outside the repository
+in `~/Desktop/f1-notes/reports/T0-fix1-evidence/`. Whole-race exclusions and pit
+matching counts are unchanged. Driver-level missingness is evidence for later
+review, not a new exclusion or label policy.
 
 ## Whole-race exclusions
 

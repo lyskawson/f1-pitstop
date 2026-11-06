@@ -143,6 +143,9 @@ def raw_laps(session, race_id):
             laps[name] = laps[name].dt.total_seconds()
         elif dtype == "str":
             laps[name] = laps[name].astype("string")
+            if name in ("Compound", "TrackStatus"):
+                # FastF1 can already encode a missing measurement as literal text.
+                laps[name] = laps[name].mask(laps[name].isin(["nan", "None"]), pd.NA)
         else:
             laps[name] = laps[name].astype(dtype)
     laps = laps[list(RAW_LAPS_DTYPES)]
@@ -318,6 +321,10 @@ def audit(session, messages, counts, stops, drivers, race_id):
         "c_total_laps": {
             "loader": event["total_laps"],
             "maximum_recorded_lap": int(laps.LapNumber.max()),
+            "maximum_non_generated_lap": int(clean.LapNumber.max()) if not clean.empty else None,
+            "earliest_recorded_lap_end": (
+                float(laps.Time.min()) if laps.Time.notna().any() else None
+            ),
             "loader_matches_last_nonnull": event["total_laps"] == int(announced.iloc[-1]),
             "changes": announced.nunique() > 1,
             "announcements": records(announcements),
