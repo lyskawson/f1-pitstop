@@ -1,0 +1,22 @@
+[
+  {
+    "race_id": "2022_01_R",
+    "season": 2022,
+    "round_number": 1,
+    "session": "R",
+    "event_name": "Bahrain Grand Prix",
+    "total_laps": 57,
+    "total_laps_source": "FastF1 Session.total_laps; last non-null LapCount.TotalLaps",
+    "special_tyre_rule": false
+  },
+  {
+    "race_id": "2022_02_R",
+    "season": 2022,
+    "round_number": 2,
+    "session": "R",
+    "event_name": "Saudi Arabian Grand Prix",
+    "total_laps": 50,
+    "total_laps_source": "FastF1 Session.total_laps; last non-null LapCount.TotalLaps",
+    "special_tyre_rule": false
+  }
+]
