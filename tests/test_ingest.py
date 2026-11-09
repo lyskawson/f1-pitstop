@@ -436,3 +436,88 @@ def test_real_loader_preserves_planned_announcements_and_control_timestamps(raw,
     assert control.Time.tolist() == ["2022-01-01T12:00:00"] and control.Message.tolist() == [
         "PENALTY"
     ]
+
+
+@pytest.mark.parametrize(
+    "removed",
+    [
+        ("track_status.parquet",),
+        ("race_control.parquet",),
+        ("track_status.parquet", "race_control.parquet"),
+    ],
+)
+def test_rejects_missing_declared_streams(snapshot, removed):
+    root = Path(snapshot["manifest"]).parent
+    for name in removed:
+        (root / name).unlink()
+    path = rewrite_manifest(
+        snapshot, lambda m: m.update(files=[f for f in m["files"] if f["path"] not in removed])
+    )
+    with pytest.raises(ValueError, match="Declared raw stream missing"):
+        ingest.verify_data(path)
+
+
+@pytest.mark.parametrize(
+    "name,field", [("track_status.parquet", "Status"), ("race_control.parquet", "Message")]
+)
+@pytest.mark.parametrize("value", [None, 42, "   "])
+def test_rejects_erased_or_invalid_essential_stream_values(snapshot, name, field, value):
+    path = Path(snapshot["manifest"]).parent / name
+    frame = pd.read_parquet(path)
+    frame[field] = value
+    frame.to_parquet(path, index=False)
+    rehash(snapshot, name)
+    with pytest.raises(ValueError, match=f"{name}.*{field}"):
+        ingest.verify_data(snapshot["manifest"])
+
+
+@pytest.mark.parametrize(
+    "name,field", [("track_status.parquet", "Status"), ("race_control.parquet", "Message")]
+)
+def test_rejects_erased_essential_values_for_one_race(snapshot, name, field):
+    path = Path(snapshot["manifest"]).parent / name
+    frame = pd.read_parquet(path)
+    frame.loc[frame.race_id.eq("2022_01_R"), field] = None
+    frame.to_parquet(path, index=False)
+    rehash(snapshot, name)
+    with pytest.raises(ValueError, match=f"{name}.*{field}"):
+        ingest.verify_data(snapshot["manifest"])
+
+
+@pytest.mark.parametrize(
+    "name,field", [("track_status.parquet", "Status"), ("race_control.parquet", "Message")]
+)
+def test_stream_partial_missingness_and_nullable_optional_fields_are_preserved(
+    snapshot, name, field
+):
+    path = Path(snapshot["manifest"]).parent / name
+    frame = pd.read_parquet(path)
+    missing = frame.copy()
+    missing[field] = None
+    missing["OptionalSourceField"] = None
+    frame = pd.concat([frame, missing], ignore_index=True)
+    frame.to_parquet(path, index=False)
+    rehash(snapshot, name)
+    before = path.read_bytes()
+    assert ingest.verify_data(snapshot["manifest"])["complete"] is True
+    assert path.read_bytes() == before
+
+
+@pytest.mark.parametrize("legacy", [False, True])
+def test_undeclared_optional_streams_remain_optional(snapshot, legacy):
+    root = Path(snapshot["manifest"]).parent
+    removed = ["lap_count_evidence.json"]
+    if legacy:
+        removed += ["track_status.parquet", "race_control.parquet"]
+    for name in removed:
+        (root / name).unlink()
+
+    def remove(m):
+        m["files"] = [f for f in m["files"] if f["path"] not in removed]
+        for name in removed:
+            del m["raw_streams"][name]
+        if legacy:
+            del m["raw_streams"]
+
+    path = rewrite_manifest(snapshot, remove)
+    assert ingest.verify_data(path)["complete"] is True

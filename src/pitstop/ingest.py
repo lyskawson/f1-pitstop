@@ -349,6 +349,13 @@ def verify_data(manifest_path):
     }
     if actual != {*names, "manifest.json"}:
         raise ValueError("Undeclared or missing snapshot files")
+    # Legacy snapshots may omit streams; a declared stream must be present.
+    streams = manifest.get("raw_streams", {})
+    if not isinstance(streams, dict):
+        raise ValueError("raw_streams must map payload names to provenance")
+    for name in streams:
+        if name not in names:
+            raise ValueError(f"Declared raw stream missing from payload declarations: {name}")
     laps = pd.read_parquet(root / "laps.parquet")
     validate_laps(laps)
     events = read_json(root / "events.json")
@@ -403,6 +410,14 @@ def verify_data(manifest_path):
                 raise ValueError(f"Invalid raw stream: {name}")
             if frame.Time.isna().any():
                 raise ValueError(f"Missing stream timestamps: {name}")
+            essential = "Status" if name == "track_status.parquet" else "Message"
+            values = frame[essential]
+            if not values.dropna().map(lambda value: isinstance(value, str)).all():
+                raise ValueError(f"{name}.{essential} must contain text or null")
+            # Keep partial missingness, but require usable evidence for every race.
+            usable = values.map(lambda value: isinstance(value, str) and bool(value.strip()))
+            if not usable.groupby(frame.race_id).any().all():
+                raise ValueError(f"{name}.{essential} has no usable values for a race")
             if name == "track_status.parquet":
                 if frame.Time.dtype != np.dtype("float64") or not np.isfinite(frame.Time).all():
                     raise ValueError("Invalid track-status seconds")
