@@ -30,6 +30,7 @@ from pitstop.contracts import (
     validate_raw_laps,
     validate_samples,
     validate_sequences,
+    validate_source_acquisition,
     validate_tabular,
 )
 
@@ -44,6 +45,62 @@ COMMANDS = (
     "export-demo",
 )
 RUN_ID = "20261019T120000Z_mlp_s42_abcdef12"
+
+
+@pytest.mark.parametrize("timestamp", ["2022-03-20T12:30:00Z", "2025-01-01T00:00:00.123+00:00"])
+def test_known_source_acquisition_timestamps(timestamp):
+    validate_source_acquisition({"acquired_at_utc": timestamp})
+
+
+def test_legacy_source_unknown_acquisition_timestamp():
+    validate_source_acquisition(
+        {
+            "service": "F1 live timing via human-populated FastF1 cache",
+            "season": 2022,
+            "acquired_at_utc": None,
+            "acquisition_timestamp_note": "Historical acquisition time unavailable",
+        }
+    )
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"acquired_at_utc": "missing"},
+        {"acquired_at_utc": "2022-03-20"},
+        {"acquired_at_utc": "2022-03-20T12:30:00"},
+        {"acquired_at_utc": "2022-03-20T12:30:00+01:00"},
+        {"acquired_at_utc": "2022-02-30T12:30:00Z"},
+        {"acquired_at_utc": 42},
+        {"acquisition_timestamp_note": "  "},
+        {"acquisition_timestamp_note": None},
+        {"service": "new acquisition"},
+        {"season": 2026},
+    ],
+)
+def test_invalid_source_acquisition(changes):
+    source = {
+        "service": "F1 live timing via human-populated FastF1 cache",
+        "season": 2022,
+        "acquired_at_utc": None,
+        "acquisition_timestamp_note": "Unavailable",
+    }
+    source.update(changes)
+    with pytest.raises(ValueError):
+        validate_source_acquisition(source)
+
+
+@pytest.mark.parametrize("field", ["acquired_at_utc", "acquisition_timestamp_note"])
+def test_missing_source_acquisition_fields(field):
+    source = {
+        "service": "F1 live timing via human-populated FastF1 cache",
+        "season": 2022,
+        "acquired_at_utc": None,
+        "acquisition_timestamp_note": "Unavailable",
+    }
+    del source[field]
+    with pytest.raises(ValueError):
+        validate_source_acquisition(source)
 
 
 def make_raw_laps():

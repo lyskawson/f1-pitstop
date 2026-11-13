@@ -109,7 +109,7 @@ def builder(tmp_path, monkeypatch, raw):
         }
         source = {
             "race_id": race_id,
-            "service": "synthetic cache",
+            "service": "F1 live timing via human-populated FastF1 cache",
             "url": "https://example.invalid/",
             "season": year,
             "round": 1,
@@ -385,7 +385,7 @@ def test_rejects_invalid_timestamped_evidence_with_matching_hash(snapshot, paylo
 
 def test_missing_acquisition_provenance_is_rejected(snapshot):
     path = rewrite_manifest(snapshot, lambda m: m["sources"][0].pop("acquisition_timestamp_note"))
-    with pytest.raises(KeyError, match="acquisition_timestamp_note"):
+    with pytest.raises(ValueError, match="provenance note"):
         ingest.verify_data(path)
 
 
