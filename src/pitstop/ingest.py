@@ -17,7 +17,13 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from pitstop.contracts import RAW_LAPS_DTYPES, make_race_id, validate_race_id, validate_raw_laps
+from pitstop.contracts import (
+    RAW_LAPS_DTYPES,
+    make_race_id,
+    validate_race_id,
+    validate_raw_laps,
+    validate_source_acquisition,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 SPECIAL = {"2023_18_R", "2025_08_R", "2025_23_R"}
@@ -393,11 +399,7 @@ def verify_data(manifest_path):
             raise ValueError("Source/event identity differs")
         if not source["url"] or not source["service"]:
             raise ValueError("Missing source provenance")
-        if source["acquired_at_utc"] is None:
-            if not source["acquisition_timestamp_note"]:
-                raise ValueError("Unknown acquisition timestamp needs provenance note")
-        else:
-            datetime.fromisoformat(source["acquired_at_utc"].replace("Z", "+00:00"))
+        validate_source_acquisition(source)
     for name, fields in (
         ("track_status.parquet", ["Time", "Status", "Message"]),
         ("race_control.parquet", ["Time", "Message"]),

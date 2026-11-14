@@ -2,6 +2,7 @@
 
 import re
 from collections.abc import Mapping
+from datetime import UTC, datetime
 from numbers import Integral
 
 import numpy as np
@@ -32,6 +33,36 @@ WINDOW = 15
 SPLITS = ("train", "val", "test")
 RACE_ID_PATTERN = r"[1-9][0-9]{3}_(?:0[1-9]|[1-9][0-9])_R"
 RUN_ID_PATTERN = r"[0-9]{8}T[0-9]{6}Z_(?:constant|logreg|lightgbm|mlp|gru|tcn)_s[0-9]+_[0-9a-f]{8}"
+
+LEGACY_CACHE_SERVICE = "F1 live timing via human-populated FastF1 cache"
+
+
+def validate_source_acquisition(source):
+    """Validate the recorded acquisition time or the scoped legacy exception."""
+    if "acquired_at_utc" not in source:
+        raise ValueError("Source missing acquired_at_utc")
+    timestamp = source["acquired_at_utc"]
+    if timestamp is None:
+        note = source.get("acquisition_timestamp_note")
+        if not isinstance(note, str) or not note.strip():
+            raise ValueError("Unknown acquisition timestamp needs a nonempty provenance note")
+        if source.get("service") != LEGACY_CACHE_SERVICE or source.get("season") not in range(
+            2022, 2026
+        ):
+            raise ValueError("Unknown acquisition timestamp is limited to the legacy cache")
+        return
+    if not isinstance(timestamp, str) or not re.fullmatch(
+        r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]+)?(?:Z|\+00:00)",
+        timestamp,
+    ):
+        raise ValueError("acquired_at_utc must be an ISO 8601 UTC timestamp")
+    try:
+        parsed = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError("Invalid acquired_at_utc timestamp") from exc
+    if parsed.utcoffset() != UTC.utcoffset(parsed):
+        raise ValueError("acquired_at_utc must be UTC")
+
 
 # "str" accepts pandas string columns or object columns containing only strings.
 # Other dtypes are exact NumPy dtypes; nullable raw values are listed explicitly.

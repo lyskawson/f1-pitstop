@@ -70,7 +70,8 @@ Missing Compound/TrackStatus stay null, never the strings `"nan"` or `"None"`.
 `manifest.json` is copied to `manifests/data.json` when the snapshot is accepted.
 Its required fields are:
 
-- `schema_version`, `snapshot`, `created_at_utc`, `fastf1_version` (3.8.x),
+- `schema_version`, `snapshot`, `created_at_utc`, `fastf1_version` (D10:
+  `>=3.9.0a0,<3.10`),
   and the ingest `git_commit`.
 - `sources`: source service/URL, season, round, session, and acquisition timestamp.
 - `files`: snapshot-relative path, byte size, and SHA-256 for every payload file.
@@ -82,6 +83,25 @@ Its required fields are:
   three laps, and Compound/TyreLife missing on more than 10% of a driver's laps.
 - `errors`: affected race/source, stage, error type, message, and whether ingestion
   succeeded. Failed downloads must not disappear from coverage.
+
+Each source includes `acquired_at_utc`: the actual acquisition time as an ISO 8601
+UTC date and time, with `Z` or `+00:00`. Never substitute snapshot creation or
+file modification times. Only sources recovered from the existing human-populated
+2022–2025 FastF1 cache audited in T0 may use null when the historical time is
+genuinely unavailable; `acquisition_timestamp_note` must then explain the gap
+in nonblank text. The verifier checks the existing cache service marker and
+season, but cannot establish the historical truth of a source's provenance.
+Future actual acquisitions require their real timestamps from the human download
+process. Keep the source identity, producing revision and payload hashes; snapshot
+`created_at_utc` is separate. Report the gap when accepting or sharing the dataset.
+This allowance does not itself constitute dataset acceptance.
+
+### Contract change log
+
+- 2026-11-08: Alek approved the scoped legacy null acquisition-time representation
+  because the T0 cache and log do not establish exact historical acquisition times.
+  Existing v1 bytes remain unchanged; future acquisitions still require real times.
+  The FastF1 version wording above aligns with the already approved D10 pin.
 
 Verify SHA-256 before dataset construction. Exclude an entire race for any
 INTERMEDIATE/WET lap or TrackStatus containing `5`. Keep SC/VSC and pre-DNF laps.
