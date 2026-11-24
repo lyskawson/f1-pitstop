@@ -26,8 +26,8 @@ Do not put snapshots, caches, credentials, or runs into Git.
 
 The stage order is below. T2 implements the configured cache-only `download`
 and snapshot `verify-data` commands. T3 provides the Python interfaces for
-fixed splits, exclusions and labels. The remaining CLI commands are stubs
-and exit 1.
+fixed splits, exclusions and labels. T5 implements file-based evaluation.
+Dataset building, training, prediction and demo export remain CLI stubs.
 
 ```sh
 uv run pitstop download
@@ -35,7 +35,7 @@ uv run pitstop verify-data
 uv run pitstop build-dataset
 uv run pitstop train
 uv run pitstop predict
-uv run pitstop evaluate
+uv run pitstop evaluate --help
 uv run pitstop export-demo
 ```
 
@@ -222,3 +222,58 @@ labelling inputs. Continuous visits remain unresolved by default in every split.
 For the T3 audit, verify the snapshot, read training events only for the
 diagnostics, and record accepted and omitted counts by reason. Keep keyed
 audit outputs private. Test evaluation is still gated by D4.
+
+## T5: evaluate one run
+
+Use the declared samples table and the accepted data manifest used by the run.
+Run this from the evaluation code's Git checkout. A clean checkout makes the
+recorded revision reproducible.
+
+```sh
+uv run --offline --no-sync pitstop evaluate \
+  --predictions "runs/$run_id/predictions.parquet" \
+  --samples data/processed/v1/samples.parquet \
+  --data-manifest manifests/data.json \
+  --output-dir "runs/$run_id"
+```
+
+The four paths are required. `--split val` is the default. Supply `--run-id`
+when the predictions file holds several runs. The chosen run must predict
+every declared sample in the evaluated split exactly once. Other splits may
+appear in either input. `--seed` and `--bootstrap-samples` default to 42 and
+1000. Pass `--synthetic` only for generated fixtures whose manifest includes
+`"synthetic": true`.
+
+Evaluation freezes `threshold.json` on validation and records the result in
+`metrics.json`. Both record the SHA-256 of inputs and the producing revision.
+An exact retry preserves both files. A subsequent split can add records to
+`metrics.json` while preserving the validation metrics and the threshold bytes.
+Use the same declared sample file, manifest and bootstrap settings for both
+splits. Conflicting retries fail. Empty validation cannot establish a threshold.
+With all-negative validation, thresholds that produce alarms have F1 of zero
+and the largest observed score wins. A group with neither a positive nor an
+alarm has undefined F1. A group with either one and zero matches has F1 of zero.
+Precision requires alarms, and recall and AP require positives.
+
+Status groups use the flags on each sample at lap t. Event matching stays
+within each group, race and driver and uses actual lap numbers. Bootstrap
+resamples separate copies of complete races from each group. Metric intervals
+use the defined replicates and record the number omitted. Metric and interval
+names such as `events.1.recall` identify entries in the nested event records.
+
+Test evaluation requires prior explicit human approval after the configs are
+frozen. Use `--split test --test-approval "<approval reference>"` with the
+test predictions and the existing validation run directory only after obtaining
+approval. The command records the reference and requires the frozen threshold.
+If a project's evaluated AP or lap F1 exceeds 0.6 in any group, the artifact
+records a pending leakage audit and the command exits 2. Review that audit
+before reporting results. Exit 0 indicates completion and exit 1 indicates
+an input or publication error for a configured evaluation.
+
+Training can use `pitstop.metrics.select_threshold(y, scores)` on validation
+scores. For tabular evaluation, `pitstop.evaluate.align_predictions` validates
+and aligns predictions to samples, and `pitstop.metrics.group_metrics` evaluates
+the resulting rows at a supplied threshold. `pitstop.metrics.paired_bootstrap`
+accepts aligned predictions from two runs for the same keys, labels and split,
+and their respective frozen thresholds. It reports left-minus-right intervals
+and marks an interval containing zero as a tie.
