@@ -1,4 +1,4 @@
-"""Expose the pipeline commands; implementations arrive in later tasks."""
+"""Run the pit stop prediction pipeline stages."""
 
 import argparse
 import json
@@ -29,11 +29,23 @@ def build_parser() -> argparse.ArgumentParser:
             stage.add_argument("--snapshot", type=str)
         elif command == "verify-data":
             stage.add_argument("--manifest", type=str)
+        elif command == "evaluate":
+            stage.add_argument("--predictions", help="Predictions parquet (required)")
+            stage.add_argument("--samples", help="Declared samples parquet (required)")
+            stage.add_argument("--data-manifest", help="Dataset manifest JSON (required)")
+            stage.add_argument("--output-dir", help="Run artifact directory (required)")
+            stage.add_argument("--run-id", help="Required when predictions contain multiple runs")
+            stage.add_argument("--split", choices=("val", "test"), default="val")
+            stage.add_argument("--bootstrap-samples", type=int, default=1000)
+            stage.add_argument("--seed", type=int, default=42, help="Bootstrap seed")
+            stage.add_argument("--synthetic", action="store_true", help="Use a synthetic fixture")
+            stage.add_argument("--test-approval", help="Reference to explicit human test approval")
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Return a nonzero status until the requested stage is implemented."""
+    """Run a pipeline stage and return its exit status."""
+    argv = sys.argv[1:] if argv is None else argv
     args = build_parser().parse_args(argv)
     try:
         if args.command == "download" and (args.config or args.from_cache or args.snapshot):
@@ -46,6 +58,31 @@ def main(argv: list[str] | None = None) -> int:
             from pitstop.ingest import verify_data
 
             result = verify_data(args.manifest)
+        elif args.command == "evaluate" and len(argv) > 1:
+            from pitstop.evaluate import evaluate_files
+
+            if not all((args.predictions, args.samples, args.data_manifest, args.output_dir)):
+                raise ValueError(
+                    "evaluate requires --predictions, --samples, --data-manifest and --output-dir"
+                )
+            metrics = evaluate_files(
+                args.predictions,
+                args.samples,
+                args.data_manifest,
+                args.output_dir,
+                run_id=args.run_id,
+                split=args.split,
+                bootstrap_samples=args.bootstrap_samples,
+                seed=args.seed,
+                synthetic=args.synthetic,
+                test_approval=args.test_approval,
+            )
+            result = {
+                "complete": not metrics["leakage_audit"]["required"],
+                "run_id": metrics["run_id"],
+                "output_dir": args.output_dir,
+                "leakage_audit": metrics["leakage_audit"],
+            }
         else:
             print(f"pitstop {args.command}: not implemented yet", file=sys.stderr)
             return 1
