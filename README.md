@@ -14,3 +14,6 @@ uv run ruff format --check .
 
 Read the [decisions](docs/decisions.md), [project plan](docs/plan.md),
 [contracts](docs/contracts.md), and [runbook](docs/runbook.md).
+
+To continue with an AI orchestrator, use the
+[team handoff prompt](docs/handoff/START_ORCHESTRATOR.txt).
