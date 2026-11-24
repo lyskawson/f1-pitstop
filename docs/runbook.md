@@ -25,8 +25,9 @@ Agents and tests work offline against that snapshot. Verify hashes before use.
 Do not put snapshots, caches, credentials, or runs into Git.
 
 The stage order is below. T2 implements the configured cache-only `download`
-and snapshot `verify-data` commands described next. Later stages remain stubs.
-Bare commands without inputs retain the original stub response and exit 1.
+and snapshot `verify-data` commands. T3 provides the Python interfaces for
+fixed splits, exclusions and labels. The remaining CLI commands are stubs
+and exit 1.
 
 ```sh
 uv run pitstop download
@@ -163,7 +164,7 @@ It is optional archival evidence, not a new required downstream schema. The
 reader contract and handling before the first announcement require dedicated
 contract work before T4. `events.json.total_laps` is the loader's last non-null
 announced value, never an observed lap maximum; it is not approved as an earlier
-sample's feature. D2 remains unresolved; uncertain tyre data remains unchanged.
+sample's feature.
 
 `verify-data` reads only the unpacked snapshot. It rejects unsafe paths, symlink
 payloads, undeclared/missing/changed files, invalid raw schemas, textual nulls,
@@ -185,3 +186,39 @@ directory**, not the canonical copy on its own. Payload paths are relative to
 that directory. Store the archive hash and local acceptance evidence in the T2
 report. Remote PR/CI, independent review and human snapshot acceptance are separate
 steps and remain pending until actually performed.
+
+## Fixed splits and D3 exclusions
+
+`manifests/splits.json` records all Race events in the verified snapshot, including
+events excluded by D3. Assignments depend only on the season and round. T4 can
+select the requested split by race ID before reading its raw laps.
+
+`pitstop.splits.build_split_manifest(events)` reproduces the tracked manifest from
+`events.json`. Pass all raw laps for the selected events and the full manifest to
+`pitstop.splits.apply_exclusions(laps, events, split_manifest)`. It returns retained
+raw rows with `split` and `special_tyre_rule`, plus a derived audit with per-race
+coverage and every D3 reason keyed at race or race/driver scope. Run this on raw
+rows, including generated rows, to match the verifier's coverage and thresholds.
+Store the derived audit under `data/processed/` or in private notes.
+
+## Next-lap labels
+
+Use `pitstop.labels.build_labels(raw_laps)` on the verified split's unfilled raw
+laps. It drops generated rows and joins the exact t+1 and t+2 laps by race and
+driver. It returns a table of accepted `KEY`/`y` rows and a separate audit of
+all real lap keys with observations, nullable labels and reason codes. Join the
+accepted table back to D3-retained rows by `KEY` before constructing samples.
+Keep the audit's successor observations out of features.
+
+Optional `confirmed_transits` maps exact (race ID, driver number, entry lap)
+keys to nonblank source references. Supply verified records only, with an
+input hash and a locator that reproduces the confirmation. The v1 audit uses
+the default empty mapping. Its archived control messages use UTC and field
+lap numbers, while car laps use elapsed session seconds, so the audit lacks
+an exact visit-level confirmation from snapshot payloads. The supplementary
+training cache probe supports the D2 decision and stays outside the v1
+labelling inputs. Continuous visits remain unresolved by default in every split.
+
+For the T3 audit, verify the snapshot, read training events only for the
+diagnostics, and record accepted and omitted counts by reason. Keep keyed
+audit outputs private. Test evaluation is still gated by D4.

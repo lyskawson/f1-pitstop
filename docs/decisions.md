@@ -18,15 +18,13 @@ This file is the single source of truth. Any change needs approval from a human 
 
 ## D2 — Label
 
-- Sample = (race_id, driver_number, lap t).
-- y = 1 if lap t+1 is an in-lap (`PitInTime` not null) and tyres were changed: lap t+2 exists and `Stint(t+2) > Stint(t+1)`. Otherwise y = 0.
-- Build labels with a self-join on (race_id, driver_number, lap_number = t+1 and t+2) on raw laps, before any filtering. Never use `shift()`.
-- Drop rows with `FastF1Generated == True` before labelling.
-- Drop sample t if lap t+1 does not exist, or if lap t+1 is an in-lap without lap t+2 (retirement in the pit lane).
-- Pit-lane passes without a tyre change (drive-through, stop-and-go) give y = 0.
-- Horizon: t+1 only.
-- Verified in FastF1 source: `PitInTime` marks the in-lap and `PitOutTime` the out-lap.
-- Not yet verified (Task T0): whether `Stint` stays unchanged on a drive-through. Fallback if `Stint` is unreliable: y = `PitInTime(t+1)` not null, excluding retirements; record the change below.
+- Sample key is (race_id, driver_number, lap t). The target is a tyre change on lap t+1.
+- Remove `FastF1Generated` rows, then self-join the unfilled raw laps on the same race and driver at exact lap numbers t+1 and t+2. Build evidence before feature filtering. Never use `shift()`.
+- An observed t+1 with null `PitInTime` gives y = 0. An in-lap requires an observed t+2 with `PitOutTime` later than the entry. An in-lap without the exact next lap can indicate retirement or a gap.
+- After an observed entry and exit, require a recognised compound (SOFT, MEDIUM, HARD, INTERMEDIATE or WET) and a positive integral `TyreLife` on both laps. Assign y = 1 if `Stint` advances from a positive integer by exactly one and either Compound changes or `TyreLife(t+2)` differs from `TyreLife(t+1) + 1`. An age discontinuity can be an increase when a used set is fitted.
+- A visit with the same Compound and age advancing by one gives y = 0 only when a documented source independently confirms no tyre change at the exact (race, driver, entry lap). A conflicting confirmation leaves the sample unresolved. Require reproducible provenance and apply the same procedure in all splits. Omit continuous visits if the verified snapshot cannot substantiate an exact confirmation.
+- Omit undefined labels and retain their keys and reasons. This includes missing successors or exit evidence, missing or unrecognised tyre measurements, an unsupported Stint transition and unresolved transits. Do not fill labels, infer a tyre change from Stint alone, or select labels using `IsAccurate` or `LapTime`.
+- T0 and the T3 training audit show that penalty and safety-car transits can advance Stint, and Compound or age alone cannot identify a physical tyre set. Jolpica records pit visits. The accepted rule uses corroborating lap evidence for a change and retains uncertainty when the evidence cannot resolve a visit.
 
 ## D3 — Data scope
 
@@ -206,3 +204,4 @@ Key K = (race_id: str `YYYY_RR_R`, driver_number: str, lap_number: int). Times a
 
 - 2026-10-19: v1 accepted.
 - 2026-10-19: D10 — FastF1 pin changed from >=3.8.3,<3.9 to >=3.9.0a0,<3.10 because the F1 live-timing archive requires F1 TV authentication since about 2026-10-15 (theOehrly/Fast-F1#978); 3.9.0a0 is the first version that supports it. D12 — the data downloader needs an F1 TV Access account. Statements verified against FastF1 3.8.3 (status line, D2, Leakage rule 5) are re-checked on 3.9 in T0. Approved by a human team member.
+- 2026-11-24: Alek approved the revised D2 in the T3 Codex chat, referring to the “Decision pending” section of the T3 report. The same rule applies to all splits. Confirmations require reproducible documented inputs. Omit and count visits the verified v1 snapshot cannot resolve.
