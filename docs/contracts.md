@@ -188,7 +188,7 @@ Feature rules (approved 2026-11-25, see the decisions change log):
 
 1. **Only exception to "unresolved → error".** `lap_time_rel = 0` (field-median
    pace) while it cannot yet be computed causally: no IsAccurate field lap with
-   Time <= T exists, or the driver has no earlier accurate value. After the first
+   Time <= T exists, or the driver has no accurate lap up to and including t. After the first
    resolvable value, rule 8 applies. No row is removed.
 2. Features are built for every real (non-FastF1Generated) retained lap, including
    laps whose label is omitted. Any other unresolved feature on any such lap
