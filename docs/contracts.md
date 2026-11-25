@@ -183,8 +183,37 @@ features from earlier accurate observations within the same race and driver;
 stint_deg is 0 at stint start. Apply D3's maximum three-lap feature-gap fill,
 never fill labels, never backward-fill. Remaining unresolved required inputs
 cause a reported dataset-build error; no silent row removal or arbitrary fill.
-Leading missing observations and shortened-race metadata need the T0 audit before
-the later feature implementation can claim to build a complete dataset.
+
+Feature rules (approved 2026-11-25, see the decisions change log):
+
+1. **Only exception to "unresolved → error".** `lap_time_rel = 0` (field-median
+   pace) while it cannot yet be computed causally: no IsAccurate field lap with
+   Time <= T exists, or the driver has no earlier accurate value. After the first
+   resolvable value, rule 8 applies. No row is removed.
+2. Features are built for every real (non-FastF1Generated) retained lap, including
+   laps whose label is omitted. Any other unresolved feature on any such lap
+   raises an error naming race, driver, lap and feature.
+3. Rival pit entry: a rival counts once its in-lap row has finished (lap
+   Time <= T) and PitInTime lies in (T(t−2), T]; count distinct other drivers.
+   For t <= 2 the lower bound is −inf; for t > 2 a missing own lap t−2 is unresolved.
+4. `gap_ahead` = T − the latest Time <= T of another driver's lap t. `gap_behind` =
+   the earliest Time of another driver's lap t−1 that is after the driver's own
+   lap t−1 Time and <= T, minus that own Time. Other lap numbers are ignored.
+   A missing crossing, including t = 1 or a missing own lap t−1, is 60 s; clip 0..60.
+5. Raw `Stint`, `Compound`, `TyreLife`, `Position` and `TrackStatus` are
+   forward-filled for at most 3 laps within a driver (D3), never backward.
+6. `stint_deg` is computed from IsAccurate laps of the current stint up to t
+   (mean of at most the last 3 minus the best); it is 0 while the stint has none.
+7. `compound_*`, `mandatory_done`, `sc` and `vsc` are unscaled; the other nine
+   features are standardized.
+8. `lap_time_rel` is forward-filled from the driver's last accurate value with no
+   lap limit; the 3-lap limit of rule 5 applies to raw inputs only.
+9. `laps_remaining = known_total_laps(T) − t`, used as is.
+10. Windows use all real, consecutive retained laps up to t, including laps that
+    are not sample rows; a missing lap ends the window and the rest is padding.
+11. `data_sha256` is the SHA-256 of the raw `manifest.json`; `fit_row_ids_sha256`
+    hashes the train `row_id`s as little-endian int64; `row_id` is 0..N−1 over
+    samples sorted by KEY. `missing_values` also records `leading_lap_time_rel: 0`.
 
 | Archive | Required arrays | Dtype and shape |
 | --- | --- | --- |
