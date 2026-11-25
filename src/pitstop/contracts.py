@@ -252,3 +252,57 @@ def validate_sequences(arrays: Mapping[str, np.ndarray], samples: pd.DataFrame) 
         raise ValueError("sequences final step must be a real lap")
     if np.any(inputs[:, :, :-1][is_pad == 1] != 0):
         raise ValueError("sequences padded feature values must be zero")
+
+
+def _is_number(value) -> bool:
+    return isinstance(value, int | float) and not isinstance(value, bool) and np.isfinite(value)
+
+
+def _is_count(value) -> bool:
+    """A usable lap count: finite, positive and integral (parser output may be 57.0)."""
+    return _is_number(value) and value > 0 and value % 1 == 0
+
+
+def validate_lap_count_evidence(evidence, events) -> None:
+    """Check lap_count_evidence.json against events.json (same order, same races)."""
+    if not isinstance(evidence, list) or [
+        e.get("race_id") if isinstance(e, Mapping) else None for e in evidence
+    ] != [e["race_id"] for e in events]:
+        raise ValueError("Lap-count evidence coverage differs")
+    for entry, event in zip(evidence, events, strict=True):
+        rows = entry.get("rows")
+        if not isinstance(rows, list) or not rows or not all(isinstance(r, Mapping) for r in rows):
+            raise ValueError("Invalid lap-count timestamps")
+        times = [r.get("Time") for r in rows]
+        if not all(_is_number(t) for t in times) or times != sorted(times):
+            raise ValueError("Invalid lap-count timestamps")
+        if any("TotalLaps" not in r for r in rows):
+            raise ValueError("Lap-count evidence differs from event")
+        values = [r["TotalLaps"] for r in rows if r["TotalLaps"] is not None]
+        if not values or not all(map(_is_count, values)) or values[-1] != event["total_laps"]:
+            raise ValueError("Lap-count evidence differs from event")
+        if not (
+            entry.get("source_url")
+            and entry.get("parser")
+            and entry.get("time_basis") == "session seconds"
+        ):
+            raise ValueError("Missing lap-count provenance")
+
+
+def known_total_laps(entry, cutoff: float, sample: str = "") -> int:
+    """Return the lap count announced at session second `cutoff` (sample cutoff T).
+
+    Take the last row with finite Time <= cutoff and a positive integral TotalLaps.
+    Rows are sorted by Time; source order breaks ties. Null updates keep the last count.
+    """
+    known = [
+        (row["Time"], i, int(row["TotalLaps"]))
+        for i, row in enumerate(entry["rows"])
+        if _is_number(row["Time"]) and row["Time"] <= cutoff and _is_count(row["TotalLaps"])
+    ]
+    if not known:
+        raise ValueError(
+            f"Unresolved lap count for race {entry['race_id']}, sample {sample or '?'}: "
+            f"no announcement at or before session second {cutoff}"
+        )
+    return max(known)[2]

@@ -20,6 +20,7 @@ import yaml
 from pitstop.contracts import (
     RAW_LAPS_DTYPES,
     make_race_id,
+    validate_lap_count_evidence,
     validate_race_id,
     validate_raw_laps,
     validate_source_acquisition,
@@ -427,30 +428,8 @@ def verify_data(manifest_path):
                 pd.to_datetime(frame.Time, errors="coerce", utc=True, format="ISO8601").isna().any()
             ):
                 raise ValueError("Invalid race-control UTC timestamps")
-    # This optional evidence has no approved dataset-reader or feature semantics.
     if "lap_count_evidence.json" in names:
-        evidence = read_json(root / "lap_count_evidence.json")
-        if [entry["race_id"] for entry in evidence] != loaded:
-            raise ValueError("Lap-count evidence coverage differs")
-        for entry, event in zip(evidence, events, strict=True):
-            counts = pd.DataFrame(entry["rows"])
-            if counts.empty or counts.Time.isna().any() or not np.isfinite(counts.Time).all():
-                raise ValueError("Invalid lap-count timestamps")
-            values = counts.TotalLaps.dropna()
-            if (
-                values.empty
-                or not np.isfinite(values).all()
-                or not values.gt(0).all()
-                or not values.mod(1).eq(0).all()
-                or values.iloc[-1] != event["total_laps"]
-            ):
-                raise ValueError("Lap-count evidence differs from event")
-            if (
-                not entry["source_url"]
-                or entry["time_basis"] != "session seconds"
-                or not entry["parser"]
-            ):
-                raise ValueError("Missing lap-count provenance")
+        validate_lap_count_evidence(read_json(root / "lap_count_evidence.json"), events)
     missing = set(requested) - set(loaded)
     failures = {e.get("race_id") for e in manifest["errors"]}
     if missing - failures:

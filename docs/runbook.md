@@ -160,9 +160,9 @@ over the stale 3.8.x manifest prose in the protected `docs/contracts.md`.
 seconds. `race_control.parquet` retains all message fields with Time as UTC ISO
 text. `lap_count_evidence.json` archives all parsed LapCount announcements in
 source order, including null updates, source URL, parser and session seconds.
-It is optional archival evidence, not a new required downstream schema. The
-reader contract and handling before the first announcement require dedicated
-contract work before T4. `events.json.total_laps` is the loader's last non-null
+It is optional for archives, validated by the shared `validate_lap_count_evidence`,
+and is the input for T4 laps_remaining: see docs/contracts.md for the count known
+at T. `events.json.total_laps` is the loader's last non-null
 announced value, never an observed lap maximum; it is not approved as an earlier
 sample's feature.
 
