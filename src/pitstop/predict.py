@@ -14,9 +14,9 @@ from pitstop.contracts import (
     validate_tabular,
 )
 from pitstop.ingest import ROOT
-from pitstop.models import baselines, mlp, rnn  # baselines imports lightgbm before torch
+from pitstop.models import baselines, mlp, rnn, tcn  # baselines imports lightgbm before torch
 
-MODELS = {"mlp": mlp.MLP, "gru": rnn.RNN}  # T10 adds "tcn"
+MODELS = {"mlp": mlp.MLP, "gru": rnn.RNN, "tcn": tcn.TCN}
 
 
 def build_model(config, prevalence=0.5):
