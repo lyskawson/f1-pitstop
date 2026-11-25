@@ -231,7 +231,7 @@ uv run --offline --no-sync pitstop build-dataset --config configs/data.yaml --sn
 
 The command verifies the raw snapshot, applies the fixed splits and D3
 exclusions, builds D2 labels from the unfilled raw laps, then computes the D5
-features for every real (non-generated) retained lap. It writes
+features for every real (non-generated) lap of the retained pairs; field statistics use all drivers of a kept race. It writes
 `samples.parquet`, `tabular.npz`, `sequences.npz` and `preprocess.json` to
 `paths.processed` (it refuses to overwrite an existing directory). Statistics are fitted on
 train sample rows only; `preprocess.json` records the data and split hashes, the
@@ -246,7 +246,7 @@ Feature rules chosen where D5 is silent:
   for at most 3 laps within a driver; anything still missing raises
   `UnresolvedInputError` naming race, driver, lap and feature. No row is dropped.
 - `lap_time_rel` and `stint_deg` are masked by `IsAccurate` only. `lap_time_rel` is
-  forward-filled without a lap limit; with no earlier accurate lap it is unresolved.
+  forward-filled without a lap limit; it is 0 until the first accurate lap of the driver (contract rule 1).
   `stint_deg` is 0 until the stint has an accurate lap.
 - Window history may use laps that are not sample rows, as long as the lap is real,
   consecutive and at most `t`; a missing lap ends the window and the rest is padding.
