@@ -39,7 +39,11 @@ def fit(config, x_train, y_train, x_val, y_val):
     history = [
         {"iteration": i + 1, "train_loss": loss, "val_average_precision": ap}
         for i, (loss, ap) in enumerate(
-            zip(results["training"]["log_loss"], results["valid_1"]["average_precision"])
+            zip(
+                results["training"]["log_loss"],
+                results["valid_1"]["average_precision"],
+                strict=True,
+            )
         )
     ]
     history.append({"best_iteration": model.best_iteration_})
