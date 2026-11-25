@@ -124,6 +124,10 @@ This allowance does not itself constitute dataset acceptance.
   because the T0 cache and log do not establish exact historical acquisition times.
   Existing v1 bytes remain unchanged; future acquisitions still require real times.
   The FastF1 version wording above aligns with the already approved D10 pin.
+- 2026-11-25: michalklamecki approved the feature rules under "dataset → train":
+  `lap_time_rel = 0` before the driver's first accurate lap, and rules 2–11
+  (field statistics from all drivers, rival pits after the in-lap finished, same-lap
+  gaps, fill limits, window and provenance definitions).
 
 Verify SHA-256 before dataset construction. Exclude an entire race for any
 INTERMEDIATE/WET lap or TrackStatus containing `5`. Keep SC/VSC and pre-DNF laps.
@@ -186,34 +190,55 @@ cause a reported dataset-build error; no silent row removal or arbitrary fill.
 
 Feature rules (approved 2026-11-25, see the decisions change log):
 
-1. **Only exception to "unresolved → error".** `lap_time_rel = 0` (field-median
-   pace) while it cannot yet be computed causally: no IsAccurate field lap with
-   Time <= T exists, or the driver has no accurate lap up to and including t. After the first
-   resolvable value, rule 8 applies. No row is removed.
-2. Features are built for every real (non-FastF1Generated) retained lap, including
-   laps whose label is omitted. Any other unresolved feature on any such lap
-   raises an error naming race, driver, lap and feature.
-3. Rival pit entry: a rival counts once its in-lap row has finished (lap
-   Time <= T) and PitInTime lies in (T(t−2), T]; count distinct other drivers.
-   For t <= 2 the lower bound is −inf; for t > 2 a missing own lap t−2 is unresolved.
+1. **Only exception for unresolved inputs.** `lap_time_rel = 0` (field-median pace)
+   while the driver has no accurate lap (IsAccurate and non-null LapTime) at or
+   before t. If the driver has one, the field has one with Time <= T, so the
+   median exists. After the first resolvable value, rule 8 applies. No row is
+   removed. The 60 s gap (rule 4) and `stint_deg = 0` (rule 6) are defined
+   values, not exceptions.
+2. Field statistics (the lap_time_rel median, rival pits and gaps) use all real
+   (non-FastF1Generated) laps of all drivers in the race, including drivers whose
+   (race, driver) pair D3 excluded from samples; pair exclusions never change
+   field features, because they are decided from the whole race. Whole-race
+   exclusions still remove the race. Features are built for every real lap of
+   retained pairs, including laps whose label is omitted; D3 gap-filled
+   (reindexed) rows are not laps and get no features. An unresolved feature on
+   such a lap raises an error naming race, driver, lap and feature. Laps of
+   excluded pairs only supply field inputs and never raise.
+3. Rival pit entry: another driver counts once its non-FastF1Generated in-lap
+   row has finished (lap Time <= T) and PitInTime lies in (T(t−2), T]; count
+   distinct drivers. For t <= 2 the lower bound is −inf. For t > 2 a missing own
+   lap t−2 is unresolved (an error), unlike rule 4, intentionally: a wrong
+   window would be a silent mistake, while a missing neighbour is a defined 60 s.
 4. `gap_ahead` = T − the latest Time <= T of another driver's lap t. `gap_behind` =
    the earliest Time of another driver's lap t−1 that is after the driver's own
    lap t−1 Time and <= T, minus that own Time. Other lap numbers are ignored.
    A missing crossing, including t = 1 or a missing own lap t−1, is 60 s; clip 0..60.
 5. Raw `Stint`, `Compound`, `TyreLife`, `Position` and `TrackStatus` are
-   forward-filled for at most 3 laps within a driver (D3), never backward.
-6. `stint_deg` is computed from IsAccurate laps of the current stint up to t
-   (mean of at most the last 3 minus the best); it is 0 while the stint has none.
+   forward-filled for at most 3 laps (counted in lap numbers) within a driver
+   (D3), never backward. Filled TyreLife and TrackStatus can be stale by up to
+   3 laps.
+6. `stint_deg` (LapTime seconds, not lap_time_rel) uses IsAccurate laps of the
+   current stint (Stint after the rule 5 fill) up to t: the mean of at most the
+   last 3 minus the best; it is 0 while the stint has none.
 7. `compound_*`, `mandatory_done`, `sc` and `vsc` are unscaled; the other nine
-   features are standardized.
-8. `lap_time_rel` is forward-filled from the driver's last accurate value with no
-   lap limit; the 3-lap limit of rule 5 applies to raw inputs only.
-9. `laps_remaining = known_total_laps(T) − t`, used as is.
-10. Windows use all real, consecutive retained laps up to t, including laps that
-    are not sample rows; a missing lap ends the window and the rest is padding.
-11. `data_sha256` is the SHA-256 of the raw `manifest.json`; `fit_row_ids_sha256`
-    hashes the train `row_id`s as little-endian int64; `row_id` is 0..N−1 over
-    samples sorted by KEY. `missing_values` also records `leading_lap_time_rel: 0`.
+   features are standardized. `mandatory_done` uses the forward-filled Compound
+   history up to t. A Compound outside SOFT, MEDIUM, HARD leaves the one-hot
+   channels unresolved (an error); the v1 snapshot's retained races have no
+   such value.
+8. `lap_time_rel` is forward-filled from the driver's last accurate lap, keeping
+   the value computed there against its own T_k field median; there is no lap
+   limit. The 3-lap limit of rule 5 applies to raw inputs only.
+9. `laps_remaining = known_total_laps(T) − t`, used as is (never negative in v1).
+10. A window step for lap k uses the feature vector of lap k computed at its own
+    T_k, as its own sample row would. Windows use all real, consecutive laps of
+    the pair up to t, including laps that are not sample rows; a missing lap
+    ends the window and the rest is padding.
+11. `data_sha256` is the SHA-256 of the raw `manifest.json`. `row_id` is 0..N−1
+    over samples sorted by (race_id, driver_number as str, lap_number).
+    `fit_row_ids_sha256` hashes the train `row_id`s in ascending order as
+    little-endian int64. `missing_values` also records `leading_lap_time_rel: 0`;
+    `feature_forward_fill_limit` (3) covers raw inputs only, lap_time_rel has no limit.
 
 | Archive | Required arrays | Dtype and shape |
 | --- | --- | --- |
