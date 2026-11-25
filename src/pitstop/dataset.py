@@ -127,7 +127,11 @@ def build_dataset(config_path, snapshot):
                 for name in ("samples.parquet", "tabular.npz", "sequences.npz")
             },
             "git_commit": subprocess.check_output([*git, "rev-parse", "HEAD"], text=True).strip(),
-            "git_dirty": bool(subprocess.check_output([*git, "status", "--porcelain"], text=True)),
+            "git_dirty": bool(
+                subprocess.check_output(
+                    [*git, "status", "--porcelain", "--untracked-files=no"], text=True
+                )
+            ),
         }
         write_json(staging / "preprocess.json", preprocess)
         staging.rename(output)

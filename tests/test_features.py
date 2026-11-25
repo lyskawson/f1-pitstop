@@ -36,7 +36,8 @@ def synthetic_race(race_id=RACE, n_laps=40, n_drivers=6, seed=0):
                     "LapNumber": lap,
                     "Time": time,
                     "LapTime": lap_time,
-                    "PitInTime": time - 20 if lap == pit else np.nan,
+                    # Driver 12 is logged entering 0.3 s after its in-lap Time, as in real data.
+                    "PitInTime": (time + 0.3 if i == 2 else time - 20) if lap == pit else np.nan,
                     "PitOutTime": time - lap_time + 3 if lap == pit + 1 else np.nan,
                     "Stint": float(stint),
                     "Compound": ("SOFT", "MEDIUM")[i % 2] if stint == 1 else "HARD",
@@ -56,7 +57,9 @@ def synthetic_race(race_id=RACE, n_laps=40, n_drivers=6, seed=0):
 def truncate(laps, counts, cutoff):
     """Keep every stream's observations with Time <= cutoff, for all drivers."""
     rows = [row for row in counts["rows"] if row["Time"] <= cutoff]
-    return laps[laps.Time <= cutoff], {**counts, "rows": rows}
+    kept = laps[laps.Time <= cutoff].copy()
+    kept.loc[kept.PitInTime > cutoff, "PitInTime"] = np.nan  # an entry after T is unknown
+    return kept, {**counts, "rows": rows}
 
 
 def test_known_values_on_a_handmade_race():
@@ -124,6 +127,11 @@ def test_rival_pit_after_cutoff_does_not_change_the_row():
     after.loc[later, "PitInTime"] = cutoff + 5  # a rival still on track at T
     changed = build_features(after, [lap_counts()]).set_index(["driver_number", "lap_number"])
     pd.testing.assert_series_equal(changed.loc[("10", 20)], base.loc[("10", 20)])
+    # A finished in-lap whose PitInTime is logged after T is not counted yet.
+    late_entry = laps.copy()
+    late_entry.loc[inside, "PitInTime"] = cutoff + 0.1
+    late = build_features(late_entry, [lap_counts()]).set_index(["driver_number", "lap_number"])
+    pd.testing.assert_series_equal(late.loc[("10", 20)], base.loc[("10", 20)])
     # Control: an entry inside (T(t-2), T] is counted.
     counted = laps.copy()
     counted.loc[inside, "PitInTime"] = laps.Time[inside] - 1
@@ -187,8 +195,21 @@ def test_unresolved_inputs_raise_with_context():
     ] = np.nan
     with pytest.raises(UnresolvedInputError, match="driver 12, lap 13, feature position"):
         build_features(too_long, [lap_counts()])  # forward-fill stops after three laps
-    with pytest.raises(UnresolvedInputError, match="laps_remaining"):
+    with pytest.raises(ValueError, match="No lap-count evidence for race 2022_01_R"):
         build_features(laps, [])
+
+
+def test_missing_own_lap_t_minus_2_is_unresolved_but_t_minus_1_gives_a_60_s_gap():
+    laps = synthetic_race()
+    no_lap_10 = laps[~((laps.DriverNumber == "10") & (laps.LapNumber == 10))]
+    with pytest.raises(UnresolvedInputError, match="driver 10, lap 12, feature rival_pits_2"):
+        build_features(no_lap_10, [lap_counts()])
+    # Driver 10 keeps only lap 2: its lap 1 is missing, so gap_behind has no reference.
+    lone = laps[~((laps.DriverNumber == "10") & (laps.LapNumber != 2))]
+    features = build_features(lone, [lap_counts()]).set_index(["driver_number", "lap_number"])
+    base = build_features(laps, [lap_counts()]).set_index(["driver_number", "lap_number"])
+    assert features.loc[("10", 2), "gap_behind"] == 60
+    assert base.loc[("10", 2), "gap_behind"] < 60
 
 
 def test_lap_time_rel_is_zero_until_the_first_accurate_lap_then_carried_forward():

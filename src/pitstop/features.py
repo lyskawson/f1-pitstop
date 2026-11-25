@@ -111,24 +111,29 @@ def _race_features(race, entry):
     pit = race.PitInTime.to_numpy()
     entered = ~np.isnan(pit)
     pit_time, pit_end, pit_driver = pit[entered], times[entered], drivers[entered]
+    if entry is None:
+        raise ValueError(f"No lap-count evidence for race {race.race_id.iloc[0]}")
     ahead, behind, rival_pits, remaining = [], [], [], []
     for driver, lap, cutoff in zip(drivers, laps, times, strict=True):
         crossed, who = crossings[lap]
         before = crossed[(who != driver) & (crossed <= cutoff)]
         ahead.append(np.clip(cutoff - before.max(), 0, GAP_SECONDS) if before.size else GAP_SECONDS)
         own_previous = time_of.get((driver, lap - 1))
-        behind.append(GAP_SECONDS)
+        gap = GAP_SECONDS
         if own_previous is not None:
             crossed, who = crossings[lap - 1]
             after = crossed[(who != driver) & (crossed > own_previous) & (crossed <= cutoff)]
             if after.size:
-                behind[-1] = np.clip(after.min() - own_previous, 0, GAP_SECONDS)
+                gap = np.clip(after.min() - own_previous, 0, GAP_SECONDS)
+        behind.append(gap)
         low = time_of.get((driver, lap - 2), np.nan) if lap > 2 else -np.inf
-        hit = pit_driver[(pit_driver != driver) & (pit_time > low) & (pit_end <= cutoff)]
-        rival_pits.append(np.nan if np.isnan(low) else len(set(hit)))
+        entered_by_t = (pit_time > low) & (pit_time <= cutoff) & (pit_end <= cutoff)
+        rival_pits.append(
+            np.nan if np.isnan(low) else len(set(pit_driver[entered_by_t & (pit_driver != driver)]))
+        )
         try:
             remaining.append(known_total_laps(entry, cutoff, f"{driver} lap {lap}") - lap)
-        except (ValueError, TypeError):  # no announcement known at T, or no evidence at all
+        except ValueError:  # no announcement known at T; reported as unresolved laps_remaining
             remaining.append(np.nan)
 
     status = race.TrackStatus.str
