@@ -305,3 +305,21 @@ the resulting rows at a supplied threshold. `pitstop.metrics.paired_bootstrap`
 accepts aligned predictions from two runs for the same keys, labels and split,
 and their respective frozen thresholds. It reports left-minus-right intervals
 and marks an interval containing zero as a tie.
+
+## T6: train the baselines
+
+```sh
+uv run --offline --no-sync pitstop train --config configs/constant.yaml
+uv run --offline --no-sync pitstop train --config configs/logreg.yaml
+uv run --offline --no-sync pitstop train --config configs/lightgbm.yaml
+```
+
+Each command fits on `split == "train"` rows only (LightGBM stops early on val AP
+and saves the best iteration), writes `runs/<run_id>/` with the artifacts listed
+in the contract, and then writes `predictions.parquet` for train and val rows.
+The test split is never read for prediction. `pitstop predict --run-dir runs/<run_id>`
+reloads the saved model and rewrites the predictions. Then run T5 evaluation on
+the validation split for each run (see above).
+
+LightGBM needs the system OpenMP library (`libgomp1` on Debian). If importing
+it fails with `libgomp.so.1: cannot open shared object file`, install it.

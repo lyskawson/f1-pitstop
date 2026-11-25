@@ -32,6 +32,10 @@ def build_parser() -> argparse.ArgumentParser:
         elif command == "build-dataset":
             stage.add_argument("--config", type=str, help="Data config (required)")
             stage.add_argument("--snapshot", type=str, help="Raw snapshot name (required)")
+        elif command == "train":
+            stage.add_argument("--config", help="Model config (required)")
+        elif command == "predict":
+            stage.add_argument("--run-dir", help="Run directory to predict (required)")
         elif command == "evaluate":
             stage.add_argument("--predictions", help="Predictions parquet (required)")
             stage.add_argument("--samples", help="Declared samples parquet (required)")
@@ -67,6 +71,14 @@ def main(argv: list[str] | None = None) -> int:
             if not (args.config and args.snapshot):
                 raise ValueError("build-dataset requires --config and --snapshot")
             result = build_dataset(args.config, args.snapshot)
+        elif args.command == "train" and args.config:
+            from pitstop.train import train
+
+            result = train(args.config)
+        elif args.command == "predict" and args.run_dir:
+            from pitstop.predict import predict_run
+
+            result = predict_run(args.run_dir)
         elif args.command == "evaluate" and len(argv) > 1:
             from pitstop.evaluate import evaluate_files
 
