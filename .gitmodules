@@ -1,0 +1,3 @@
+[submodule "f1-pitstop-report"]
+	path = f1-pitstop-report
+	url = https://github.com/lyskawson/f1-pitstop-report
