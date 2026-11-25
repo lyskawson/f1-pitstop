@@ -334,7 +334,18 @@ uv run --offline --no-sync pitstop train --config configs/mlp.yaml
 seeded per-epoch shuffling, early stopping on val AP, best-epoch weights. It
 writes `model.pt` (CPU `state_dict`) and `history.json` (one entry per epoch plus
 `{"best_epoch": n}`). `predict` rebuilds the model from `config.yaml` via
-`predict.MODELS`. T9 and T10 add their model class there. Config `input`
+`predict.MODELS`. T10 adds its model class there. Config `input`
 (`tabular` or `sequences`) selects the array. Then evaluate on val as above.
 
 `fit_torch` calls `torch.use_deterministic_algorithms(True)` for the whole process; T9 and T10 models must use deterministic CPU ops.
+
+## T9: GRU
+
+```sh
+uv run --offline --no-sync pitstop train --config configs/gru.yaml
+```
+
+`models/rnn.py` is a two-layer GRU (`cell: lstm` swaps in an LSTM) on the
+15-lap windows from `sequences.npz`. The logit comes from the last time step,
+which is always a real lap. `bidirectional: true` raises. It trains through
+`fit_torch` like the MLP, with gradient clipping at 1.0. Evaluate on val as above.
