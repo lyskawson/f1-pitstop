@@ -1,0 +1,18 @@
+model: constant
+seed: 42
+input: tabular
+data:
+  samples: data/processed/v1/samples.parquet
+  tabular: data/processed/v1/tabular.npz
+  sequences: data/processed/v1/sequences.npz
+  preprocess: data/processed/v1/preprocess.json
+output_dir: runs
+parameters:
+  strategy: train_prevalence
+selection:
+  split: val
+  metric: average_precision
+threshold:
+  split: val
+  metric: f1
+  tie_break: largest

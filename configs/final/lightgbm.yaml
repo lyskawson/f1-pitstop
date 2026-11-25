@@ -1,0 +1,32 @@
+model: lightgbm
+seed: 42
+input: tabular
+data:
+  samples: data/processed/v1/samples.parquet
+  tabular: data/processed/v1/tabular.npz
+  sequences: data/processed/v1/sequences.npz
+  preprocess: data/processed/v1/preprocess.json
+output_dir: runs
+parameters:
+  objective: binary
+  num_leaves: 31
+  learning_rate: 0.05
+  n_estimators: 2000
+  min_child_samples: 50
+  subsample: 0.8
+  subsample_freq: 1
+  colsample_bytree: 0.8
+  class_weight: null
+  n_jobs: 1
+  verbosity: -1
+early_stopping:
+  rounds: 100
+  split: val
+  metric: average_precision
+selection:
+  split: val
+  metric: average_precision
+threshold:
+  split: val
+  metric: f1
+  tie_break: largest
