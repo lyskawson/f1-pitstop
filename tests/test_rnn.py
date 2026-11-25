@@ -51,6 +51,8 @@ def test_logits_shape_and_bias_init():
 def test_rows_do_not_mix():
     model = RNN(ARCHITECTURE, 0.2).eval()
     x = torch.from_numpy(windows(5))
+    x[1, :5] = 0  # row 1 is a short history: left zero padding marked by is_pad
+    x[1, :5, -1] = 1
     with torch.no_grad():
         batch = model(x)
         alone = torch.cat([model(x[i : i + 1]) for i in range(5)])
