@@ -3,6 +3,28 @@
   "git_commit": "f91914766761844937bd1e83e77740daa5af8a17",
   "data_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
   "bootstrap_samples": 1000,
+  "val_groups": {
+    "green": {
+      "n_samples": 9805,
+      "n_positives": 284,
+      "n_races": 10
+    },
+    "overall": {
+      "n_samples": 10415,
+      "n_positives": 296,
+      "n_races": 10
+    },
+    "sc_vsc": {
+      "n_samples": 610,
+      "n_positives": 12,
+      "n_races": 8
+    },
+    "special_tyre_rule": {
+      "n_samples": 1402,
+      "n_positives": 35,
+      "n_races": 1
+    }
+  },
   "tuning": [
     {
       "model": "mlp",

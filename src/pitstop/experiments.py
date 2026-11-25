@@ -20,6 +20,7 @@ SETTERS = {
     "gru": lambda a, h: a.update(hidden_size=h),
     "tcn": lambda a, h: a.update(channels=h),
 }
+NETWORKS = ("mlp", "gru", "tcn")
 MODELS = ("constant", "logreg", "lightgbm", "mlp", "gru", "tcn")
 SEEDS = (42, 43, 44)
 RUNS = ROOT / "runs"
@@ -50,11 +51,13 @@ def run_one(config_path, threads):
     from pitstop.train import train
 
     torch.set_num_threads(threads)
-    while True:
+    for attempt in range(10):
         try:
             run_id = train(str(config_path))["run_id"]
             break
         except FileExistsError:  # run ids have 1 s resolution; parallel starts can collide
+            if attempt == 9:
+                raise
             time.sleep(1)
     run_dir = f"runs/{run_id}"
     metrics = evaluate_files(
@@ -212,11 +215,34 @@ def summary_markdown(doc):
         + [f"[{c['ci_lower']:+.4f}, {c['ci_upper']:+.4f}]", "tie" if c["tie"] else "differs"]
         for c in doc["paired_bootstrap_vs_lightgbm"]
     ]
+    counts = [
+        [
+            name,
+            str(g["n_samples"]),
+            str(g["n_positives"]),
+            str(g["n_races"]),
+            f"{g['n_positives'] / g['n_samples']:.3f}",
+        ]
+        for name, g in doc["val_groups"].items()
+    ]
+    overall = doc["val_groups"]["overall"]
+    tuned_ap = next(
+        t["average_precision"] for t in doc["tuning"] if t["model"] == "tcn" and t["selected"]
+    )
+    tied = sum(c["tie"] for c in doc["paired_bootstrap_vs_lightgbm"] if c["model"] in NETWORKS)
+    n_networks = sum(c["model"] in NETWORKS for c in doc["paired_bootstrap_vs_lightgbm"])
     return (
         "\n\n".join(
             [
                 "# Validation study v1 (val split only)",
-                f"Code revision `{doc['git_commit']}`, data `{doc['data_sha256']}`.",
+                f"Runs produced by code revision `{doc['git_commit']}`, "
+                f"data `{doc['data_sha256']}`.",
+                "Caveats: configs were selected on val AP at seed 42 only, and the seed-42 final "
+                "runs are the tuning runs, so val metrics of the selected configs are "
+                f"optimistically biased (e.g. TCN tuning AP {tuned_ap:.4f} vs its 3-seed mean "
+                f"{doc['models']['tcn']['average_precision']['mean']:.3f}). "
+                f"All val numbers come from one split of {overall['n_races']} races. "
+                "Unbiased numbers come only from the locked test split (T12).",
                 "## Tuning (seed 42, val AP)",
                 _table(["model", "learning rate", "hidden", "val AP", "selected"], tuning),
                 "## Models, mean ± sd over seeds 42, 43, 44",
@@ -224,9 +250,16 @@ def summary_markdown(doc):
                     ["model", "val AP", "val F1", "event k=1 F1", "false alarms / race"], models
                 ),
                 "## Green vs SC/VSC laps, mean over seeds",
+                _table(["group", "laps", "positives", "races", "prevalence"], counts),
                 _table(["model", "green AP", "green F1", "SC/VSC AP", "SC/VSC F1"], split),
+                "SC/VSC has very few positives, so its AP is very noisy and no performance claim "
+                "is made for it. An F1 of 0 means the frozen threshold (selected on the "
+                "green-dominated val split) produces no SC/VSC hits.",
                 "## AP difference vs LightGBM (paired race bootstrap, 95% CI)",
                 _table(["model", "seed", "AP difference", "95% CI", "result"], paired),
+                f"The networks are statistically tied with LightGBM in {tied} of {n_networks} "
+                "comparisons (a tie means the CI contains 0); logreg and constant are clearly "
+                "worse. No network is claimed to beat LightGBM.",
             ]
         )
         + "\n"
@@ -251,6 +284,10 @@ def summarize(bootstrap_samples=1000):
         "git_commit": commits.pop(),
         "data_sha256": (RUNS / rows[0]["run_id"] / "data_hash.txt").read_text().strip(),
         "bootstrap_samples": bootstrap_samples,
+        "val_groups": {  # same val rows for every run
+            name: {k: g[k] for k in ("n_samples", "n_positives", "n_races")}
+            for name, g in val_metrics(rows[0]["run_id"]).items()
+        },
         "tuning": tuning,
         "runs": rows,
         "models": aggregate(rows),
@@ -269,4 +306,9 @@ if __name__ == "__main__":  # uv run python -m pitstop.experiments tune|final|su
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--threads", type=int, default=4, help="Torch threads per worker")
     args = parser.parse_args()
-    summarize() if args.step == "summary" else globals()[args.step](args.workers, args.threads)
+    if args.step == "summary":
+        summarize()
+    elif args.step == "tune":
+        tune(args.workers, args.threads)
+    else:
+        final(args.workers, args.threads)

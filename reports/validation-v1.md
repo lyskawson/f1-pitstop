@@ -1,6 +1,8 @@
 # Validation study v1 (val split only)
 
-Code revision `f91914766761844937bd1e83e77740daa5af8a17`, data `36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5`.
+Runs produced by code revision `f91914766761844937bd1e83e77740daa5af8a17`, data `36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5`.
+
+Caveats: configs were selected on val AP at seed 42 only, and the seed-42 final runs are the tuning runs, so val metrics of the selected configs are optimistically biased (e.g. TCN tuning AP 0.1495 vs its 3-seed mean 0.141). All val numbers come from one split of 10 races. Unbiased numbers come only from the locked test split (T12).
 
 ## Tuning (seed 42, val AP)
 
@@ -38,6 +40,13 @@ Code revision `f91914766761844937bd1e83e77740daa5af8a17`, data `36ee960d81516ad4
 
 ## Green vs SC/VSC laps, mean over seeds
 
+| group | laps | positives | races | prevalence |
+| --- | --- | --- | --- | --- |
+| green | 9805 | 284 | 10 | 0.029 |
+| overall | 10415 | 296 | 10 | 0.028 |
+| sc_vsc | 610 | 12 | 8 | 0.020 |
+| special_tyre_rule | 1402 | 35 | 1 | 0.025 |
+
 | model | green AP | green F1 | SC/VSC AP | SC/VSC F1 |
 | --- | --- | --- | --- | --- |
 | constant | 0.029 | 0.056 | 0.020 | 0.039 |
@@ -46,6 +55,8 @@ Code revision `f91914766761844937bd1e83e77740daa5af8a17`, data `36ee960d81516ad4
 | logreg | 0.091 | 0.178 | 0.029 | 0.042 |
 | mlp | 0.157 | 0.243 | 0.051 | 0.000 |
 | tcn | 0.148 | 0.239 | 0.063 | 0.025 |
+
+SC/VSC has very few positives, so its AP is very noisy and no performance claim is made for it. An F1 of 0 means the frozen threshold (selected on the green-dominated val split) produces no SC/VSC hits.
 
 ## AP difference vs LightGBM (paired race bootstrap, 95% CI)
 
@@ -66,3 +77,5 @@ Code revision `f91914766761844937bd1e83e77740daa5af8a17`, data `36ee960d81516ad4
 | constant | 42 | -0.1145 | [-0.1566, -0.0717] | differs |
 | constant | 43 | -0.1065 | [-0.1595, -0.0540] | differs |
 | constant | 44 | -0.1160 | [-0.1602, -0.0688] | differs |
+
+The networks are statistically tied with LightGBM in 8 of 9 comparisons (a tie means the CI contains 0); logreg and constant are clearly worse. No network is claimed to beat LightGBM.
