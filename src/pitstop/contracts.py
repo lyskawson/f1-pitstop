@@ -252,3 +252,61 @@ def validate_sequences(arrays: Mapping[str, np.ndarray], samples: pd.DataFrame) 
         raise ValueError("sequences final step must be a real lap")
     if np.any(inputs[:, :, :-1][is_pad == 1] != 0):
         raise ValueError("sequences padded feature values must be zero")
+
+
+def validate_lap_count_evidence(evidence, events) -> None:
+    """Check lap_count_evidence.json against events.json (same order, same races)."""
+    if not isinstance(evidence, list) or [
+        e.get("race_id") if isinstance(e, Mapping) else None for e in evidence
+    ] != [e["race_id"] for e in events]:
+        raise ValueError("Lap-count evidence coverage differs")
+    for entry, event in zip(evidence, events, strict=True):
+        rows = entry.get("rows")
+        if not isinstance(rows, list) or not rows or not all(isinstance(r, Mapping) for r in rows):
+            raise ValueError("Invalid lap-count timestamps")
+        counts = pd.DataFrame(rows)
+        if "Time" not in counts or "TotalLaps" not in counts:
+            raise ValueError("Invalid lap-count timestamps")
+        times = pd.to_numeric(counts.Time, errors="coerce")
+        if times.isna().any() or not np.isfinite(times).all():
+            raise ValueError("Invalid lap-count timestamps")
+        values = pd.to_numeric(counts.TotalLaps.dropna(), errors="coerce")
+        if (
+            values.empty
+            or values.isna().any()
+            or not np.isfinite(values).all()
+            or not values.gt(0).all()
+            or not values.mod(1).eq(0).all()
+            or values.iloc[-1] != event["total_laps"]
+        ):
+            raise ValueError("Lap-count evidence differs from event")
+        if not (
+            entry.get("source_url")
+            and entry.get("parser")
+            and entry.get("time_basis") == "session seconds"
+        ):
+            raise ValueError("Missing lap-count provenance")
+
+
+def known_total_laps(entry, cutoff: float, sample: str = "") -> int:
+    """Return the lap count announced at session second `cutoff` (sample cutoff T).
+
+    Take the last row with finite Time <= cutoff and a positive integral TotalLaps.
+    Rows are sorted by Time; source order breaks ties. Null updates keep the last count.
+    """
+    known = [
+        (row["Time"], i, int(row["TotalLaps"]))
+        for i, row in enumerate(entry["rows"])
+        if row["TotalLaps"] is not None
+        and np.isfinite(row["Time"])
+        and row["Time"] <= cutoff
+        and np.isfinite(row["TotalLaps"])
+        and row["TotalLaps"] > 0
+        and row["TotalLaps"] % 1 == 0
+    ]
+    if not known:
+        raise ValueError(
+            f"Unresolved lap count for race {entry['race_id']}, sample {sample or '?'}: "
+            f"no announcement at or before session second {cutoff}"
+        )
+    return max(known)[2]

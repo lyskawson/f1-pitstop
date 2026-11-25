@@ -24,7 +24,9 @@ from pitstop.contracts import (
     SEQ_CHANNELS,
     SPLITS,
     WINDOW,
+    known_total_laps,
     make_race_id,
+    validate_lap_count_evidence,
     validate_predictions,
     validate_race_id,
     validate_raw_laps,
@@ -514,3 +516,69 @@ def test_internet_socket_is_blocked(family):
 def test_unix_socket_is_allowed():
     with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as local:
         assert local.family == socket.AF_UNIX
+
+
+def lap_counts(**changes):
+    entry = {
+        "race_id": "2022_01_R",
+        "source_url": "https://example.invalid/LapCount.jsonStream",
+        "time_basis": "session seconds",
+        "parser": "fastf1._api.lap_count",
+        "rows": [
+            {"Time": 5.0, "TotalLaps": 58.0, "CurrentLap": 1},
+            {"Time": 50.0, "TotalLaps": None, "CurrentLap": 2},
+            {"Time": 90.0, "TotalLaps": 57.0, "CurrentLap": 3},
+        ],
+    }
+    return {**entry, **changes}
+
+
+EVENTS = [{"race_id": "2022_01_R", "total_laps": 57}]
+
+
+def test_lap_count_evidence_accepts_parser_output():
+    validate_lap_count_evidence([lap_counts()], EVENTS)
+
+
+@pytest.mark.parametrize(
+    "evidence",
+    [
+        [lap_counts(race_id="2022_02_R")],
+        [lap_counts(), lap_counts()],
+        [lap_counts(rows=[])],
+        [lap_counts(rows=[{"Time": None, "TotalLaps": 57}])],
+        [lap_counts(rows=[{"Time": float("inf"), "TotalLaps": 57}])],
+        [lap_counts(rows=[{"Time": 1.0, "TotalLaps": 56.5}, {"Time": 2.0, "TotalLaps": 57}])],
+        [lap_counts(rows=[{"Time": 1.0, "TotalLaps": 0}, {"Time": 2.0, "TotalLaps": 57}])],
+        [lap_counts(rows=[{"Time": 1.0, "TotalLaps": None}])],
+        [lap_counts(rows=[{"Time": 1.0, "TotalLaps": 56}])],
+        [lap_counts(source_url="")],
+        [lap_counts(parser=None)],
+        [lap_counts(time_basis="UTC")],
+    ],
+)
+def test_lap_count_evidence_rejects_malformed_payloads(evidence):
+    with pytest.raises(ValueError, match="Lap-count|lap-count"):
+        validate_lap_count_evidence(evidence, EVENTS)
+
+
+def test_known_total_laps_uses_only_announcements_known_at_cutoff():
+    entry = lap_counts()
+    assert known_total_laps(entry, 5.0) == 58
+    assert known_total_laps(entry, 89.9) == 58  # null update keeps the last count
+    assert known_total_laps(entry, 90.0) == 57
+
+
+def test_known_total_laps_breaks_ties_by_time_then_source_order():
+    rows = [
+        {"Time": 20.0, "TotalLaps": 50},
+        {"Time": 10.0, "TotalLaps": 52},
+        {"Time": 20.0, "TotalLaps": 51},
+        {"Time": 20.0, "TotalLaps": 0},
+    ]
+    assert known_total_laps(lap_counts(rows=rows), 20.0) == 51
+
+
+def test_known_total_laps_reports_unresolved_input_with_context():
+    with pytest.raises(ValueError, match=r"2022_01_R, sample 2022_01_R/1/3"):
+        known_total_laps(lap_counts(), 4.9, "2022_01_R/1/3")

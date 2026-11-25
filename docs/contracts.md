@@ -61,6 +61,28 @@ before this count is used for earlier-lap features. If the count changed, preser
 the timestamped announcements and use only the count known at T; a final count
 must not leak into earlier samples. Record findings and provenance.
 
+**`lap_count_evidence.json` and the lap count known at T.**
+
+Optional raw-snapshot payload (hashed in the manifest; archives without it stay
+valid). It is a JSON list with one entry per race, in `events.json` order:
+`race_id`, `source_url` (LapCount stream of the race), `time_basis`
+(`"session seconds"`), `parser` (`fastf1._api.lap_count`) and `rows`, all parsed
+announcements in source order: `Time` (finite float seconds), `TotalLaps` (null,
+or a positive integral number; the parser emits floats such as `57.0`) and
+`CurrentLap`. Null `TotalLaps` updates are kept. `validate_lap_count_evidence`
+checks coverage, provenance, timestamps, counts, and that the last non-null count
+equals `events.total_laps`; `verify-data` calls it.
+
+T4 needs this payload for every race it processes. For a sample at the end of lap
+`t` in race `r` with cutoff `T` (session seconds), the count is the last
+`TotalLaps` of race `r` that is positive, integral, non-null, and has finite
+`Time <= T`, ordered by `Time` and then source order. Null updates leave the last
+known count in effect. `laps_remaining = count - t` (D5). Later announcements,
+observed lap maxima and `events.total_laps` never supply an earlier sample's
+count. If no count is known at `T`, the builder raises an unresolved-input error
+naming the race and sample (`known_total_laps`); it never guesses or drops the
+sample silently.
+
 All raw times are floating-point seconds, not timedelta, datetime, or integer
 nanoseconds. Missing float measurements are NaN. A null `PitInTime` means no
 recorded pit entry on that lap; it is never filled. Infinity is invalid.
