@@ -68,6 +68,7 @@ Feature vector at t (15 dimensions):
 Rules:
 
 - On laps that are not IsAccurate, `lap_time_rel` and `stint_deg` are forward-filled within (race, driver).
+- Clarification (2026-11-25): while no accurate observation exists to compute it causally, `lap_time_rel` = 0; details in `docs/contracts.md`.
 - Standardization statistics are fitted on train only and saved in `preprocess.json`.
 - Tabular models (logistic regression, LightGBM, MLP) get the vector at t.
 - Sequence models (GRU, TCN) get a window of W = 15 laps, t−14..t, of the same (race, driver), aligned to t. A window never crosses race or driver boundaries; it may cross stint boundaries. Left zero-padding plus an extra `is_pad` channel → tensor `[N, 15, 16]` float32.
@@ -205,3 +206,4 @@ Key K = (race_id: str `YYYY_RR_R`, driver_number: str, lap_number: int). Times a
 - 2026-10-19: v1 accepted.
 - 2026-10-19: D10 — FastF1 pin changed from >=3.8.3,<3.9 to >=3.9.0a0,<3.10 because the F1 live-timing archive requires F1 TV authentication since about 2026-10-15 (theOehrly/Fast-F1#978); 3.9.0a0 is the first version that supports it. D12 — the data downloader needs an F1 TV Access account. Statements verified against FastF1 3.8.3 (status line, D2, Leakage rule 5) are re-checked on 3.9 in T0. Approved by a human team member.
 - 2026-11-24: Alek approved the revised D2 in the T3 Codex chat, referring to the “Decision pending” section of the T3 report. The same rule applies to all splits. Confirmations require reproducible documented inputs. Omit and count visits the verified v1 snapshot cannot resolve.
+- 2026-11-25: D5 clarified, approved by michalklamecki. `lap_time_rel` is 0 (neutral field-median pace) while no accurate observation allows a causal value (lap 1 is never IsAccurate in the v1 snapshot); afterwards it is forward-filled without a lap limit, while raw inputs use the 3-lap limit of D3. A rival pit entry counts once the rival's in-lap has finished by T. Gaps use same-lap crossings by session time, missing = 60 s. Remaining interpretations are listed in `docs/contracts.md`. No row is removed; D2 and the leakage rules are unchanged.
