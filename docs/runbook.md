@@ -349,3 +349,14 @@ uv run --offline --no-sync pitstop train --config configs/gru.yaml
 15-lap windows from `sequences.npz`. The logit comes from the last time step,
 which is always a real lap. `bidirectional: true` raises. It trains through
 `fit_torch` like the MLP, with gradient clipping at 1.0. Evaluate on val as above.
+
+## T10: TCN
+
+```sh
+uv run --offline --no-sync pitstop train --config configs/tcn.yaml
+```
+
+`models/tcn.py` is a causal TCN on the 15-lap windows: three residual blocks of
+two convolutions (32 channels, kernel 3, dilations 1, 2, 4), padded on the left
+only. The logit comes from the last time step. `causal: false` raises. It trains
+through `fit_torch` like the GRU. Evaluate on val as above.
