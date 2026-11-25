@@ -27,7 +27,7 @@ Do not put snapshots, caches, credentials, or runs into Git.
 The stage order is below. T2 implements the configured cache-only `download`
 and snapshot `verify-data` commands. T3 provides the Python interfaces for
 fixed splits, exclusions and labels. T5 implements file-based evaluation.
-Dataset building, training, prediction and demo export remain CLI stubs.
+T4 implements `build-dataset`. Training, prediction and demo export remain CLI stubs.
 
 ```sh
 uv run pitstop download
@@ -222,6 +222,34 @@ labelling inputs. Continuous visits remain unresolved by default in every split.
 For the T3 audit, verify the snapshot, read training events only for the
 diagnostics, and record accepted and omitted counts by reason. Keep keyed
 audit outputs private. Test evaluation is still gated by D4.
+
+## T4: build the processed dataset
+
+```sh
+uv run --offline --no-sync pitstop build-dataset --config configs/data.yaml --snapshot v1
+```
+
+The command verifies the raw snapshot, applies the fixed splits and D3
+exclusions, builds D2 labels from the unfilled raw laps, then computes the D5
+features for every real (non-generated) lap of the retained pairs; field statistics use all drivers of a kept race. It writes
+`samples.parquet`, `tabular.npz`, `sequences.npz` and `preprocess.json` to
+`paths.processed` (it refuses to overwrite an existing directory). Statistics are fitted on
+train sample rows only; `preprocess.json` records the data and split hashes, the
+fit row-id hash, payload hashes and the producing commit.
+
+Feature rules chosen where D5 is silent:
+
+- Every aggregate uses only rows with `Time <= T` (laps, lap-count evidence). A rival's
+  pit entry counts once its in-lap row has finished, so a truncated stream gives the
+  same row.
+- Raw `Stint`, `Compound`, `TyreLife`, `Position` and `TrackStatus` are forward-filled
+  for at most 3 laps within a driver; anything still missing raises
+  `UnresolvedInputError` naming race, driver, lap and feature. No row is dropped.
+- `lap_time_rel` and `stint_deg` are masked by `IsAccurate` only. `lap_time_rel` is
+  forward-filled without a lap limit; it is 0 until the first accurate lap of the driver (contract rule 1).
+  `stint_deg` is 0 until the stint has an accurate lap.
+- Window history may use laps that are not sample rows, as long as the lap is real,
+  consecutive and at most `t`; a missing lap ends the window and the rest is padding.
 
 ## T5: evaluate one run
 

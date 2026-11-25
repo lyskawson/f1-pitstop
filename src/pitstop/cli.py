@@ -29,6 +29,9 @@ def build_parser() -> argparse.ArgumentParser:
             stage.add_argument("--snapshot", type=str)
         elif command == "verify-data":
             stage.add_argument("--manifest", type=str)
+        elif command == "build-dataset":
+            stage.add_argument("--config", type=str, help="Data config (required)")
+            stage.add_argument("--snapshot", type=str, help="Raw snapshot name (required)")
         elif command == "evaluate":
             stage.add_argument("--predictions", help="Predictions parquet (required)")
             stage.add_argument("--samples", help="Declared samples parquet (required)")
@@ -58,6 +61,12 @@ def main(argv: list[str] | None = None) -> int:
             from pitstop.ingest import verify_data
 
             result = verify_data(args.manifest)
+        elif args.command == "build-dataset" and len(argv) > 1:
+            from pitstop.dataset import build_dataset
+
+            if not (args.config and args.snapshot):
+                raise ValueError("build-dataset requires --config and --snapshot")
+            result = build_dataset(args.config, args.snapshot)
         elif args.command == "evaluate" and len(argv) > 1:
             from pitstop.evaluate import evaluate_files
 
