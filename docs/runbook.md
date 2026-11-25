@@ -323,3 +323,18 @@ the validation split for each run (see above).
 
 LightGBM needs the system OpenMP library (`libgomp1` on Debian). If importing
 it fails with `libgomp.so.1: cannot open shared object file`, install it.
+
+## T8: MLP and the shared neural loop
+
+```sh
+uv run --offline --no-sync pitstop train --config configs/mlp.yaml
+```
+
+`train.fit_torch` is the loop for every neural model: AdamW, BCE with logits,
+seeded per-epoch shuffling, early stopping on val AP, best-epoch weights. It
+writes `model.pt` (CPU `state_dict`) and `history.json` (one entry per epoch plus
+`{"best_epoch": n}`). `predict` rebuilds the model from `config.yaml` via
+`predict.MODELS`. T9 and T10 add their model class there. Config `input`
+(`tabular` or `sequences`) selects the array. Then evaluate on val as above.
+
+`fit_torch` calls `torch.use_deterministic_algorithms(True)` for the whole process; T9 and T10 models must use deterministic CPU ops.
