@@ -5,6 +5,7 @@ import json
 import platform
 import subprocess
 import sys
+import time
 from datetime import UTC, datetime
 from importlib import metadata
 from pathlib import Path
@@ -48,6 +49,7 @@ def train(config_path):
     run_dir = ROOT / config["output_dir"] / f"{stamp}_{kind}_s{seed}_{commit[:8]}"
     run_dir.mkdir(parents=True)  # raises if the run already exists
 
+    started = time.perf_counter()
     model, history = baselines.fit(config, x[train_rows], y[train_rows], x[val_rows], y[val_rows])
     baselines.save(model, kind, run_dir)
     preprocess = ROOT / config["data"]["preprocess"]
@@ -56,6 +58,7 @@ def train(config_path):
     (run_dir / "git_commit.txt").write_text(commit + "\n")
     (run_dir / "data_hash.txt").write_text(json.loads(preprocess.read_text())["data_sha256"] + "\n")
     (run_dir / "seed.txt").write_text(f"{seed}\n")
-    write_json(run_dir / "environment.json", _environment(ROOT / "uv.lock"))
+    environment = _environment(ROOT / "uv.lock") | {"train_seconds": time.perf_counter() - started}
+    write_json(run_dir / "environment.json", environment)
     write_json(run_dir / "history.json", history)
     return predict_run(run_dir)
