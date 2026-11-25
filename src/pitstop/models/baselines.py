@@ -5,13 +5,17 @@ import pickle
 
 import lightgbm as lgb  # import before torch (segfault on one Mac)
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import average_precision_score
+from sklearn.metrics import average_precision_score, log_loss
 
 FILES = {"constant": "model.json", "logreg": "model.pkl", "lightgbm": "model.txt"}
 
 
 def _average_precision(y_true, y_score):
     return "average_precision", average_precision_score(y_true, y_score), True
+
+
+def _log_loss(y_true, y_score):
+    return "log_loss", log_loss(y_true, y_score, labels=[0, 1]), False
 
 
 def fit(config, x_train, y_train, x_val, y_val):
@@ -26,13 +30,18 @@ def fit(config, x_train, y_train, x_val, y_val):
     model.fit(
         x_train,
         y_train,
-        eval_X=x_val,
-        eval_y=y_val,
-        eval_metric=_average_precision,
-        callbacks=[lgb.early_stopping(stop["rounds"], verbose=False)],
+        # x_train is passed as the "training" set, which early stopping ignores
+        eval_set=[(x_train, y_train), (x_val, y_val)],
+        eval_metric=[_average_precision, _log_loss],  # AP first: it alone decides stopping
+        callbacks=[lgb.early_stopping(stop["rounds"], first_metric_only=True, verbose=False)],
     )
-    scores = model.evals_result_["valid_0"]["average_precision"]
-    history = [{"iteration": i + 1, "val_average_precision": s} for i, s in enumerate(scores)]
+    results = model.evals_result_
+    history = [
+        {"iteration": i + 1, "train_loss": loss, "val_average_precision": ap}
+        for i, (loss, ap) in enumerate(
+            zip(results["training"]["log_loss"], results["valid_1"]["average_precision"])
+        )
+    ]
     history.append({"best_iteration": model.best_iteration_})
     return model.booster_, history
 

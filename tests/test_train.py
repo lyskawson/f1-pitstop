@@ -144,6 +144,7 @@ def test_lightgbm_early_stopping_uses_val(tmp_path):
     run_dir = run(tmp_path, "lightgbm")
     history = json.loads((run_dir / "history.json").read_text())
     curve = [h["val_average_precision"] for h in history[:-1]]
+    assert all(np.isfinite(h["train_loss"]) for h in history[:-1])
     assert history[-1]["best_iteration"] == int(np.argmax(curve)) + 1
     assert len(curve) < PARAMETERS["lightgbm"]["n_estimators"]
 

@@ -25,10 +25,11 @@ def predict_run(run_dir):
     config = yaml.safe_load((run_dir / "config.yaml").read_text())
     samples, x = load_inputs(config)
     rows = samples["split"].isin(("train", "val")).to_numpy()
+    samples, x = samples[rows], x[rows]  # test rows never reach the model
     model = baselines.load(config["model"], run_dir)
-    predictions = samples.loc[rows, [*KEY, "split", "y"]].assign(
+    predictions = samples[[*KEY, "split", "y"]].assign(
         run_id=run_dir.name,
-        score=np.asarray(baselines.score(model, x[rows]), dtype="float64"),
+        score=np.asarray(baselines.score(model, x), dtype="float64"),
     )
     predictions["target_lap"] = predictions["lap_number"] + 1
     validate_predictions(predictions)
