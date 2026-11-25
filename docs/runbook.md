@@ -336,3 +336,5 @@ writes `model.pt` (CPU `state_dict`) and `history.json` (one entry per epoch plu
 `{"best_epoch": n}`). `predict` rebuilds the model from `config.yaml` via
 `predict.MODELS`. T9 and T10 add their model class there. Config `input`
 (`tabular` or `sequences`) selects the array. Then evaluate on val as above.
+
+`fit_torch` calls `torch.use_deterministic_algorithms(True)` for the whole process; T9 and T10 models must use deterministic CPU ops.

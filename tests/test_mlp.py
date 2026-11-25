@@ -74,3 +74,37 @@ def test_reload_seed_and_early_stopping(tmp_path):
     history = json.loads((first / "history.json").read_text())
     curve = [h["val_average_precision"] for h in history[:-1]]
     assert history[-1]["best_epoch"] == int(np.argmax(curve)) + 1
+
+
+def noisy_split(seed):
+    """Weak signal plus noisy labels: val AP peaks early, then the net memorises train noise."""
+    rng = np.random.default_rng(seed)
+    x = rng.normal(size=(64, 15)).astype("float32")
+    y = ((x[:, 0] + rng.normal(size=64)) > 1).astype("int64")
+    return x, y
+
+
+def test_returned_weights_are_best_epoch_not_last():
+    (x, y), (x_val, y_val) = noisy_split(0), noisy_split(1)
+    config = {"model": "mlp", "seed": 1, "architecture": ARCHITECTURE}
+    config["training"] = TRAINING | {"learning_rate": 0.05, "max_epochs": 30, "patience": 30}
+    state, history = fit_torch(config, x, y, x_val, y_val)
+    curve = [h["val_average_precision"] for h in history[:-1]]
+    best = history[-1]["best_epoch"]
+    assert best < len(curve)  # the peak is before the last epoch
+    model = MLP(ARCHITECTURE, 0.5)
+    model.load_state_dict(state)
+    ap = average_precision_score(y_val, model.eval()(torch.from_numpy(x_val)).detach())
+    assert math.isclose(ap, max(curve), rel_tol=1e-6)
+
+
+def test_val_data_does_not_change_training():
+    x, y = noisy_split(0)
+    config = {"model": "mlp", "seed": 1, "architecture": ARCHITECTURE}
+    config["training"] = TRAINING | {"max_epochs": 3, "patience": 30}
+    losses = []
+    for seed in (1, 2):  # only val differs; val may pick the epoch but never feeds the loss
+        x_val, y_val = noisy_split(seed)
+        _, history = fit_torch(config, x, y, x_val, y_val)
+        losses.append([h["train_loss"] for h in history[:-1]])
+    assert losses[0] == losses[1]

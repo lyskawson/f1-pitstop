@@ -77,7 +77,7 @@ def fit_torch(config, x_train, y_train, x_val, y_val):
         history.append(
             {"epoch": epoch, "train_loss": total / len(x_train), "val_average_precision": ap}
         )
-        if ap > best_ap:
+        if ap > best_ap or best_state is None:  # NaN AP must not leave no state
             best_ap, best_epoch, best_state = ap, epoch, copy.deepcopy(model.state_dict())
         elif epoch - best_epoch >= cfg["patience"]:
             break
