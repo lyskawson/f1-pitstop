@@ -254,6 +254,15 @@ def validate_sequences(arrays: Mapping[str, np.ndarray], samples: pd.DataFrame) 
         raise ValueError("sequences padded feature values must be zero")
 
 
+def _is_number(value) -> bool:
+    return isinstance(value, int | float) and not isinstance(value, bool) and np.isfinite(value)
+
+
+def _is_count(value) -> bool:
+    """A usable lap count: finite, positive and integral (parser output may be 57.0)."""
+    return _is_number(value) and value > 0 and value % 1 == 0
+
+
 def validate_lap_count_evidence(evidence, events) -> None:
     """Check lap_count_evidence.json against events.json (same order, same races)."""
     if not isinstance(evidence, list) or [
@@ -264,21 +273,13 @@ def validate_lap_count_evidence(evidence, events) -> None:
         rows = entry.get("rows")
         if not isinstance(rows, list) or not rows or not all(isinstance(r, Mapping) for r in rows):
             raise ValueError("Invalid lap-count timestamps")
-        counts = pd.DataFrame(rows)
-        if "Time" not in counts or "TotalLaps" not in counts:
+        times = [r.get("Time") for r in rows]
+        if not all(_is_number(t) for t in times) or times != sorted(times):
             raise ValueError("Invalid lap-count timestamps")
-        times = pd.to_numeric(counts.Time, errors="coerce")
-        if times.isna().any() or not np.isfinite(times).all():
-            raise ValueError("Invalid lap-count timestamps")
-        values = pd.to_numeric(counts.TotalLaps.dropna(), errors="coerce")
-        if (
-            values.empty
-            or values.isna().any()
-            or not np.isfinite(values).all()
-            or not values.gt(0).all()
-            or not values.mod(1).eq(0).all()
-            or values.iloc[-1] != event["total_laps"]
-        ):
+        if any("TotalLaps" not in r for r in rows):
+            raise ValueError("Lap-count evidence differs from event")
+        values = [r["TotalLaps"] for r in rows if r["TotalLaps"] is not None]
+        if not values or not all(map(_is_count, values)) or values[-1] != event["total_laps"]:
             raise ValueError("Lap-count evidence differs from event")
         if not (
             entry.get("source_url")
@@ -297,12 +298,7 @@ def known_total_laps(entry, cutoff: float, sample: str = "") -> int:
     known = [
         (row["Time"], i, int(row["TotalLaps"]))
         for i, row in enumerate(entry["rows"])
-        if row["TotalLaps"] is not None
-        and np.isfinite(row["Time"])
-        and row["Time"] <= cutoff
-        and np.isfinite(row["TotalLaps"])
-        and row["TotalLaps"] > 0
-        and row["TotalLaps"] % 1 == 0
+        if _is_number(row["Time"]) and row["Time"] <= cutoff and _is_count(row["TotalLaps"])
     ]
     if not known:
         raise ValueError(

@@ -70,7 +70,7 @@ valid). It is a JSON list with one entry per race, in `events.json` order:
 announcements in source order: `Time` (finite float seconds), `TotalLaps` (null,
 or a positive integral number; the parser emits floats such as `57.0`) and
 `CurrentLap`. Null `TotalLaps` updates are kept. `validate_lap_count_evidence`
-checks coverage, provenance, timestamps, counts, and that the last non-null count
+checks coverage, provenance, numeric (non-bool) fields, non-decreasing `Time`, and that the last non-null count
 equals `events.total_laps`; `verify-data` calls it.
 
 T4 needs this payload for every race it processes. For a sample at the end of lap

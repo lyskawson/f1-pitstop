@@ -582,3 +582,25 @@ def test_known_total_laps_breaks_ties_by_time_then_source_order():
 def test_known_total_laps_reports_unresolved_input_with_context():
     with pytest.raises(ValueError, match=r"2022_01_R, sample 2022_01_R/1/3"):
         known_total_laps(lap_counts(), 4.9, "2022_01_R/1/3")
+
+
+@pytest.mark.parametrize(
+    "rows",
+    [
+        [{"Time": "5", "TotalLaps": 57}],
+        [{"Time": True, "TotalLaps": 57}],
+        [{"Time": 5.0, "TotalLaps": "57"}],
+        [{"Time": 5.0, "TotalLaps": True}, {"Time": 6.0, "TotalLaps": 57}],
+        [{"Time": 5.0}, {"Time": 6.0, "TotalLaps": 57}],
+        [{"Time": 6.0, "TotalLaps": 57}, {"Time": 5.0, "TotalLaps": None}],
+    ],
+)
+def test_lap_count_evidence_rejects_non_numeric_and_unordered_rows(rows):
+    with pytest.raises(ValueError, match="Lap-count|lap-count"):
+        validate_lap_count_evidence([lap_counts(rows=rows)], EVENTS)
+
+
+def test_known_total_laps_ignores_bool_and_string_counts():
+    rows = [{"Time": 1.0, "TotalLaps": 57}, {"Time": 2.0, "TotalLaps": True}]
+    rows += [{"Time": 3.0, "TotalLaps": "9"}]
+    assert known_total_laps(lap_counts(rows=rows), 9.0) == 57
