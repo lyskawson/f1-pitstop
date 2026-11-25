@@ -7,7 +7,7 @@ import pytest
 
 from pitstop.cli import main
 from pitstop.contracts import KEY, PREDICTIONS_DTYPES, SAMPLES_DTYPES
-from pitstop.evaluate import align_predictions, evaluate_files
+from pitstop.evaluate import _git_revision, align_predictions, evaluate_files
 
 RUN = "20261124T120000Z_logreg_s42_abcdef12"
 OTHER_RUN = "20261124T120000Z_mlp_s42_abcdef12"
@@ -291,3 +291,15 @@ def test_publish_failure_rolls_back_new_threshold(files, monkeypatch):
     assert list(output.iterdir()) == []
     evaluate_files(val, samples, manifest, output, synthetic=True, bootstrap_samples=4)
     assert {path.name for path in output.iterdir()} == {"threshold.json", "metrics.json"}
+
+
+def test_git_dirty_ignores_untracked_files(monkeypatch):
+    calls = []
+
+    def fake_run(args, **kwargs):
+        calls.append(args)
+        return type("Result", (), {"returncode": 0, "stdout": ""})()
+
+    monkeypatch.setattr("pitstop.evaluate.subprocess.run", fake_run)
+    _git_revision()
+    assert ["git", "status", "--porcelain", "--untracked-files=no"] in calls

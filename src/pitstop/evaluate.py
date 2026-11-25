@@ -83,7 +83,7 @@ def _git_revision():
             )
         return result.stdout.strip()
 
-    return git("rev-parse", "HEAD"), bool(git("status", "--porcelain"))
+    return git("rev-parse", "HEAD"), bool(git("status", "--porcelain", "--untracked-files=no"))
 
 
 def _load_json(payload):
