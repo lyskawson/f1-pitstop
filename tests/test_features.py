@@ -43,7 +43,7 @@ def synthetic_race(race_id=RACE, n_laps=40, n_drivers=6, seed=0):
                     "TyreLife": float(lap if stint == 1 else lap - pit),
                     "Position": float(1 + (i + lap) % n_drivers),
                     "TrackStatus": "4" if lap in (12, 13) else "6" if lap == 20 else "1",
-                    "IsAccurate": lap == 1 or (rng.random() < 0.8 and lap not in (pit, pit + 1)),
+                    "IsAccurate": lap > 1 and rng.random() < 0.8 and lap not in (pit, pit + 1),
                     "FastF1Generated": False,
                 }
             )
@@ -189,3 +189,27 @@ def test_unresolved_inputs_raise_with_context():
         build_features(too_long, [lap_counts()])  # forward-fill stops after three laps
     with pytest.raises(UnresolvedInputError, match="laps_remaining"):
         build_features(laps, [])
+
+
+def test_lap_time_rel_is_zero_until_the_first_accurate_lap_then_carried_forward():
+    laps = synthetic_race()
+    mine = (laps.DriverNumber == "10") & (laps.LapNumber <= 6)
+    laps.loc[mine, "IsAccurate"] = laps.loc[mine, "LapNumber"].isin([5])  # first accurate: lap 5
+    features = build_features(laps, [lap_counts()]).set_index(["driver_number", "lap_number"])
+    rel = features.loc["10", "lap_time_rel"]
+    assert (rel.loc[1:4] == 0).all()
+    assert rel.loc[5] != 0 and rel.loc[6] == rel.loc[5]  # lap 6 is inaccurate: carried value
+
+
+def test_pairs_outside_the_sample_set_feed_the_field_but_never_raise():
+    laps = synthetic_race()
+    base = build_features(laps, [lap_counts()])
+    broken = laps.copy()
+    broken.loc[(broken.DriverNumber == "13") & (broken.LapNumber <= 10), "TyreLife"] = np.nan
+    with pytest.raises(UnresolvedInputError, match="driver 13"):
+        build_features(broken, [lap_counts()])
+    kept = {(RACE, str(d)) for d in range(10, 16) if d != 13}
+    features = build_features(broken, [lap_counts()], kept)
+    assert "13" not in set(features.driver_number)
+    expected = base[base.driver_number != "13"].reset_index(drop=True)
+    pd.testing.assert_frame_equal(features, expected)  # driver 13 still shapes the field

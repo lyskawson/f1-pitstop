@@ -25,11 +25,12 @@ class UnresolvedInputError(ValueError):
         )
 
 
-def build_features(laps, lap_counts):
-    """Return KEY and FEATURES (float64) for every real lap, using only data up to its Time.
+def build_features(laps, lap_counts, retained_pairs=None):
+    """Return KEY and FEATURES (float64) for the real laps of the retained pairs.
 
-    `laps` are raw laps; `lap_counts` is the lap_count_evidence list.
-    Raises UnresolvedInputError instead of dropping rows or inventing values.
+    `laps` are raw laps of all drivers (field statistics use all of them); `lap_counts` is the
+    lap_count_evidence list; `retained_pairs` is a set of (race_id, driver_number), default all.
+    Raises UnresolvedInputError for retained laps instead of dropping rows or inventing values.
     """
     validate_raw_laps(laps)
     entries = {entry["race_id"]: entry for entry in lap_counts}
@@ -41,6 +42,9 @@ def build_features(laps, lap_counts):
         ],
         ignore_index=True,
     )
+    if retained_pairs is not None:
+        pairs = pd.MultiIndex.from_frame(features[list(KEY[:2])])
+        features = features.loc[pairs.isin(retained_pairs)].reset_index(drop=True)
     missing = features[list(FEATURES)].isna().to_numpy()
     if missing.any():
         rows, columns = np.nonzero(missing)
@@ -85,14 +89,16 @@ def _race_features(race, entry):
     drivers, laps, times = (race[c].to_numpy() for c in ("DriverNumber", "LapNumber", "Time"))
     lap_time = race.LapTime.to_numpy()
 
-    # Field median over accurate laps finished by T, then forward-fill within each driver.
+    # Field median over accurate laps finished by T, forward-filled within each driver.
     accurate = (race.IsAccurate & race.LapTime.notna()).to_numpy()
     order = np.argsort(times[accurate])
     done_time, done_lap = times[accurate][order], lap_time[accurate][order]
     known = np.searchsorted(done_time, times, side="right")
     median = np.array([np.median(done_lap[:n]) if n else np.nan for n in known])
     relative = pd.Series(np.where(accurate, lap_time / median - 1, np.nan))
-    relative = relative.groupby(drivers).ffill().to_numpy()
+    relative = (
+        relative.groupby(drivers).ffill().fillna(0.0).to_numpy()
+    )  # 0 until the first accurate lap
 
     history = [_driver_history(d) for _, d in race.groupby("DriverNumber", sort=True)]
     stint_deg = np.concatenate([h[0] for h in history])

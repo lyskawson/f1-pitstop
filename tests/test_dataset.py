@@ -112,3 +112,30 @@ def test_build_dataset_writes_validated_artifacts_with_provenance(tmp_path, monk
 def test_key_columns_stay_unique_across_splits():
     samples = make_dataset(*raw_inputs())[0]
     assert not samples.duplicated(list(KEY)).any()
+
+
+def test_late_pair_exclusion_does_not_change_earlier_field_features():
+    laps, events, evidence, splits = raw_inputs()
+    base = make_dataset(laps, events, evidence, splits)
+    late_gap = (laps.race_id == "2022_01_R") & (laps.DriverNumber == "15")
+    late_gap &= laps.LapNumber.between(30, 35)  # six missing laps: D3 drops the pair
+    cut = make_dataset(laps[~late_gap], events, evidence, splits)
+    drivers = [set(r[0].query("race_id == '2022_01_R'").driver_number) for r in (base, cut)]
+    assert "15" in drivers[0] and "15" not in drivers[1]
+
+    def unscaled(result):
+        samples, tabular, _, scaling = result
+        x = tabular["X"].astype("float64")
+        columns = [FEATURES.index(name) for name in SCALED]
+        x[:, columns] = x[:, columns] * scaling["scale"] + scaling["mean"]
+        return pd.DataFrame(x, columns=list(FEATURES)).set_index(
+            pd.MultiIndex.from_frame(samples[list(KEY)])
+        )
+
+    before, after = unscaled(base), unscaled(cut)
+    early = [
+        key
+        for key in after.index
+        if key[0] == "2022_01_R" and key[2] <= 28  # before the dropped laps
+    ]
+    np.testing.assert_allclose(after.loc[early], before.loc[early], atol=1e-4)

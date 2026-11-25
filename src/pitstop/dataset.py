@@ -52,7 +52,10 @@ def make_dataset(laps, events, evidence, split_manifest):
     """Return validated samples, tabular and sequence arrays, and the train-only scaling."""
     retained, _ = apply_exclusions(laps, events, split_manifest)
     labels, _ = build_labels(retained)  # unfilled raw laps, before any feature work
-    features = build_features(retained, evidence)
+    # Field statistics use every driver of a kept race; pair exclusions only choose sample rows.
+    field = laps.loc[laps["race_id"].isin(retained["race_id"].unique())]
+    pairs = set(zip(retained["race_id"], retained["DriverNumber"], strict=True))
+    features = build_features(field, evidence, pairs)
     race_info = retained[["race_id", "split", "special_tyre_rule"]].drop_duplicates("race_id")
     samples = labels.merge(features[[*KEY, "sc", "vsc"]], on=list(KEY), validate="one_to_one")
     samples = samples.merge(race_info, on="race_id", validate="many_to_one")
@@ -117,6 +120,7 @@ def build_dataset(config_path, snapshot):
                 "feature_forward_fill_limit": MAX_GAP,
                 "gap_seconds": int(GAP_SECONDS),
                 "unresolved": "error",
+                "leading_lap_time_rel": 0,
             },
             "payload_sha256": {
                 name: file_record(staging / name)["sha256"]
