@@ -35,13 +35,16 @@ def load_inputs(config):
     return samples, arrays["X"]
 
 
-def predict_run(run_dir):
-    """Write predictions.parquet for train and val rows only; the test split is never read."""
+def predict_run(run_dir, test_approval=None):
+    """Write predictions.parquet for train and val rows; test rows only with explicit approval."""
+    if test_approval is not None and not test_approval.strip():
+        raise ValueError("Test approval must be a non-empty reference")
     run_dir = ROOT / run_dir
     config = yaml.safe_load((run_dir / "config.yaml").read_text())
     samples, x = load_inputs(config)
-    rows = samples["split"].isin(("train", "val")).to_numpy()
-    samples, x = samples[rows], x[rows]  # test rows never reach the model
+    splits = ("train", "val") if test_approval is None else ("train", "val", "test")
+    rows = samples["split"].isin(splits).to_numpy()
+    samples, x = samples[rows], x[rows]  # without approval test rows never reach the model
     if config["model"] in baselines.FILES:
         score = baselines.score(baselines.load(config["model"], run_dir), x)
     else:

@@ -36,6 +36,7 @@ def build_parser() -> argparse.ArgumentParser:
             stage.add_argument("--config", help="Model config (required)")
         elif command == "predict":
             stage.add_argument("--run-dir", help="Run directory to predict (required)")
+            stage.add_argument("--test-approval", help="Also score test rows (human approval)")
         elif command == "evaluate":
             stage.add_argument("--predictions", help="Predictions parquet (required)")
             stage.add_argument("--samples", help="Declared samples parquet (required)")
@@ -78,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "predict" and args.run_dir:
             from pitstop.predict import predict_run
 
-            result = predict_run(args.run_dir)
+            result = predict_run(args.run_dir, args.test_approval)
         elif args.command == "evaluate" and len(argv) > 1:
             from pitstop.evaluate import evaluate_files
 

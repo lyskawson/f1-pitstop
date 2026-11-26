@@ -26,6 +26,7 @@ SEEDS = (42, 43, 44)
 RUNS = ROOT / "runs"
 FINAL = ROOT / "configs" / "final"
 SAMPLES, MANIFEST = "data/processed/v1/samples.parquet", "manifests/data.json"
+GROUP_METRICS = ("green_average_precision", "green_f1", "sc_vsc_average_precision", "sc_vsc_f1")
 
 
 def grid_configs(out_dir):
@@ -74,8 +75,8 @@ def run_all(paths, workers=3, threads=4):
         return list(pool.map(run_one, paths, [threads] * len(paths)))
 
 
-def val_metrics(run_id):
-    return json.loads((RUNS / run_id / "metrics.json").read_text())["splits"]["val"]
+def val_metrics(run_id, split="val"):
+    return json.loads((RUNS / run_id / "metrics.json").read_text())["splits"][split]
 
 
 def select(tuning):
@@ -118,9 +119,9 @@ def final(workers=3, threads=4):
     return run_ids
 
 
-def _row(run_id):
+def _row(run_id, split="val"):
     config = yaml.safe_load((RUNS / run_id / "config.yaml").read_text())
-    val = val_metrics(run_id)
+    val = val_metrics(run_id, split)
     overall = val["overall"]
     return {
         "run_id": run_id,
@@ -153,17 +154,17 @@ def aggregate(rows):
     }
 
 
-def _scores(run_id):
+def _scores(run_id, split="val"):
     from pitstop.evaluate import align_predictions
 
     predictions = pd.read_parquet(RUNS / run_id / "predictions.parquet")
     samples = pd.read_parquet(ROOT / SAMPLES)
-    rows = align_predictions(predictions, samples, split="val", run_id=run_id)[1]
+    rows = align_predictions(predictions, samples, split=split, run_id=run_id)[1]
     threshold = json.loads((RUNS / run_id / "threshold.json").read_text())["threshold"]
     return rows, threshold
 
 
-def compare(rows, bootstrap_samples=1000):
+def compare(rows, bootstrap_samples=1000, split="val"):
     """Paired race-level bootstrap of every model's AP minus LightGBM's, per seed."""
     from pitstop.metrics import paired_bootstrap
 
@@ -172,7 +173,9 @@ def compare(rows, bootstrap_samples=1000):
     for (model, seed), run_id in ids.items():
         if model == "lightgbm":
             continue
-        (left, left_t), (right, right_t) = _scores(run_id), _scores(ids[("lightgbm", seed)])
+        (left, left_t), (right, right_t) = (
+            _scores(i, split) for i in (run_id, ids[("lightgbm", seed)])
+        )
         result = paired_bootstrap(left, right, left_t, right_t, bootstrap_samples=bootstrap_samples)
         ci = result["confidence_intervals"]["average_precision"]
         out.append(
@@ -205,7 +208,7 @@ def summary_markdown(doc):
         [model] + [f"{m[n]['mean']:.3f} ± {m[n]['sd']:.3f}" for n in names]
         for model, m in doc["models"].items()
     ]
-    groups = ("green_average_precision", "green_f1", "sc_vsc_average_precision", "sc_vsc_f1")
+    groups = GROUP_METRICS
     split = [
         [model] + ["n/a" if m[g]["mean"] is None else f"{m[g]['mean']:.3f}" for g in groups]
         for model, m in doc["models"].items()
@@ -300,13 +303,122 @@ def summarize(bootstrap_samples=1000):
     return doc
 
 
+def markdown_test(doc):
+    """Render the test summary: test means next to the val means, groups, paired bootstrap."""
+    names = ("average_precision", "f1", "event_k1_f1", "event_k1_false_alarms_per_race")
+    header = ["model"] + [f"{n} {s}" for n in names for s in ("val", "test")]
+    models = [
+        [model]
+        + [
+            cell
+            for n in names
+            for cell in (
+                f"{doc['val_models'][model][n]['mean']:.3f}",
+                f"{m[n]['mean']:.3f} ± {m[n]['sd']:.3f}",
+            )
+        ]
+        for model, m in doc["models"].items()
+    ]
+    groups = [
+        [name, str(g["n_samples"]), str(g["n_positives"]), str(g["n_races"])]
+        for name, g in doc["test_groups"].items()
+    ]
+    split = [
+        [model] + ["n/a" if m[g]["mean"] is None else f"{m[g]['mean']:.3f}" for g in GROUP_METRICS]
+        for model, m in doc["models"].items()
+    ]
+    paired = [
+        [c["model"], str(c["seed"]), f"{c['ap_difference']:+.4f}"]
+        + [f"[{c['ci_lower']:+.4f}, {c['ci_upper']:+.4f}]", "tie" if c["tie"] else "differs"]
+        for c in doc["paired_bootstrap_vs_lightgbm"]
+    ]
+    return (
+        "\n\n".join(
+            [
+                "# Locked test evaluation v1 (test split, evaluated once)",
+                f"Runs produced by code revision `{doc['git_commit']}`, data "
+                f"`{doc['data_sha256']}`. Approval: {doc['approval']}",
+                "Frozen models and val thresholds; nothing was retrained or retuned. "
+                "Mean over seeds 42, 43, 44 (± sample sd for test); val means from "
+                "reports/validation-v1.json.",
+                "## Models, val vs test",
+                _table(header, models),
+                "## Test groups",
+                _table(["group", "laps", "positives", "races"], groups),
+                _table(["model", "green AP", "green F1", "SC/VSC AP", "SC/VSC F1"], split),
+                "Group counts are on the test split. SC/VSC and special-tyre-rule groups can "
+                "have few positives, so their metrics are noisy; no claim is made for them.",
+                "## AP difference vs LightGBM (paired race bootstrap, 95% CI)",
+                _table(["model", "seed", "AP difference", "95% CI", "result"], paired),
+                "A CI containing 0 is a tie.",
+            ]
+        )
+        + "\n"
+    )
+
+
+def evaluate_test(approval, bootstrap_samples=1000):
+    """Evaluate the 18 final runs on test once (after `pitstop predict --test-approval`).
+
+    Writes reports/test-v1.{json,md}; raises on the D8 leak alarm before writing anything.
+    """
+    from pitstop.evaluate import evaluate_files
+
+    ids = json.loads((RUNS / "final.json").read_text())
+    for run_id in ids:
+        run_dir = f"runs/{run_id}"
+        metrics = json.loads((RUNS / run_id / "metrics.json").read_text())
+        if "test" not in metrics["splits"]:  # a second call only rebuilds the summary
+            metrics = evaluate_files(
+                f"{run_dir}/predictions.parquet",
+                SAMPLES,
+                MANIFEST,
+                run_dir,
+                run_id=run_id,
+                split="test",
+                test_approval=approval,
+            )
+        if metrics["leakage_audit"]["by_split"]["test"]["required"]:
+            raise RuntimeError(f"Leak alarm (D8): test AP or F1 > 0.6 in {run_id}")
+    rows = [_row(i, "test") for i in ids]
+    provenance = [
+        json.loads((RUNS / i / "metrics.json").read_text())["split_provenance"]["test"] for i in ids
+    ]
+    commits = {p["git_commit"] for p in provenance}
+    approvals = {p["test_approval"] for p in provenance}
+    if len(commits) != 1 or len(approvals) != 1 or any(p["git_dirty"] for p in provenance):
+        raise ValueError(f"Test runs must share one clean revision and approval: {commits}")
+    validation = json.loads((ROOT / "reports" / "validation-v1.json").read_text())
+    doc = {
+        "split": "test",
+        "git_commit": commits.pop(),
+        "approval": approvals.pop(),
+        "data_sha256": (RUNS / ids[0] / "data_hash.txt").read_text().strip(),
+        "bootstrap_samples": bootstrap_samples,
+        "test_groups": {
+            name: {k: g[k] for k in ("n_samples", "n_positives", "n_races")}
+            for name, g in val_metrics(ids[0], "test").items()
+        },
+        "runs": rows,
+        "models": aggregate(rows),
+        "val_models": validation["models"],
+        "paired_bootstrap_vs_lightgbm": compare(rows, bootstrap_samples, "test"),
+    }
+    write_json(ROOT / "reports" / "test-v1.json", doc)
+    (ROOT / "reports" / "test-v1.md").write_text(markdown_test(doc))
+    return doc
+
+
 if __name__ == "__main__":  # uv run python -m pitstop.experiments tune|final|summary
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("step", choices=("tune", "final", "summary"))
+    parser.add_argument("step", choices=("tune", "final", "summary", "test"))
     parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument("--test-approval", help="Required for the test step")
     parser.add_argument("--threads", type=int, default=4, help="Torch threads per worker")
     args = parser.parse_args()
-    if args.step == "summary":
+    if args.step == "test":
+        evaluate_test(args.test_approval)
+    elif args.step == "summary":
         summarize()
     elif args.step == "tune":
         tune(args.workers, args.threads)

@@ -99,3 +99,37 @@ def test_summarize_refuses_runs_from_two_commits(tmp_path, monkeypatch):
     (tmp_path / "final.json").write_text('["b"]')
     with pytest.raises(ValueError, match="one clean revision"):
         experiments.summarize()
+
+
+def test_test_summary_is_built_from_metrics_files(tmp_path, monkeypatch):
+    monkeypatch.setattr(experiments, "RUNS", tmp_path / "runs")
+    monkeypatch.setattr(experiments, "ROOT", tmp_path)
+    monkeypatch.setattr(experiments, "compare", lambda *args: [])
+    (tmp_path / "reports").mkdir()
+    (tmp_path / "runs").mkdir()
+    val = {m: {"mean": 0.3, "sd": 0.1} for m in SPLIT_AND_EVENT_METRICS + ("average_precision",)}
+    (tmp_path / "reports" / "validation-v1.json").write_text(json.dumps({"models": {"mlp": val}}))
+    group = {"average_precision": 0.2, "f1": 0.25, "n_samples": 10, "n_positives": 2, "n_races": 1}
+    group["events"] = {"1": {"f1": 0.2, "false_alarms_per_race": 3.0}}
+    metrics = {
+        "splits": {"test": dict.fromkeys(("overall", "green", "sc_vsc"), group)},
+        "split_provenance": {
+            "test": {"git_commit": "c", "git_dirty": False, "test_approval": "ok"}
+        },
+        "leakage_audit": {"by_split": {"test": {"required": False}}},
+    }
+    ids = ["a", "b"]
+    for run_id in ids:
+        (tmp_path / "runs" / run_id).mkdir()
+        (tmp_path / "runs" / run_id / "metrics.json").write_text(json.dumps(metrics))
+        (tmp_path / "runs" / run_id / "config.yaml").write_text("model: mlp\nseed: 42\n")
+        (tmp_path / "runs" / run_id / "data_hash.txt").write_text("hash")
+    (tmp_path / "runs" / "final.json").write_text(json.dumps(ids))
+    doc = experiments.evaluate_test("ok")
+    assert doc["models"]["mlp"]["average_precision"]["mean"] == pytest.approx(0.2)
+    text = (tmp_path / "reports" / "test-v1.md").read_text()
+    assert "0.300" in text and "0.200 ± 0.000" in text and "Approval: ok" in text
+    metrics["leakage_audit"]["by_split"]["test"]["required"] = True
+    (tmp_path / "runs" / "a" / "metrics.json").write_text(json.dumps(metrics))
+    with pytest.raises(RuntimeError, match="Leak alarm"):
+        experiments.evaluate_test("ok")

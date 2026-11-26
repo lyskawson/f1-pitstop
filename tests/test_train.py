@@ -163,3 +163,17 @@ def test_run_directory_is_never_overwritten(tmp_path, monkeypatch):
     with pytest.raises(FileExistsError):
         train(config)
     assert marker.read_text() == "changed\n"
+
+
+def test_test_rows_are_scored_only_with_approval(tmp_path):
+    run_dir = run(tmp_path, "logreg")
+    before = pd.read_parquet(run_dir / "predictions.parquet")
+    assert set(before["split"]) == {"train", "val"}
+    for bad in ("", "  "):
+        with pytest.raises(ValueError, match="approval"):
+            predict_run(run_dir, bad)
+    predict_run(run_dir, "approved by the team")
+    after = pd.read_parquet(run_dir / "predictions.parquet")
+    assert set(after["split"]) == {"train", "val", "test"}
+    held = after[after["split"] != "test"].reset_index(drop=True)
+    assert held.equals(before)  # train/val scores stay bit-identical
