@@ -2,39 +2,34 @@
 
 Updated on 2026-11-26 by michalklamecki's orchestrator, continuing the
 2026-11-24 handoff. Application checkpoint:
-`38a17d3a134da87a7facb3f4abec600360966692` (T7 merged, main CI green).
-The T11 runs were produced at revision `f919147` (merged in `228f320`).
+`19cfcb01341da7d938cab5484e28415694778f39` (T12 merged, main CI green).
+The T11 runs were produced at revision `f919147` (merged in `228f320`); their
+single test evaluation ran at `75b39bc` (merged in `19cfcb0`).
 Later documentation commits can contain this handoff. Inspect the live main
 and open PRs before starting work.
 
-## Start with T12, after the team approves the test evaluation
+## Start with T12b, the demo pack
 
-The next task is `prompts/T12-locked-test-evaluation.md`, relative to this
-file. It evaluates the locked test split once. D4 allows that only after
-configs are frozen and a human gives explicit approval, before M3
-(2026-12-20). **This handoff does not grant that approval.** The three
-teammates have equal authority, so agree on it together, then record the
-approval text and who gave it; the executor stores it in `metrics.json` via
-`pitstop evaluate --test-approval`.
+The locked test split has been evaluated once (T12, approval recorded in
+`reports/test-v1-freeze.json` and every final run's `metrics.json`). **Never
+evaluate it again**, and never change the frozen configs, models or
+thresholds.
 
-The T11 run directories that T12 freezes are not in Git (`runs/` is ignored).
-They exist only on michalklamecki's computer. T12 is therefore simplest there.
-On another computer, first agree whether to retrain the final runs from
-`configs/final/` (CPU is deterministic per machine, but bit-identity across
-machines is not verified) and re-derive their val thresholds before any test
-access; record that choice in the T12 report.
+The next task is `prompts/T12b-demo-pack.md`, relative to this file. It
+exports the D11 demo pack (three test races) from the saved runs; no
+training, no new evaluation.
 
-T7 was done on a second computer without `runs/` or `data/`. Continue T12 on
-the computer that holds the T11 runs: `git pull --ff-only` on main first.
-Check `runs/` for the 18 final run directories before any test access.
-`runs/` and `data/` are not in Git. T7 changed only `app/`, tests, the `app`
-dependency group and CI, so the frozen T11 runs are unaffected. Run
-`uv sync --locked --extra train --group app` once after pulling.
+All 36 T11 run directories, including the T12 test predictions and metrics,
+are published as the
+[runs-v1 release](https://github.com/lyskawson/f1-pitstop/releases/tag/runs-v1)
+(SHA-256 `122b60c80561a9f32d361b2431c44b854ba16691b44d41e2acbb954bc94986f6`).
+On any computer, download and extract it into the repository root (see the
+runbook section "Frozen runs (runs-v1)"), next to `data/processed/v1` built
+from data-v1. Run `uv sync --locked --extra train --group app` after pulling.
 
-If approval is not ready, T13a can run first. It adds the D11 field heatmap
-and model comparison views to `app/streamlit_app.py` on synthetic fixture
-packs. It needs no test data. Write its brief from the task table below,
-reusing the T7 brief's structure (in the PR #19 description).
+T13a (D11 field heatmap and model comparison views on fixture packs) is
+independent of T12b. Write its brief from the task table below, reusing the
+T7 brief's structure (in the PR #19 description).
 
 ## Purpose and status
 
@@ -43,9 +38,9 @@ at the end of lap t. Compare baseline models, MLP, GRU and a causal TCN, then
 present predictions in Streamlit. Neural Networks course; presentation on
 2027-01-17, demo before the winter break (docs/plan.md).
 
-The data pipeline, all six models and the validation study are merged.
-Remaining: the locked test evaluation, demo export, dashboard, final
-documentation and the report update.
+The data pipeline, all six models, the validation study, the single test
+evaluation and the Streamlit race view are merged. Remaining: demo export,
+dashboard views and deployment, final documentation and the report update.
 
 | Stage | Main commit | PR | Verification |
 | --- | --- | --- | --- |
@@ -59,6 +54,7 @@ documentation and the report update.
 | T10 causal TCN | 67460cd6d6dbc9579fc101d175ebb2f6dd7f3833 | [#16](https://github.com/lyskawson/f1-pitstop/pull/16) | 348 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45716834011) |
 | T11 validation study | 228f3206e1c06712d6637e6f990c78803c2ea5ad | [#17](https://github.com/lyskawson/f1-pitstop/pull/17) | 352 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45778750918) |
 | T7 Streamlit race view | 38a17d3a134da87a7facb3f4abec600360966692 | [#19](https://github.com/lyskawson/f1-pitstop/pull/19) | 357 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45805458778) |
+| T12 locked test evaluation | 19cfcb01341da7d938cab5484e28415694778f39 | [#21](https://github.com/lyskawson/f1-pitstop/pull/21) | 359 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45825996850) |
 
 Earlier stages (T1, T1b, T0, T2, T2c, T3, T5, the first handoff #7 and the
 report submodule #8) are listed in git history and `reports/accepted-work.md`.
@@ -68,7 +64,14 @@ Validation result (T11, val split only; numbers from
 `reports/validation-v1.md`): MLP, GRU and TCN reach val AP 0.141–0.150 at a
 prevalence of 0.028, LightGBM 0.141, logreg 0.087. The networks are tied with
 LightGBM in 8 of 9 paired race-bootstrap comparisons. These val numbers are
-optimistically biased by selection; only T12 gives unbiased numbers.
+optimistically biased by selection.
+
+Test result (T12, numbers from `reports/test-v1.md`; 11 races, prevalence
+0.024): test AP MLP 0.115, GRU 0.113, LightGBM 0.109, TCN 0.105, logreg
+0.095, constant 0.024 (means over seeds 42–44). The networks are tied with
+LightGBM in 8 of 9 comparisons, logreg is tied with LightGBM at all three
+seeds, and only the constant baseline is clearly worse. No model ranking is
+claimed.
 
 ## Shared data
 
@@ -107,10 +110,14 @@ editing; the first handoff's D2/D4/leakage notes still hold.
   fixes were mapped to findings in the PR body. Future process choices belong to the receiving human.
 - The CLI is fixed at seven commands by `tests/test_contracts.py`; T11 runs
   as `python -m pitstop.experiments tune|final|summary` instead.
+- 2026-11-26 (michalklamecki): the team approved the single T12 test
+  evaluation; it ran once on michalklamecki's computer. Trained runs are
+  shared as GitHub release assets (runs-v1, like data-v1), not committed to
+  Git. The demo export is a separate task (T12b), and its small pack is
+  committed under `demo/` because D11 hosting reads it from the repository.
 
-Open questions for the team: the test approval and where T12 runs (above);
-whether the demo export is part of T12 or a separate PR (the T12 brief keeps
-it separate as T12b); the milestone dates in docs/plan.md.
+Open questions for the team: Streamlit Community Cloud deployment (T13, needs
+human authorization); the milestone dates in docs/plan.md.
 
 ## Workflow and acceptance
 
@@ -135,12 +142,11 @@ segfaults in `test_train.py::...[lightgbm]` on clean main as well; use
 first handoff's macOS note). Executors must not leave non-terminating
 background wait loops.
 
-## Continue after T12
+## Continue after T12b
 
 | Task | Outcome and principal acceptance |
 | --- | --- |
-| T12 | Single locked test evaluation of the 18 frozen T11 runs with frozen val thresholds, human approval recorded; `reports/test-v1.{json,md}`. Brief ready. |
-| T12b | Demo pack per contracts "evaluate → dashboard": first three retained test races, metadata with hashes. Only after T12. |
+| T12b | `pitstop export-demo` writes the pack per contracts "evaluate → dashboard": first three retained test races, metadata with hashes; committed `demo/`. Brief ready. |
 | T13a | Field heatmap (driver × lap) and model comparison views on fixture packs; offline AppTest. Independent of T12. |
 | T13 | Dashboard on the exported demo pack, offline AppTest, deployment under human authorization. |
 | T14 | Final README/runbook, Colab and offline end-to-end reproduction. Every result number cites `runs/` or `reports/`. |
@@ -151,7 +157,7 @@ background wait loops.
 The report lives in [f1-pitstop-report](https://github.com/lyskawson/f1-pitstop-report),
 also a submodule of this repository. Its main is still
 `d1a908478ee49abb5cb8e8bf62787cb1516ce38c` and report-state.json still
-documents application T2 at `5ba376f`, so T2c through T11 are not yet written
+documents application T2 at `5ba376f`, so T2c through T12 are not yet written
 up. Use `prompts/update-report.md`; integrate teammates' report edits first
 and update one shared narrative through the latest accepted main.
 
