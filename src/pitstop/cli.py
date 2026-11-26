@@ -108,7 +108,7 @@ def main(argv: list[str] | None = None) -> int:
                 "output_dir": args.output_dir,
                 "leakage_audit": metrics["leakage_audit"],
             }
-        elif args.command == "export-demo":
+        elif args.command == "export-demo" and len(argv) > 1:
             from pitstop.demo import export_demo
 
             meta = export_demo(args.runs_dir, output_dir=args.output_dir)

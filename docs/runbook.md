@@ -387,10 +387,10 @@ a pack it shows an info message. The real pack is exported in T12b and committed
 ## T12b: demo pack
 
 ```sh
-uv run --offline --no-sync pitstop export-demo   # needs runs/, data/processed/v1, data/raw/v1
+uv run --offline --no-sync pitstop export-demo --output-dir demo   # needs runs/, data/processed/v1, data/raw/v1
 ```
 
-Run it from a clean committed revision. It only reads saved files (no training,
+Run it from a clean committed revision (a bare `export-demo` stays a stub, like the other stages, so pass `--output-dir`). It only reads saved files (no training,
 prediction or evaluation) and writes `demo/{predictions,samples}.parquet`,
 `metrics.json`, `thresholds.json` and `metadata.json`. Rule `seed42_one_run_per_model`
 v1: the seed-42 run of each of the six models listed in `reports/test-v1.json`; a run
