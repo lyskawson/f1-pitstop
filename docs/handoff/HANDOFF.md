@@ -2,22 +2,23 @@
 
 Updated on 2026-11-26 by michalklamecki's orchestrator, continuing the
 2026-11-24 handoff. Application checkpoint:
-`19cfcb01341da7d938cab5484e28415694778f39` (T12 merged, main CI green).
+`1c76890244470588e5778fe38ad63579aca4f9d4` (T12b merged, main CI green).
 The T11 runs were produced at revision `f919147` (merged in `228f320`); their
 single test evaluation ran at `75b39bc` (merged in `19cfcb0`).
 Later documentation commits can contain this handoff. Inspect the live main
 and open PRs before starting work.
 
-## Start with T12b, the demo pack
+## Start with T13a, the remaining dashboard views
 
 The locked test split has been evaluated once (T12, approval recorded in
 `reports/test-v1-freeze.json` and every final run's `metrics.json`). **Never
 evaluate it again**, and never change the frozen configs, models or
 thresholds.
 
-The next task is `prompts/T12b-demo-pack.md`, relative to this file. It
-exports the D11 demo pack (three test races) from the saved runs; no
-training, no new evaluation.
+The demo pack is committed in `demo/` (T12b: three test races, the seed-42
+run of each model). The next task is `prompts/T13a-dashboard-views.md`,
+relative to this file: field heatmap and model comparison views on that
+pack. If T13a is already merged, continue with T13 (deployment) and T14.
 
 All 36 T11 run directories, including the T12 test predictions and metrics,
 are published as the
@@ -27,10 +28,6 @@ On any computer, download and extract it into the repository root (see the
 runbook section "Frozen runs (runs-v1)"), next to `data/processed/v1` built
 from data-v1. Run `uv sync --locked --extra train --group app` after pulling.
 
-T13a (D11 field heatmap and model comparison views on fixture packs) is
-independent of T12b. Write its brief from the task table below, reusing the
-T7 brief's structure (in the PR #19 description).
-
 ## Purpose and status
 
 Predict whether a driver changes tyres on lap t+1 using information available
@@ -39,7 +36,7 @@ present predictions in Streamlit. Neural Networks course; presentation on
 2027-01-17, demo before the winter break (docs/plan.md).
 
 The data pipeline, all six models, the validation study, the single test
-evaluation and the Streamlit race view are merged. Remaining: demo export,
+evaluation, the Streamlit race view and the demo pack are merged. Remaining:
 dashboard views and deployment, final documentation and the report update.
 
 | Stage | Main commit | PR | Verification |
@@ -55,6 +52,7 @@ dashboard views and deployment, final documentation and the report update.
 | T11 validation study | 228f3206e1c06712d6637e6f990c78803c2ea5ad | [#17](https://github.com/lyskawson/f1-pitstop/pull/17) | 352 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45778750918) |
 | T7 Streamlit race view | 38a17d3a134da87a7facb3f4abec600360966692 | [#19](https://github.com/lyskawson/f1-pitstop/pull/19) | 357 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45805458778) |
 | T12 locked test evaluation | 19cfcb01341da7d938cab5484e28415694778f39 | [#21](https://github.com/lyskawson/f1-pitstop/pull/21) | 359 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45825996850) |
+| T12b demo pack | 1c76890244470588e5778fe38ad63579aca4f9d4 | [#23](https://github.com/lyskawson/f1-pitstop/pull/23) | 363 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45828093141) |
 
 Earlier stages (T1, T1b, T0, T2, T2c, T3, T5, the first handoff #7 and the
 report submodule #8) are listed in git history and `reports/accepted-work.md`.
@@ -142,24 +140,26 @@ segfaults in `test_train.py::...[lightgbm]` on clean main as well; use
 first handoff's macOS note). Executors must not leave non-terminating
 background wait loops.
 
-## Continue after T12b
+## Continue with T13a
 
 | Task | Outcome and principal acceptance |
 | --- | --- |
-| T12b | `pitstop export-demo` writes the pack per contracts "evaluate → dashboard": first three retained test races, metadata with hashes; committed `demo/`. Brief ready. |
-| T13a | Field heatmap (driver × lap) and model comparison views on fixture packs; offline AppTest. Independent of T12. |
-| T13 | Dashboard on the exported demo pack, offline AppTest, deployment under human authorization. |
+| T13a | Field heatmap (driver × lap) and model comparison views on the committed `demo/` pack; offline AppTest. Brief ready. |
+| T13 | Streamlit Community Cloud deployment of `app/` reading `demo/` (D11), under human authorization; local run as fallback. |
 | T14 | Final README/runbook, Colab and offline end-to-end reproduction. Every result number cites `runs/` or `reports/`. |
 | T1c | Align repository agent-workflow prose (AGENTS.md etc.) with the practice used. |
 
 ## Maintain and transfer the report
 
 The report lives in [f1-pitstop-report](https://github.com/lyskawson/f1-pitstop-report),
-also a submodule of this repository. Its main is still
-`d1a908478ee49abb5cb8e8bf62787cb1516ce38c` and report-state.json still
-documents application T2 at `5ba376f`, so T2c through T12 are not yet written
-up. Use `prompts/update-report.md`; integrate teammates' report edits first
-and update one shared narrative through the latest accepted main.
+also a submodule of this repository (pointer `ee556297d97b80db27220276171d3eb08082c331`).
+Report PR [#1](https://github.com/lyskawson/f1-pitstop-report/pull/1)
+updated the whole narrative through application `1c76890` (T12b), including
+the validation and test results. The team compiles the PDF in Overleaf by
+importing the report repository; no local TeX build exists, so the page count
+in report-state.json is filled in after an Overleaf compile. For later
+updates use `prompts/update-report.md`; integrate teammates' report edits
+first and update one shared narrative through the latest accepted main.
 
 Before the next handoff, update this file: the task table, exact
 source/PR/CI references, open decisions and the next copyable executor
