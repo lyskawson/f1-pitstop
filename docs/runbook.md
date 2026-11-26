@@ -383,3 +383,22 @@ The app reads a precomputed pack (`predictions.parquet`, `samples.parquet`,
 `thresholds.json`) from `demo/`, or from the directory in `PITSTOP_DEMO_DIR`. Without
 a pack it shows an info message. The real pack comes in T12b; tests use a synthetic
 pack. `demo/` is never committed.
+
+## T12: locked test evaluation
+
+Only with explicit human approval, once, from one clean commit, after `reports/test-v1-freeze.json`
+is committed. Nothing is retrained or re-thresholded.
+
+```sh
+for run in $(uv run --offline --no-sync python -c "import json; print(*json.load(open('runs/final.json')))"); do
+  uv run --offline --no-sync pitstop predict --run-dir "runs/$run" --test-approval "<approval>"
+done
+uv run --offline --no-sync python -m pitstop.experiments test --test-approval "<approval>"
+```
+
+`predict` adds test rows only with `--test-approval`. Run it once per run and never
+repeat it: a rewrite of `predictions.parquet` no longer matches the test
+`predictions_sha256` recorded in `metrics.json`. The `test` step runs
+`evaluate --split test` for the 18 runs (frozen val thresholds), stops on the D8 leak
+alarm, and writes `reports/test-v1.{json,md}`. Running the `test` step again only
+rebuilds the summary from the saved metrics.
