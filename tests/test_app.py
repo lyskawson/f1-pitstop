@@ -6,7 +6,7 @@ import pandas as pd
 from streamlit.testing.v1 import AppTest
 
 APP = Path(__file__).parents[1] / "app" / "streamlit_app.py"
-RUNS = ["gru-1", "mlp-1"]
+RUNS = ["20260101T000000Z_gru_s42_abcd1234", "20260101T000000Z_mlp_s42_abcd1234"]
 
 
 def make_pack(path):
@@ -19,7 +19,7 @@ def make_pack(path):
     samples = pd.DataFrame(rows, columns=["race_id", "driver_number", "lap_number"])
     samples["row_id"] = range(len(samples))
     samples["y"] = (samples.lap_number % 9 == 0).astype("int8")
-    samples["split"] = "val"
+    samples["split"] = samples.race_id.map({"2023_01_Race": "val", "2023_02_Race": "test"})
     samples["sc"] = samples.lap_number.between(5, 6)
     samples["vsc"] = samples.lap_number == 12
     samples["special_tyre_rule"] = False
@@ -30,7 +30,9 @@ def make_pack(path):
     preds[
         ["race_id", "driver_number", "lap_number", "run_id", "split", "y", "score", "target_lap"]
     ].to_parquet(path / "predictions.parquet")
-    (path / "thresholds.json").write_text(json.dumps({r: {"threshold": 0.5} for r in RUNS}))
+    (path / "thresholds.json").write_text(
+        json.dumps({r: {"run_id": r, "threshold": 0.5, "chosen_on_split": "val"} for r in RUNS})
+    )
 
 
 def run_app(monkeypatch, pack):
@@ -48,12 +50,22 @@ def test_default_run(tmp_path, monkeypatch):
 def test_switch_race_driver_model(tmp_path, monkeypatch):
     make_pack(tmp_path)
     at = run_app(monkeypatch, tmp_path)
-    at.selectbox[0].select("2023_02_Race").run()
+    for box, value in [(0, "2023_02_Race"), (1, "44"), (2, RUNS[1])]:
+        at.selectbox[box].select(value).run()
+        assert not at.exception
+        assert at.selectbox[box].value == value
+        assert len(at.get("vega_lite_chart")) == 1
+
+
+def test_missing_threshold_shows_error(tmp_path, monkeypatch):
+    make_pack(tmp_path)
+    (tmp_path / "thresholds.json").write_text(json.dumps({RUNS[0]: {"threshold": 0.5}}))
+    at = run_app(monkeypatch, tmp_path)
     assert not at.exception
-    at.selectbox[1].select("44").run()
+    assert len(at.error) == 0
+    at.selectbox[2].select(RUNS[1]).run()
     assert not at.exception
-    at.selectbox[2].select("mlp-1").run()
-    assert not at.exception
+    assert len(at.error) == 1
 
 
 def test_missing_pack_shows_info(tmp_path, monkeypatch):

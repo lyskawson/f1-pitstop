@@ -51,16 +51,24 @@ def main():
     pack_dir = Path(os.environ.get("PITSTOP_DEMO_DIR", "demo"))
     try:
         df, thresholds = load_pack(pack_dir)
-    except FileNotFoundError:
-        st.info(f"Demo pack not found in `{pack_dir}`. Set PITSTOP_DEMO_DIR or add demo/.")
+    except FileNotFoundError as err:
+        st.info(
+            f"Demo pack incomplete: `{err.filename}` not found. Set PITSTOP_DEMO_DIR or add demo/."
+        )
+        return
+    except KeyError as err:
+        st.error(f"Inconsistent demo pack: missing {err}.")
         return
     race_id = st.selectbox("Race", sorted(df.race_id.unique()))
     race = df[df.race_id == race_id]
     driver = st.selectbox("Driver", sorted(race.driver_number.unique()))
     run_id = st.selectbox("Model (run_id)", sorted(race.run_id.unique()))
     rows = filter_rows(df, race_id, driver, run_id)
+    if run_id not in thresholds:
+        st.error(f"Inconsistent demo pack: no threshold for run_id {run_id}.")
+        return
     threshold = thresholds[run_id]["threshold"]
-    st.altair_chart(make_chart(rows, threshold), use_container_width=True)
+    st.altair_chart(make_chart(rows, threshold), width="stretch")
     st.caption(
         "A score at lap t predicts a tyre change on lap t+1, so scores are plotted at "
         "target_lap. Red lines are real tyre changes, orange bands are SC/VSC laps "
