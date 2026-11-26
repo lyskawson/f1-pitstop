@@ -100,3 +100,14 @@ one clean revision f919147 within the 2 h CPU budget. Selected configs are in
 `configs/final/`; results, caveats and the paired bootstrap vs LightGBM are in
 `reports/validation-v1.{json,md}`. The orchestrator recomputed val AP from
 every referenced run's predictions.parquet and found no test rows.
+
+## T7 Streamlit race view
+
+PR #19, head ac9f4d0, merged as 38a17d3; 357 tests in CI. `app/streamlit_app.py`
+reads a precomputed pack from `demo/` or `PITSTOP_DEMO_DIR` and shows the D11 race
+view: race, driver and model selectors, score per target lap, real tyre changes,
+SC/VSC bands and the frozen threshold. It imports no torch, lightgbm, fastf1 or
+pitstop. Streamlit is in the `app` dependency group (locked 1.67.0), and
+`app/requirements.txt` is exported from the lock. The offline AppTest uses
+synthetic packs only. No real data, runs or test rows were used. An independent
+reviewer found no blockers, and four fixes are mapped in the PR body.

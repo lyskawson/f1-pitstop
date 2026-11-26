@@ -2,7 +2,7 @@ TASK T12 — single locked test evaluation of the frozen T11 models     Owner: B
 
 PROJECT_ROOT = <application checkout>. NOTES_ROOT = <sibling notes directory>.
 Report: NOTES_ROOT/reports/T12.md (written so it can serve as the PR body).
-Branch: codex/t12-test-evaluation from up-to-date main (T11 merged as 228f320).
+Branch: codex/t12-test-evaluation from up-to-date main (T7 merged as 38a17d3).
 
 HUMAN APPROVAL = <paste the exact approval text, who gave it and the date>.
 If this line is still a placeholder, STOP before step 2: do not read, score or
