@@ -435,3 +435,12 @@ Archive SHA-256: `122b60c80561a9f32d361b2431c44b854ba16691b44d41e2acbb954bc94986
 Extraction creates `runs/<run_id>/`, `runs/tuning.json` and `runs/final.json`.
 The runs are read-only evidence: do not retrain them, and never repeat the test
 evaluation. `runs/` stays out of Git.
+
+## T13a: dashboard views
+
+The app now has three tabs on the demo pack: Race view (unchanged), Field heatmap
+(drivers x target lap, score colour, red outline = real tyre change, black dot =
+score >= frozen threshold) and Model comparison (table and AP chart from the "test"
+/ "overall" group of `metrics.json`; nothing is recomputed). Race and model
+selectors are shared above the tabs. A missing or inconsistent `metrics.json` only
+affects the comparison tab; `metadata.json` supplies event names (race_id fallback).

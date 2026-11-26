@@ -33,6 +33,23 @@ def make_pack(path):
     (path / "thresholds.json").write_text(
         json.dumps({r: {"run_id": r, "threshold": 0.5, "chosen_on_split": "val"} for r in RUNS})
     )
+    (path / "metadata.json").write_text(json.dumps({"event_names": {"2023_01_Race": "Test GP"}}))
+    (path / "metrics.json").write_text(
+        json.dumps({r: metrics_record(r, i) for i, r in enumerate(RUNS)})
+    )
+
+
+def metrics_record(run_id, i):
+    group = {
+        "average_precision": [0.111, 0.211][i],
+        "prevalence": 0.05,
+        "precision": 0.2,
+        "recall": 0.3,
+        "f1": 0.24,
+        "events": {"1": {"f1": 0.25, "false_alarms_per_race": 7.5}},
+        "confidence_intervals": {"average_precision": {"lower": 0.1, "upper": 0.2}},
+    }
+    return {"run_id": run_id, "splits": {"test": {"overall": group}}}
 
 
 def run_app(monkeypatch, pack):
@@ -44,17 +61,59 @@ def test_default_run(tmp_path, monkeypatch):
     make_pack(tmp_path)
     at = run_app(monkeypatch, tmp_path)
     assert not at.exception
+    assert [t.label for t in at.tabs] == ["Race view", "Field heatmap", "Model comparison"]
     assert len(at.selectbox) == 3
+    assert len(at.get("vega_lite_chart")) == 3
+    assert len(at.dataframe) == 1
 
 
-def test_switch_race_driver_model(tmp_path, monkeypatch):
+def test_switch_race_model_driver(tmp_path, monkeypatch):
     make_pack(tmp_path)
     at = run_app(monkeypatch, tmp_path)
-    for box, value in [(0, "2023_02_Race"), (1, "44"), (2, RUNS[1])]:
+    for box, value in [(0, "2023_02_Race"), (1, RUNS[1]), (2, "44")]:
         at.selectbox[box].select(value).run()
         assert not at.exception
         assert at.selectbox[box].value == value
-        assert len(at.get("vega_lite_chart")) == 1
+        assert len(at.get("vega_lite_chart")) == 3
+
+
+def test_heatmap_follows_race_and_model(tmp_path, monkeypatch):
+    make_pack(tmp_path)
+    at = run_app(monkeypatch, tmp_path)
+    before = at.tabs[1].get("vega_lite_chart")[0].proto.spec
+    at.selectbox[0].select("2023_02_Race").run()
+    at.selectbox[1].select(RUNS[1]).run()
+    assert not at.exception
+    assert len(at.tabs[1].get("vega_lite_chart")) == 1
+    assert at.tabs[1].get("vega_lite_chart")[0].proto.spec != before
+
+
+def test_comparison_shows_metrics_unchanged(tmp_path, monkeypatch):
+    make_pack(tmp_path)
+    at = run_app(monkeypatch, tmp_path)
+    table = at.dataframe[0].value
+    assert list(table.ap) == [0.111, 0.211]
+    assert list(table.model) == ["gru", "mlp"]
+    assert list(table.seed) == ["s42", "s42"]
+
+
+def test_missing_metrics_only_affects_comparison(tmp_path, monkeypatch):
+    make_pack(tmp_path)
+    (tmp_path / "metrics.json").unlink()
+    at = run_app(monkeypatch, tmp_path)
+    assert not at.exception
+    assert len(at.tabs[2].info) == 1
+    assert len(at.tabs[0].get("vega_lite_chart")) == 1
+    assert len(at.tabs[1].get("vega_lite_chart")) == 1
+
+
+def test_inconsistent_metrics_shows_error(tmp_path, monkeypatch):
+    make_pack(tmp_path)
+    (tmp_path / "metrics.json").write_text(json.dumps({RUNS[0]: {"splits": {}}}))
+    at = run_app(monkeypatch, tmp_path)
+    assert not at.exception
+    assert len(at.tabs[2].error) == 1
+    assert len(at.tabs[1].get("vega_lite_chart")) == 1
 
 
 def test_missing_threshold_shows_error(tmp_path, monkeypatch):
@@ -63,9 +122,10 @@ def test_missing_threshold_shows_error(tmp_path, monkeypatch):
     at = run_app(monkeypatch, tmp_path)
     assert not at.exception
     assert len(at.error) == 0
-    at.selectbox[2].select(RUNS[1]).run()
+    at.selectbox[1].select(RUNS[1]).run()
     assert not at.exception
-    assert len(at.error) == 1
+    assert len(at.tabs[0].error) == 1
+    assert len(at.tabs[2].get("vega_lite_chart")) == 1
 
 
 def test_missing_pack_shows_info(tmp_path, monkeypatch):
