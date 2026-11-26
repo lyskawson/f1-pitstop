@@ -1,205 +1,148 @@
 # F1 Pitstop orchestrator handoff
 
-Prepared on 2026-11-24 for a teammate continuing with separate orchestrator
-and executor chats. The application code checkpoint is
-`4927786152af1b6343f98720754d266e9b3a4433`. Later documentation commits
-can contain this handoff. Inspect the live main and PRs before starting work.
+Updated on 2026-11-26 by michalklamecki's orchestrator, continuing the
+2026-11-24 handoff. Application checkpoint:
+`228f3206e1c06712d6637e6f990c78803c2ea5ad` (T11 merged, main CI green).
+Later documentation commits can contain this handoff. Inspect the live main
+and open PRs before starting work.
 
-## Start with T4c
+## Start with T12, after the team approves the test evaluation
 
-The next task is `prompts/T4c-lap-count-contract.md`, relative to this file.
-It has been prepared and has not been implemented at this checkpoint.
-Give the human a copyable executor launch message in your first response.
+The next task is `prompts/T12-locked-test-evaluation.md`, relative to this
+file. It evaluates the locked test split once. D4 allows that only after
+configs are frozen and a human gives explicit approval, before M3
+(2026-12-20). **This handoff does not grant that approval.** The three
+teammates have equal authority, so agree on it together, then record the
+approval text and who gave it; the executor stores it in `metrics.json` via
+`pitstop evaluate --test-approval`.
 
-Resolve the actual application checkout and choose a sibling notes directory
-with writable `prompts/` and `reports/`. The executor needs both locations.
-Suggest high reasoning effort for T4c. The established model was gpt-6.1-sol,
-and the receiving human may choose an available model.
+The T11 run directories that T12 freezes are not in Git (`runs/` is ignored).
+They exist only on michalklamecki's computer. T12 is therefore simplest there.
+On another computer, first agree whether to retrain the final runs from
+`configs/final/` (CPU is deterministic per machine, but bit-identity across
+machines is not verified) and re-derive their val thresholds before any test
+access; record that choice in the T12 report.
 
-The orchestrator owns priorities, briefs, dependencies, evidence checks and
-handoffs. Executors implement and test in separate chats launched by the human.
-Keep the result of a task in one branch and PR. Continue ordinary fixes in the
-same author chat. Give the human one clear next action after each result.
+If approval is not ready, T7 (Streamlit shell on fixture predictions) needs
+no test data and can run first. Write its brief from the task table below.
 
-## Purpose and completed work
+## Purpose and status
 
 Predict whether a driver changes tyres on lap t+1 using information available
 at the end of lap t. Compare baseline models, MLP, GRU and a causal TCN, then
-present the predictions in Streamlit. A reproducible comparison is the goal.
-The project is for a Neural Networks course, with a planned presentation on
-2027-01-17. The original milestone dates in docs/plan.md need reassessment.
+present predictions in Streamlit. Neural Networks course; presentation on
+2027-01-17, demo before the winter break (docs/plan.md).
 
-Merged work includes the repository skeleton, schemas and offline CI (T1),
-the FastF1 dependency update (T1b), the source-data audit and fixtures (T0),
-the offline raw snapshot/verifier (T2), the legacy acquisition-time contract
-(T2c), next-lap labels and fixed splits/exclusions (T3), and metrics/evaluation
-on synthetic inputs (T5).
-
-Recent merges and evidence:
+The data pipeline, all six models and the validation study are merged.
+Remaining: the locked test evaluation, demo export, dashboard, final
+documentation and the report update.
 
 | Stage | Main commit | PR | Verification |
 | --- | --- | --- | --- |
-| T2c | 3de4c38022c36cb81e1076c79ecce87fad296bb9 | [#4](https://github.com/lyskawson/f1-pitstop/pull/4) | Source a79bccd, green CI, 224 local tests reported |
-| T3 | 515e72edff169a05abc152d340c54a3f1d3a83e2 | [#5](https://github.com/lyskawson/f1-pitstop/pull/5) | Source e005c56, 254 tests and training audit reported |
-| T5 | 4927786152af1b6343f98720754d266e9b3a4433 | [#6](https://github.com/lyskawson/f1-pitstop/pull/6) | Source 383e3e8, 278 tests and synthetic CLI smoke reported |
+| T4c lap-count contract | b2f2db0c10ffa22e42ce2cf3fb819815c99ae0ed | [#9](https://github.com/lyskawson/f1-pitstop/pull/9) | 301 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45703896780) |
+| T4d feature rules (contract) | f1b36767b51e314852e9a8c66fe08032016b8d03 | [#10](https://github.com/lyskawson/f1-pitstop/pull/10) | 301 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45707319534) |
+| T4 features, windows, dataset | c4bde16bdf21d0db1e47863c728462a42c287f6d | [#11](https://github.com/lyskawson/f1-pitstop/pull/11) | 320 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45709235984) |
+| T6 trainer and baselines | 9859030f656d877f9fa3e059f5fa22faa6579f95 | [#12](https://github.com/lyskawson/f1-pitstop/pull/12) | 330 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45711757824) |
+| T8 MLP, shared torch loop | 2f97102b7e3b132506031748b9d2a0fa0175032f | [#13](https://github.com/lyskawson/f1-pitstop/pull/13) | 335 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45713176270) |
+| T5b evaluate git_dirty fix | ac26cf46702f46b3e33aedbda3c4fa9749035c7c | [#14](https://github.com/lyskawson/f1-pitstop/pull/14) | [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45713565148) |
+| T9 GRU | ad4ce2ab57d8b1d5958b139bdac996ced140b7ee | [#15](https://github.com/lyskawson/f1-pitstop/pull/15) | 341 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45715245934) |
+| T10 causal TCN | 67460cd6d6dbc9579fc101d175ebb2f6dd7f3833 | [#16](https://github.com/lyskawson/f1-pitstop/pull/16) | 348 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45716834011) |
+| T11 validation study | 228f3206e1c06712d6637e6f990c78803c2ea5ad | [#17](https://github.com/lyskawson/f1-pitstop/pull/17) | 352 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45778750918) |
 
-Main CI succeeded after [T3](https://github.com/lyskawson/f1-pitstop/actions/runs/45383833653)
-and [T5](https://github.com/lyskawson/f1-pitstop/actions/runs/45399220816).
-The portable `reports/accepted-work.md` records the transferred author results.
-Historical private cache probes and detailed audit files are outside this
-package. T4c uses the public source and the shared archive.
+Earlier stages (T1, T1b, T0, T2, T2c, T3, T5, the first handoff #7 and the
+report submodule #8) are listed in git history and `reports/accepted-work.md`.
+That file also summarises the evidence for every stage above.
 
-Features, processed training inputs, model training and dashboard remain
-unfinished. T5's perfect-score smoke cases are synthetic software checks.
-There are no real predictive model results and the locked test is unevaluated.
+Validation result (T11, val split only; numbers from
+`reports/validation-v1.md`): MLP, GRU and TCN reach val AP 0.141–0.150 at a
+prevalence of 0.028, LightGBM 0.141, logreg 0.087. The networks are tied with
+LightGBM in 8 of 9 paired race-bootstrap comparisons. These val numbers are
+optimistically biased by selection; only T12 gives unbiased numbers.
 
 ## Shared data
 
-Download the existing versioned archive from the public
-[data-v1 release](https://github.com/lyskawson/f1-pitstop/releases/tag/data-v1).
-It contains 92 Race sessions from 2022–2025 and 101,290 raw lap rows.
-The archive SHA-256 is
+Unchanged from the first handoff: the
+[data-v1 release](https://github.com/lyskawson/f1-pitstop/releases/tag/data-v1)
+holds 92 Race sessions (2022–2025, 101,290 raw lap rows), archive SHA-256
 `f30bff5fdaa6c280203483e878ca1e4c9189761e7471b6e8a83d74d93e09c410`.
-
-From the application checkout, if the files are absent:
 
 ```sh
 uv sync --locked --extra train
 mkdir -p data/raw
 gh release download data-v1 --repo lyskawson/f1-pitstop --pattern 'v1.tar.gz*' --dir data/raw
-(cd data/raw && shasum -a 256 -c v1.tar.gz.sha256) && test ! -e data/raw/v1 && tar -xzf data/raw/v1.tar.gz -C data/raw
+(cd data/raw && sha256sum -c v1.tar.gz.sha256) && test ! -e data/raw/v1 && tar -xzf data/raw/v1.tar.gz -C data/raw
 uv run --offline --no-sync pitstop verify-data --manifest data/raw/v1/manifest.json
+uv run --offline --no-sync pitstop build-dataset --config configs/data.yaml --snapshot v1
 ```
 
-On Linux, `sha256sum -c` can replace `shasum -a 256 -c`. A manual download
-of both release assets also works. Inspect existing files before downloading
-or extracting. Keep the archive immutable. Verify the inside-snapshot manifest,
-whose payload paths are relative to its directory. Its byte-identical tracked
-copy is `manifests/data.json`.
+The processed dataset has train 55,797 samples (1,706 positives, 53 races),
+val 10,415 (296, 10 races) and test 12,354 (301, 11 races). T11 runs used
+processed-data hash
+`36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5`.
 
-The archive works without the original FastF1 cache, credentials or a new
-source acquisition. Unknown acquisition dates for the historical cache remain
-explicitly null with explanations under the approved T2c contract. Snapshot
-creation time is separate. Data acquisition and predictive test evaluation
-retain their own authorization requirements.
+## Decisions added since the first handoff
 
-## Decisions to preserve
+Read current AGENTS.md, docs/decisions.md and docs/contracts.md before
+editing; the first handoff's D2/D4/leakage notes still hold.
 
-Read current AGENTS.md, docs/decisions.md and docs/contracts.md before editing.
-All three human teammates have equal authority to propose changes, approve
-decisions and reassign the A/B/C work areas. Technical ownership labels do
-not grant one student exclusive control of the plan. Record agreed changes
-where they belong. Decision changes need human approval and a change-log entry.
-Respect the actual repository permissions of the receiving human.
+- 2026-11-25 (T4d, approved by michalklamecki): `lap_time_rel = 0` while no
+  accurate lap allows a causal value (lap 1 is never IsAccurate in v1), and
+  the 11 D5 feature interpretations are contract rules in docs/contracts.md.
+- 2026-11-25: T11 compute budget at most 2 h CPU; CPU only, no GPU or CUDA
+  dependency. T11 selected configs by val AP at seed 42 (grid lr × hidden,
+  D6) and ran seeds 42–44; `configs/final/*.yaml` are the frozen configs.
+- Review policy chosen by michalklamecki for T4c–T11: every PR except the
+  small T5b fix received an independent reviewer pass before merge, and
+  fixes were mapped to findings in the PR body. Future process choices belong to the receiving human.
+- The CLI is fixed at seven commands by `tests/test_contracts.py`; T11 runs
+  as `python -m pitstop.experiments tune|final|summary` instead.
 
-D2 was approved on 2026-11-24 and merged in T3. Labels use exact t+1/t+2 joins
-after generated rows are removed. A pit entry needs the exact exit lap,
-usable tyre measurements, a one-step Stint increase and a compound or age
-discontinuity for a positive. Used sets can increase age. A continuous tyre
-history needs documented exact no-change confirmation for a negative.
-Unresolved cases are omitted with reasons. In the current v1 workflow,
-confirmation mappings are empty in every split. Private training cache probes
-never become implicit label inputs. Follow the full D2 implementation.
-
-The split is fixed before exclusions. Train is 2022–2024, validation is
-2025 rounds 1–12 and test is rounds 13–24. Preprocessing fits on train only.
-The test split is evaluated once after configurations are frozen and a human
-explicitly approves it. This handoff does not grant that approval.
-
-For T4c/T4, the existing contract requires count announcements known by
-sample time T. Missing required feature inputs produce a contextual build
-error. An earlier suggestion to omit pre-announcement samples was deferred.
-Implement the existing error behaviour and causal lookup. The available
-`lap_count_evidence.json` payload needs its reader contract and shared
-validation in the dedicated T4c PR. Keep archive bytes intact.
-
-All feature aggregation is bounded by Time <= T, across drivers and streams.
-IsAccurate masks time features and never selects label rows. Do not fill labels
-or use future aggregates. Preserve D3 exclusions, special-rule flags and reasons.
-T0's exact-versus-mixed SC finding is documented in docs/fastf1-findings.md.
-Amending the historical Leakage rule 5 prose requires approval and a log entry.
+Open questions for the team: the test approval and where T12 runs (above);
+whether the demo export is part of T12 or a separate PR (the T12 brief keeps
+it separate as T12b); the milestone dates in docs/plan.md.
 
 ## Workflow and acceptance
 
-Follow AGENTS.md. Tasks run sequentially, one branch and one PR per task.
-Contract edits belong in a dedicated PR. Code, comments, docs and commits use
-English. Write short code the students can explain. Tests and data processing
-run offline. Data, caches, credentials and raw archives stay outside Git.
-
-Task briefs state the outcome, applicable docs, allowed files, acceptance,
-branch and report location. Branch prefix defaults to `codex/`.
-After successful local checks, executors push their branch and open or update
-its PR themselves using the report as the body. This standing task publication
-permission includes ordinary PR/CI reads and correction commits. Use tool
-permission mechanisms for environmental restrictions and report actual blockers.
-Avoid force-push and direct application main writes.
-
-The orchestrator checks full head SHA, allowed scope and CI against the saved
-report and acceptance artifacts. Re-run checks when a concrete gap warrants it.
-A human authorizes merging, and may delegate it to the agent. Squash-merge
-after required checks, then update local main with --ff-only. The receiving
-human can provide authorization in their own chat.
-
-The ordinary review policy calls for an initial independent review for medium
-risk tasks and targeted audits of labels, leakage and metrics for high risk
-tasks. Alek explicitly waived independent reviews for work on 2026-11-24,
-including completed T3 and T5. Record that historical omission. The waiver is
-dated. Future process choices belong to the receiving human. Ordinary fixes
-after a review use a finding-to-fix mapping and fresh affected checks. Request
-another review only for a concrete unresolved finding or new risk.
-
-Baseline local acceptance:
+Follow AGENTS.md and the first handoff's workflow: one task, one branch
+(`codex/` prefix), one PR; contract edits in a dedicated PR; English in code
+and docs; offline tests; no data, runs or credentials in Git. The
+orchestrator checks the full head SHA, file scope and CI against the report;
+a human merges (squash), then local main is updated with `--ff-only`.
 
 ```sh
 uv run --offline --no-sync ruff check .
 uv run --offline --no-sync ruff format --check .
 uv run --offline --no-sync pytest
-uv run --offline --no-sync pitstop --help
 ```
 
-Use a writable task-specific UV_CACHE_DIR if the default uv metadata is blocked.
-On Alek's Mac, importing torch before fitting LightGBM caused a segfault with
-the locked versions. Importing lightgbm first worked. Check this in T6 and
-preserve a working path. CPU is the reference device.
+Environment notes: CPU is the reference device and training is seeded and
+deterministic. Known per-run times at 12 threads: MLP about 7 s, TCN about
+80 s, GRU about 115 s. On Debian/WSL LightGBM needs `libgomp1`
+(`sudo apt install libgomp1`). lightgbm is imported before torch (see the
+first handoff's macOS note). Executors must not leave non-terminating
+background wait loops.
 
-## Continue after T4c
+## Continue after T12
 
 | Task | Outcome and principal acceptance |
 | --- | --- |
-| T4 | Causal features, 15-lap windows and build-dataset CLI. Test truncation of all streams, rival data after T, window provenance, train-only scaling and aligned output artifacts. |
-| T6 | Shared trainer, prediction and constant/logreg/LightGBM baselines. CPU smoke on fixture inputs, finite predictions, reproducible artifacts and save/load equality. Reuse merged T5 metrics. |
-| T7 | Streamlit shell on fixture predictions. Offline AppTest changes race and driver. |
-| T8–T10 | MLP, GRU and causal TCN. Test shapes, small-sample overfit and save/load equality. TCN must pass causality tests. |
-| T11 | Bounded validation experiments, saved runs and evidence-backed results. Agree compute budget before the larger sweep. |
-| T12 | Freeze configurations and validation thresholds, obtain explicit human test approval, then perform the single test evaluation and demo export. |
-| T13 | Dashboard on exported predictions and metadata, offline AppTest, deployment under human authorization. |
-| T14 | Final README/runbook, Colab and offline end-to-end reproduction. |
-
-The team may change this order where dependencies allow. Preserve the meaning
-of each accepted interface. T1c's alignment of repository agent-workflow prose
-is also open. Do not declare a whole phase complete while its tasks are pending.
+| T12 | Single locked test evaluation of the 18 frozen T11 runs with frozen val thresholds, human approval recorded; `reports/test-v1.{json,md}`. Brief ready. |
+| T12b | Demo pack per contracts "evaluate → dashboard": first three retained test races, metadata with hashes. Only after T12. |
+| T7 | Streamlit shell on fixture predictions; offline AppTest changes race and driver. Independent of T12. |
+| T13 | Dashboard on the exported demo pack, offline AppTest, deployment under human authorization. |
+| T14 | Final README/runbook, Colab and offline end-to-end reproduction. Every result number cites `runs/` or `reports/`. |
+| T1c | Align repository agent-workflow prose (AGENTS.md etc.) with the practice used. |
 
 ## Maintain and transfer the report
 
-The report is in the separate public repository
-[f1-pitstop-report](https://github.com/lyskawson/f1-pitstop-report).
-At handoff its main is `d1a908478ee49abb5cb8e8bf62787cb1516ce38c`.
-Its report-state.json still points to application T2 at `5ba376f`.
-Alek will ask his writer to update his part through merged T5.
+The report lives in [f1-pitstop-report](https://github.com/lyskawson/f1-pitstop-report),
+also a submodule of this repository. Its main is still
+`d1a908478ee49abb5cb8e8bf62787cb1516ce38c` and report-state.json still
+documents application T2 at `5ba376f`, so T2c through T11 are not yet written
+up. Use `prompts/update-report.md`; integrate teammates' report edits first
+and update one shared narrative through the latest accepted main.
 
-At the end of the receiving teammate's work, give a report writer
-`prompts/update-report.md`. First integrate the report remote so Alek's and
-other teammates' edits are preserved. Update one shared narrative from the
-last documented application commit through the latest accepted main. Reuse
-the existing template and title page. Explain the implementation, technology
-roles, tests, uses, limitations and goal completion in readable Polish.
-
-The human wants natural, concise prose with only details needed to understand
-the project. Remove repetition and development-process narration. Keep hashes,
-full schemas, command inventories and test-case arithmetic in maintenance
-evidence. Update implemented methods and conclusions in place. Build and
-inspect the PDF and publish the checked sources to the existing report remote.
-
-Before the next handoff, update the task table, exact source/PR/CI references,
-open decisions and next copyable executor prompt. Keep the portable files free
-of local account paths, cache content and credentials.
+Before the next handoff, update this file: the task table, exact
+source/PR/CI references, open decisions and the next copyable executor
+prompt. Keep portable files free of local account paths, caches and
+credentials.

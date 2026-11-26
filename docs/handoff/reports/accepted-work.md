@@ -52,3 +52,51 @@ locked-test evaluation were outside this work.
 The source was the original author report `T5.md` and its recorded smoke/check
 outputs. Use the tracked tests to inspect the numerical cases. The synthetic
 scores are software-verification evidence.
+
+# Accepted work added on 2026-11-26
+
+Transcribed from the author reports of T4c–T11 and the orchestrator's checks.
+For every stage the orchestrator verified the exact PR head, file scope,
+green checks/GitGuardian and main CI (links in HANDOFF.md). Each PR except
+T5b had an independent reviewer pass, and fixes were mapped to findings in
+the PR body. Real-data numbers below come from local `runs/` directories
+(not in Git) or from committed `reports/`; val only, the test split is unused.
+
+## T4c and T4d contracts
+
+T4c (PR #9, head dfa8227) documents `lap_count_evidence.json` and adds the
+shared validator and the causal `known_total_laps` lookup; 301 tests,
+`verify-data` complete on v1 with the archive hash unchanged. T4d (PR #10,
+head d37290a, contract files only) records the human decision of 2026-11-25:
+`lap_time_rel = 0` until a causal accurate value exists (2,389 cells in the
+first build; lap 1 is never IsAccurate in v1) and the 11 D5 interpretations
+as contract rules.
+
+## T4 features, windows and dataset
+
+PR #11, head d4faf93; 320 tests. The real build from a clean commit passes
+all schema validators with finite X: train 55,797 samples (1,706 positives,
+53 races), val 10,415 (296, 10), test 12,354 (301, 11). Leakage tests cover
+truncation at T across streams, rival data after T, window provenance,
+train-only scaling and row alignment. The review found a rival PitInTime
+leak; it was fixed before merge.
+
+## T6, T8, T9, T10 models
+
+T6 (PR #12, head e79807e): shared trainer, predict and constant/logreg/
+LightGBM baselines; 330 tests; predict never scores test rows. T8 (PR #13,
+head 9b4d626): MLP and the shared `fit_torch` loop (AdamW, val-AP early
+stopping, best-epoch weights, deterministic CPU); 335 tests. T5b (PR #14)
+made evaluate's `git_dirty` ignore untracked files. T9 (PR #15, head
+508e92a): GRU, 341 tests. T10 (PR #16, head 7b7d908): causal TCN, receptive
+field 29 ≥ 15, per-step causality tests; 348 tests; the reviewer re-checked
+causality for every step. Each task trained one seed-42 default run and
+evaluated it on val only; no leak alarm (all val AP and F1 far below 0.6).
+
+## T11 validation study
+
+PR #17, head c6e5409; 352 tests. All 36 runs (18 grid + 18 final) come from
+one clean revision f919147 within the 2 h CPU budget. Selected configs are in
+`configs/final/`; results, caveats and the paired bootstrap vs LightGBM are in
+`reports/validation-v1.{json,md}`. The orchestrator recomputed val AP from
+every referenced run's predictions.parquet and found no test rows.
