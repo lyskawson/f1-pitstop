@@ -25,6 +25,7 @@ pitstop = "pitstop.cli:main"
 
 [dependency-groups]
 dev = ["pytest", "pytest-socket", "ruff"]
+app = ["streamlit>=1.40,<2"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pitstop"]

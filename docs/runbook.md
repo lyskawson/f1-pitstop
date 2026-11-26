@@ -372,3 +372,14 @@ uv run --offline --no-sync python -m pitstop.experiments summary  # reports/vali
 Val split only. `--workers 3 --threads 4` are the defaults (parallel processes,
 torch threads each). Run from one clean commit: `summary` refuses runs from several
 revisions or a dirty tree. A val AP or F1 above 0.6 raises the D8 leak alarm and stops.
+
+## T7: Streamlit race view
+
+```sh
+PITSTOP_DEMO_DIR=demo uv run --group app streamlit run app/streamlit_app.py
+```
+
+The app reads a precomputed pack (`predictions.parquet`, `samples.parquet`,
+`thresholds.json`) from `demo/`, or from the directory in `PITSTOP_DEMO_DIR`. Without
+a pack it shows an info message. The real pack comes in T12b; tests use a synthetic
+pack. `demo/` is never committed.
