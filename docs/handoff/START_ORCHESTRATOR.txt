@@ -15,11 +15,12 @@ docs/decisions.md i odpowiednie fragmenty docs/contracts.md.
 Sprawdź aktualny main i otwarte PR-y, zachowując moje lokalne zmiany.
 
 Zbiór testowy oceniono już jeden raz (T12, #21). Nigdy nie oceniaj go
-ponownie i nie zmieniaj zamrożonych modeli. Następne zadanie to T12b, czyli
-pakiet demo: docs/handoff/prompts/T12b-demo-pack.md. Najpierw sprawdź, czy
-nikt go już nie wykonał. Wytrenowane przebiegi pobierz z release'u runs-v1
-(runbook, sekcja „Frozen runs (runs-v1)”), a dane z data-v1. Niezależnie
-od T12b można zrobić T13a.
+ponownie i nie zmieniaj zamrożonych modeli. Pakiet demo jest w demo/ (T12b).
+Następne zadanie to T13a, czyli heatmapa i porównanie modeli w aplikacji:
+docs/handoff/prompts/T13a-dashboard-views.md. Najpierw sprawdź, czy nikt go
+już nie wykonał; jeśli tak, przejdź do T13 (wdrożenie) i T14. Wytrenowane
+przebiegi są w release'ie runs-v1 (runbook, sekcja „Frozen runs (runs-v1)”),
+a dane w data-v1.
 
 Pierwszą odpowiedź zakończ gotowym poleceniem do wklejenia w nowe okno
 wykonawcy, z katalogiem projektu, katalogiem na notatki i raporty oraz
