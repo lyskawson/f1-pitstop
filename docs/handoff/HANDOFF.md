@@ -2,7 +2,8 @@
 
 Updated on 2026-11-26 by michalklamecki's orchestrator, continuing the
 2026-11-24 handoff. Application checkpoint:
-`228f3206e1c06712d6637e6f990c78803c2ea5ad` (T11 merged, main CI green).
+`38a17d3a134da87a7facb3f4abec600360966692` (T7 merged, main CI green).
+The T11 runs were produced at revision `f919147` (merged in `228f320`).
 Later documentation commits can contain this handoff. Inspect the live main
 and open PRs before starting work.
 
@@ -23,8 +24,17 @@ On another computer, first agree whether to retrain the final runs from
 machines is not verified) and re-derive their val thresholds before any test
 access; record that choice in the T12 report.
 
-If approval is not ready, T7 (Streamlit shell on fixture predictions) needs
-no test data and can run first. Write its brief from the task table below.
+T7 was done on a second computer without `runs/` or `data/`. Continue T12 on
+the computer that holds the T11 runs: `git pull --ff-only` on main first.
+Check `runs/` for the 18 final run directories before any test access.
+`runs/` and `data/` are not in Git. T7 changed only `app/`, tests, the `app`
+dependency group and CI, so the frozen T11 runs are unaffected. Run
+`uv sync --locked --extra train --group app` once after pulling.
+
+If approval is not ready, T13a can run first. It adds the D11 field heatmap
+and model comparison views to `app/streamlit_app.py` on synthetic fixture
+packs. It needs no test data. Write its brief from the task table below,
+reusing the T7 brief's structure (in the PR #19 description).
 
 ## Purpose and status
 
@@ -48,6 +58,7 @@ documentation and the report update.
 | T9 GRU | ad4ce2ab57d8b1d5958b139bdac996ced140b7ee | [#15](https://github.com/lyskawson/f1-pitstop/pull/15) | 341 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45715245934) |
 | T10 causal TCN | 67460cd6d6dbc9579fc101d175ebb2f6dd7f3833 | [#16](https://github.com/lyskawson/f1-pitstop/pull/16) | 348 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45716834011) |
 | T11 validation study | 228f3206e1c06712d6637e6f990c78803c2ea5ad | [#17](https://github.com/lyskawson/f1-pitstop/pull/17) | 352 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45778750918) |
+| T7 Streamlit race view | 38a17d3a134da87a7facb3f4abec600360966692 | [#19](https://github.com/lyskawson/f1-pitstop/pull/19) | 357 tests, [CI](https://github.com/lyskawson/f1-pitstop/actions/runs/45805458778) |
 
 Earlier stages (T1, T1b, T0, T2, T2c, T3, T5, the first handoff #7 and the
 report submodule #8) are listed in git history and `reports/accepted-work.md`.
@@ -118,7 +129,9 @@ uv run --offline --no-sync pytest
 Environment notes: CPU is the reference device and training is seeded and
 deterministic. Known per-run times at 12 threads: MLP about 7 s, TCN about
 80 s, GRU about 115 s. On Debian/WSL LightGBM needs `libgomp1`
-(`sudo apt install libgomp1`). lightgbm is imported before torch (see the
+(`sudo apt install libgomp1`). On macOS (Apple Silicon) a full `pytest` run
+segfaults in `test_train.py::...[lightgbm]` on clean main as well; use
+`pytest -k "not lightgbm"` locally and rely on Linux CI. lightgbm is imported before torch (see the
 first handoff's macOS note). Executors must not leave non-terminating
 background wait loops.
 
@@ -128,7 +141,7 @@ background wait loops.
 | --- | --- |
 | T12 | Single locked test evaluation of the 18 frozen T11 runs with frozen val thresholds, human approval recorded; `reports/test-v1.{json,md}`. Brief ready. |
 | T12b | Demo pack per contracts "evaluate → dashboard": first three retained test races, metadata with hashes. Only after T12. |
-| T7 | Streamlit shell on fixture predictions; offline AppTest changes race and driver. Independent of T12. |
+| T13a | Field heatmap (driver × lap) and model comparison views on fixture packs; offline AppTest. Independent of T12. |
 | T13 | Dashboard on the exported demo pack, offline AppTest, deployment under human authorization. |
 | T14 | Final README/runbook, Colab and offline end-to-end reproduction. Every result number cites `runs/` or `reports/`. |
 | T1c | Align repository agent-workflow prose (AGENTS.md etc.) with the practice used. |
