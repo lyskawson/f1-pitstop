@@ -14,13 +14,12 @@ sklonuj repozytorium. Przeczytaj docs/handoff/HANDOFF.md oraz AGENTS.md,
 docs/decisions.md i odpowiednie fragmenty docs/contracts.md.
 Sprawdź aktualny main i otwarte PR-y, zachowując moje lokalne zmiany.
 
-Następne zadanie to T12, czyli jednorazowa ocena zablokowanego zbioru
-testowego: docs/handoff/prompts/T12-locked-test-evaluation.md. Najpierw
-sprawdź, czy nikt jej już nie wykonał. Nie uruchamiaj niczego, co dotyka
-zbioru testowego, dopóki nie napiszę wprost, że zespół zatwierdził ocenę.
-Zapytaj mnie o treść tej zgody i o to, na którym komputerze są przebiegi
-T11 z runs/ (są na komputerze, na którym powstało T11, nie w Git). T7 jest
-zmergowane (#19). Jeśli zgody jeszcze nie ma, zaproponuj T13a.
+Zbiór testowy oceniono już jeden raz (T12, #21). Nigdy nie oceniaj go
+ponownie i nie zmieniaj zamrożonych modeli. Następne zadanie to T12b, czyli
+pakiet demo: docs/handoff/prompts/T12b-demo-pack.md. Najpierw sprawdź, czy
+nikt go już nie wykonał. Wytrenowane przebiegi pobierz z release'u runs-v1
+(runbook, sekcja „Frozen runs (runs-v1)”), a dane z data-v1. Niezależnie
+od T12b można zrobić T13a.
 
 Pierwszą odpowiedź zakończ gotowym poleceniem do wklejenia w nowe okno
 wykonawcy, z katalogiem projektu, katalogiem na notatki i raporty oraz

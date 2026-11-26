@@ -111,3 +111,18 @@ pitstop. Streamlit is in the `app` dependency group (locked 1.67.0), and
 `app/requirements.txt` is exported from the lock. The offline AppTest uses
 synthetic packs only. No real data, runs or test rows were used. An independent
 reviewer found no blockers, and four fixes are mapped in the PR body.
+
+## T12 locked test evaluation
+
+PR #21, head e9889c4, merged as 19cfcb0; 359 tests. The approval given by
+michalklamecki on behalf of the team on 2026-11-26 is recorded in
+`reports/test-v1-freeze.json` and every final run's `metrics.json`. The freeze
+file (hashes of config, model, threshold and metrics for the 18 final runs) was
+committed before any test row was scored. The test evaluation ran once from
+clean revision 75b39bc. Afterwards the orchestrator confirmed that the hashes
+of config, model and threshold were unchanged, that the test AP recomputed
+from predictions matched `metrics.json`, and that the val entries were
+unchanged. No leak alarm was triggered. An independent reviewer approved
+after recomputing all 15 paired-bootstrap rows. Results are in
+`reports/test-v1.{json,md}`; the runs are in the runs-v1 release
+(SHA-256 122b60c8…86f6).

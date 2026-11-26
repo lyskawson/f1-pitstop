@@ -402,3 +402,20 @@ repeat it: a rewrite of `predictions.parquet` no longer matches the test
 `evaluate --split test` for the 18 runs (frozen val thresholds), stops on the D8 leak
 alarm, and writes `reports/test-v1.{json,md}`. Running the `test` step again only
 rebuilds the summary from the saved metrics.
+
+## Frozen runs (runs-v1)
+
+The 36 T11 run directories, including the single T12 test evaluation of the 18
+final runs, are published as the
+[runs-v1 release](https://github.com/lyskawson/f1-pitstop/releases/tag/runs-v1).
+From the repository root:
+
+```sh
+gh release download runs-v1 --repo lyskawson/f1-pitstop --pattern 'runs-v1.tar.gz*'
+sha256sum -c runs-v1.tar.gz.sha256 && tar -xzf runs-v1.tar.gz
+```
+
+Archive SHA-256: `122b60c80561a9f32d361b2431c44b854ba16691b44d41e2acbb954bc94986f6`.
+Extraction creates `runs/<run_id>/`, `runs/tuning.json` and `runs/final.json`.
+The runs are read-only evidence: do not retrain them, and never repeat the test
+evaluation. `runs/` stays out of Git.
