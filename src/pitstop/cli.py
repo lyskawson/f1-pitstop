@@ -37,6 +37,9 @@ def build_parser() -> argparse.ArgumentParser:
         elif command == "predict":
             stage.add_argument("--run-dir", help="Run directory to predict (required)")
             stage.add_argument("--test-approval", help="Also score test rows (human approval)")
+        elif command == "export-demo":
+            stage.add_argument("--runs-dir", default="runs")
+            stage.add_argument("--output-dir", default="demo")
         elif command == "evaluate":
             stage.add_argument("--predictions", help="Predictions parquet (required)")
             stage.add_argument("--samples", help="Declared samples parquet (required)")
@@ -105,6 +108,11 @@ def main(argv: list[str] | None = None) -> int:
                 "output_dir": args.output_dir,
                 "leakage_audit": metrics["leakage_audit"],
             }
+        elif args.command == "export-demo" and len(argv) > 1:
+            from pitstop.demo import export_demo
+
+            meta = export_demo(args.runs_dir, output_dir=args.output_dir)
+            result = {"complete": True, "output_dir": args.output_dir, **meta}
         else:
             print(f"pitstop {args.command}: not implemented yet", file=sys.stderr)
             return 1

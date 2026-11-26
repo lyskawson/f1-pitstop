@@ -1,0 +1,4994 @@
+{
+  "20261125T231912Z_tcn_s42_f9191476": {
+    "bootstrap": {
+      "confidence_level": 0.95,
+      "method": "percentile",
+      "samples": 1000,
+      "seed": 42,
+      "undefined_handling": "omit_per_metric",
+      "undefined_replicates": {
+        "test": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 23,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 23,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 23,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        },
+        "val": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 24,
+            "events.1.f1": 5,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 26,
+            "events.1.recall": 24,
+            "events.2.f1": 5,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 26,
+            "events.2.recall": 24,
+            "f1": 5,
+            "precision": 26,
+            "prevalence": 0,
+            "recall": 24
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        }
+      },
+      "unit": "race"
+    },
+    "data_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+    "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+    "leakage_audit": {
+      "by_split": {
+        "test": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        },
+        "val": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        }
+      },
+      "required": false,
+      "status": "not_triggered"
+    },
+    "run_id": "20261125T231912Z_tcn_s42_f9191476",
+    "schema_version": 1,
+    "split_provenance": {
+      "test": {
+        "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "e64f23ca6c8caa897deec5712a1b888a78d72b28997bc65e48701617ee94148c",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        },
+        "test_approval": "Single locked test evaluation (T12) of the frozen T11 configs approved by the team; communicated by michalklamecki on 2026-11-26."
+      },
+      "val": {
+        "git_commit": "f91914766761844937bd1e83e77740daa5af8a17",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "d2801d4743b88f44269f68782d1fd973ab496d772a9cdabaa35d15a8bdc2d152",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        }
+      }
+    },
+    "splits": {
+      "test": {
+        "green": {
+          "average_precision": 0.10138898167368772,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.09234423247204178,
+              "upper": 0.11861492338061803
+            },
+            "events.1.f1": {
+              "lower": 0.25738649934287905,
+              "upper": 0.3215689986418201
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 46.08409090909091,
+              "upper": 80.72727272727273
+            },
+            "events.1.precision": {
+              "lower": 0.20500505125768573,
+              "upper": 0.24871421397802623
+            },
+            "events.1.recall": {
+              "lower": 0.30180633293794945,
+              "upper": 0.5521416015318454
+            },
+            "events.2.f1": {
+              "lower": 0.331221957669006,
+              "upper": 0.4075933635538108
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 40.449999999999996,
+              "upper": 71.64318181818182
+            },
+            "events.2.precision": {
+              "lower": 0.2858580274214949,
+              "upper": 0.3515042751104012
+            },
+            "events.2.recall": {
+              "lower": 0.3440171389648506,
+              "upper": 0.5871609237536657
+            },
+            "f1": {
+              "lower": 0.16122190057998434,
+              "upper": 0.1986338025218885
+            },
+            "precision": {
+              "lower": 0.10876326677132182,
+              "upper": 0.1326794783302515
+            },
+            "prevalence": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "recall": {
+              "lower": 0.2585617703036673,
+              "upper": 0.4900695463758999
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.2937782297159883,
+              "false_alarms_per_race": 62.90909090909091,
+              "precision": 0.22595078299776286,
+              "recall": 0.4197952218430034
+            },
+            "2": {
+              "f1": 0.3733586270267066,
+              "false_alarms_per_race": 55.63636363636363,
+              "precision": 0.31543624161073824,
+              "recall": 0.45733788395904434
+            }
+          },
+          "f1": 0.18197135636057288,
+          "n_positives": 293,
+          "n_races": 11,
+          "n_samples": 11681,
+          "precision": 0.12080536912751678,
+          "prevalence": 0.02508346888108895,
+          "recall": 0.36860068259385664,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.09887432617935486,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.08858163237502809,
+              "upper": 0.11561612740961397
+            },
+            "events.1.f1": {
+              "lower": 0.2505143517930983,
+              "upper": 0.31983918682052237
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 47.35909090909091,
+              "upper": 80.73181818181818
+            },
+            "events.1.precision": {
+              "lower": 0.20338638555877087,
+              "upper": 0.24521569334294638
+            },
+            "events.1.recall": {
+              "lower": 0.28862827988338197,
+              "upper": 0.5404784688995214
+            },
+            "events.2.f1": {
+              "lower": 0.3224341193796085,
+              "upper": 0.4042121176811611
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 41.631818181818176,
+              "upper": 72.0
+            },
+            "events.2.precision": {
+              "lower": 0.28388290694928003,
+              "upper": 0.3443641836224549
+            },
+            "events.2.recall": {
+              "lower": 0.3292268370607029,
+              "upper": 0.5771316161778218
+            },
+            "f1": {
+              "lower": 0.1572600156550203,
+              "upper": 0.19661501617938446
+            },
+            "precision": {
+              "lower": 0.10729089315181517,
+              "upper": 0.13162414965986394
+            },
+            "prevalence": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "recall": {
+              "lower": 0.2477936710398445,
+              "upper": 0.48347520661157023
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.2893308801266972,
+              "false_alarms_per_race": 63.63636363636363,
+              "precision": 0.22394678492239467,
+              "recall": 0.40863787375415284
+            },
+            "2": {
+              "f1": 0.3673195625759417,
+              "false_alarms_per_race": 56.36363636363637,
+              "precision": 0.31263858093126384,
+              "recall": 0.44518272425249167
+            }
+          },
+          "f1": 0.17955112219451372,
+          "n_positives": 301,
+          "n_races": 11,
+          "n_samples": 12354,
+          "precision": 0.1197339246119734,
+          "prevalence": 0.02436457827424316,
+          "recall": 0.3588039867109635,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.03334858174728492,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.008752932864907451,
+              "upper": 0.1294973010871964
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.14285714285714285,
+              "upper": 2.857142857142857
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.14285714285714285,
+              "upper": 2.857142857142857
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "prevalence": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.1428571428571428,
+              "precision": 0.0,
+              "recall": 0.0
+            },
+            "2": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.1428571428571428,
+              "precision": 0.0,
+              "recall": 0.0
+            }
+          },
+          "f1": 0.0,
+          "n_positives": 8,
+          "n_races": 7,
+          "n_samples": 673,
+          "precision": 0.0,
+          "prevalence": 0.01188707280832095,
+          "recall": 0.0,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.17591434018738566,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.17591434018738566,
+              "upper": 0.17591434018738566
+            },
+            "events.1.f1": {
+              "lower": 0.17500000000000002,
+              "upper": 0.17500000000000002
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 17.0,
+              "upper": 17.0
+            },
+            "events.1.precision": {
+              "lower": 0.2916666666666667,
+              "upper": 0.2916666666666667
+            },
+            "events.1.recall": {
+              "lower": 0.125,
+              "upper": 0.125
+            },
+            "events.2.f1": {
+              "lower": 0.17500000000000002,
+              "upper": 0.17500000000000002
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 17.0,
+              "upper": 17.0
+            },
+            "events.2.precision": {
+              "lower": 0.2916666666666667,
+              "upper": 0.2916666666666667
+            },
+            "events.2.recall": {
+              "lower": 0.125,
+              "upper": 0.125
+            },
+            "f1": {
+              "lower": 0.125,
+              "upper": 0.125
+            },
+            "precision": {
+              "lower": 0.16666666666666666,
+              "upper": 0.16666666666666666
+            },
+            "prevalence": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "recall": {
+              "lower": 0.1,
+              "upper": 0.1
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.17500000000000002,
+              "false_alarms_per_race": 17.0,
+              "precision": 0.2916666666666667,
+              "recall": 0.125
+            },
+            "2": {
+              "f1": 0.17500000000000002,
+              "false_alarms_per_race": 17.0,
+              "precision": 0.2916666666666667,
+              "recall": 0.125
+            }
+          },
+          "f1": 0.125,
+          "n_positives": 40,
+          "n_races": 1,
+          "n_samples": 1042,
+          "precision": 0.16666666666666666,
+          "prevalence": 0.03838771593090211,
+          "recall": 0.1,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        }
+      },
+      "val": {
+        "green": {
+          "average_precision": 0.1554920565214286,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.10052939952409617,
+              "upper": 0.20304531548437274
+            },
+            "events.1.f1": {
+              "lower": 0.25532097658788866,
+              "upper": 0.420909813608921
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 34.8,
+              "upper": 67.60249999999999
+            },
+            "events.1.precision": {
+              "lower": 0.2132704357710785,
+              "upper": 0.34750684511747904
+            },
+            "events.1.recall": {
+              "lower": 0.3133125,
+              "upper": 0.5580805145618388
+            },
+            "events.2.f1": {
+              "lower": 0.31649505015557644,
+              "upper": 0.5191636308751003
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 30.0,
+              "upper": 56.80499999999999
+            },
+            "events.2.precision": {
+              "lower": 0.2906947616162558,
+              "upper": 0.46377800860661816
+            },
+            "events.2.recall": {
+              "lower": 0.3434258907062254,
+              "upper": 0.6055592141980131
+            },
+            "f1": {
+              "lower": 0.1771188042990309,
+              "upper": 0.2920165777109824
+            },
+            "precision": {
+              "lower": 0.12682339281796243,
+              "upper": 0.20611020067851185
+            },
+            "prevalence": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "recall": {
+              "lower": 0.293258064516129,
+              "upper": 0.5325140531110679
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.35073936533898187,
+              "false_alarms_per_race": 50.8,
+              "precision": 0.28851540616246496,
+              "recall": 0.4471830985915493
+            },
+            "2": {
+              "f1": 0.43629153867634735,
+              "false_alarms_per_race": 43.3,
+              "precision": 0.39355742296918766,
+              "recall": 0.4894366197183099
+            }
+          },
+          "f1": 0.24248496993987972,
+          "n_positives": 284,
+          "n_races": 10,
+          "n_samples": 9805,
+          "precision": 0.16946778711484595,
+          "prevalence": 0.028964813870474247,
+          "recall": 0.426056338028169,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.14947830865687506,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.09745868777462621,
+              "upper": 0.19546448084247833
+            },
+            "events.1.f1": {
+              "lower": 0.24856639223911026,
+              "upper": 0.41049831835777545
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 35.9,
+              "upper": 70.0025
+            },
+            "events.1.precision": {
+              "lower": 0.21103085435059638,
+              "upper": 0.3393026672694394
+            },
+            "events.1.recall": {
+              "lower": 0.29994444444444446,
+              "upper": 0.5494118831395903
+            },
+            "events.2.f1": {
+              "lower": 0.31067496098032527,
+              "upper": 0.5096584834821996
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 30.897499999999997,
+              "upper": 58.9
+            },
+            "events.2.precision": {
+              "lower": 0.28932977118834435,
+              "upper": 0.4526204912254836
+            },
+            "events.2.recall": {
+              "lower": 0.3268914473684211,
+              "upper": 0.5939118225565027
+            },
+            "f1": {
+              "lower": 0.17314388543504305,
+              "upper": 0.28609784356379453
+            },
+            "precision": {
+              "lower": 0.12498688811188811,
+              "upper": 0.20176301975410965
+            },
+            "prevalence": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "recall": {
+              "lower": 0.2838138771683075,
+              "upper": 0.5217829004960607
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.34280391243595715,
+              "false_alarms_per_race": 52.2,
+              "precision": 0.2839506172839506,
+              "recall": 0.43243243243243246
+            },
+            "2": {
+              "f1": 0.42558696073992625,
+              "false_alarms_per_race": 44.7,
+              "precision": 0.3868312757201646,
+              "recall": 0.47297297297297297
+            }
+          },
+          "f1": 0.2380487804878049,
+          "n_positives": 296,
+          "n_races": 10,
+          "n_samples": 10415,
+          "precision": 0.1673525377229081,
+          "prevalence": 0.02842054728756601,
+          "recall": 0.41216216216216217,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.07711314594506391,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.03927347919908332,
+              "upper": 0.1356582837663006
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.2359999999999999
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 3.5
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.25
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.25
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.2359999999999999
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 3.5
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.25
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.25
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.2359999999999999
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.25
+            },
+            "prevalence": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.029466461255135287
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.25
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.07407407407407407,
+              "false_alarms_per_race": 1.75,
+              "precision": 0.06666666666666667,
+              "recall": 0.08333333333333333
+            },
+            "2": {
+              "f1": 0.07407407407407407,
+              "false_alarms_per_race": 1.75,
+              "precision": 0.06666666666666667,
+              "recall": 0.08333333333333333
+            }
+          },
+          "f1": 0.07407407407407407,
+          "n_positives": 12,
+          "n_races": 8,
+          "n_samples": 610,
+          "precision": 0.06666666666666667,
+          "prevalence": 0.019672131147540985,
+          "recall": 0.08333333333333333,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.02641117515131461,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.02641117515131461,
+              "upper": 0.02641117515131461
+            },
+            "events.1.f1": {
+              "lower": 0.04780876494023905,
+              "upper": 0.04780876494023905
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 70.0,
+              "upper": 70.0
+            },
+            "events.1.precision": {
+              "lower": 0.0410958904109589,
+              "upper": 0.0410958904109589
+            },
+            "events.1.recall": {
+              "lower": 0.05714285714285714,
+              "upper": 0.05714285714285714
+            },
+            "events.2.f1": {
+              "lower": 0.07614213197969542,
+              "upper": 0.07614213197969542
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 68.0,
+              "upper": 68.0
+            },
+            "events.2.precision": {
+              "lower": 0.0684931506849315,
+              "upper": 0.0684931506849315
+            },
+            "events.2.recall": {
+              "lower": 0.08571428571428572,
+              "upper": 0.08571428571428572
+            },
+            "f1": {
+              "lower": 0.037037037037037035,
+              "upper": 0.037037037037037035
+            },
+            "precision": {
+              "lower": 0.0273972602739726,
+              "upper": 0.0273972602739726
+            },
+            "prevalence": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "recall": {
+              "lower": 0.05714285714285714,
+              "upper": 0.05714285714285714
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.04780876494023905,
+              "false_alarms_per_race": 70.0,
+              "precision": 0.0410958904109589,
+              "recall": 0.05714285714285714
+            },
+            "2": {
+              "f1": 0.07614213197969542,
+              "false_alarms_per_race": 68.0,
+              "precision": 0.0684931506849315,
+              "recall": 0.08571428571428572
+            }
+          },
+          "f1": 0.037037037037037035,
+          "n_positives": 35,
+          "n_races": 1,
+          "n_samples": 1402,
+          "precision": 0.0273972602739726,
+          "prevalence": 0.024964336661911554,
+          "recall": 0.05714285714285714,
+          "threshold": 0.12220201641321182,
+          "undefined": {}
+        }
+      }
+    },
+    "threshold_file_sha256": "84618815f3e0571b3a4a48b7bd617f614549db0c90badff0d177abff3d773adf"
+  },
+  "20261125T232400Z_gru_s42_f9191476": {
+    "bootstrap": {
+      "confidence_level": 0.95,
+      "method": "percentile",
+      "samples": 1000,
+      "seed": 42,
+      "undefined_handling": "omit_per_metric",
+      "undefined_replicates": {
+        "test": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 21,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 21,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 21,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        },
+        "val": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 24,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 5,
+            "events.1.recall": 24,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 5,
+            "events.2.recall": 24,
+            "f1": 0,
+            "precision": 5,
+            "prevalence": 0,
+            "recall": 24
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        }
+      },
+      "unit": "race"
+    },
+    "data_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+    "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+    "leakage_audit": {
+      "by_split": {
+        "test": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        },
+        "val": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        }
+      },
+      "required": false,
+      "status": "not_triggered"
+    },
+    "run_id": "20261125T232400Z_gru_s42_f9191476",
+    "schema_version": 1,
+    "split_provenance": {
+      "test": {
+        "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "b9547a124e7d3232b78d9a7b57ac1908d6908291221874e1f2e725c31df37017",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        },
+        "test_approval": "Single locked test evaluation (T12) of the frozen T11 configs approved by the team; communicated by michalklamecki on 2026-11-26."
+      },
+      "val": {
+        "git_commit": "f91914766761844937bd1e83e77740daa5af8a17",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "af5418f8fbbe7dcf215f5b16b2863b85d3924cb9c86e864b5b6fe4488be5c782",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        }
+      }
+    },
+    "splits": {
+      "test": {
+        "green": {
+          "average_precision": 0.11619276637561003,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.10179974560231246,
+              "upper": 0.14404198362462659
+            },
+            "events.1.f1": {
+              "lower": 0.2607297733008347,
+              "upper": 0.33630515608737
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 42.26136363636364,
+              "upper": 83.37954545454544
+            },
+            "events.1.precision": {
+              "lower": 0.20788740147421775,
+              "upper": 0.26017589929424884
+            },
+            "events.1.recall": {
+              "lower": 0.2972853595645115,
+              "upper": 0.5871257215007215
+            },
+            "events.2.f1": {
+              "lower": 0.3247563741600929,
+              "upper": 0.423782984542192
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 36.98863636363637,
+              "upper": 73.27727272727272
+            },
+            "events.2.precision": {
+              "lower": 0.2958991143627262,
+              "upper": 0.3623457753055758
+            },
+            "events.2.recall": {
+              "lower": 0.31693747990999677,
+              "upper": 0.6051242236024844
+            },
+            "f1": {
+              "lower": 0.16385239213652794,
+              "upper": 0.2104370709382151
+            },
+            "precision": {
+              "lower": 0.10926599004791566,
+              "upper": 0.1421333677030457
+            },
+            "prevalence": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "recall": {
+              "lower": 0.25901639344262295,
+              "upper": 0.5195638020833333
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.30195635643016794,
+              "false_alarms_per_race": 62.36363636363637,
+              "precision": 0.232662192393736,
+              "recall": 0.4300341296928328
+            },
+            "2": {
+              "f1": 0.3794424523072546,
+              "false_alarms_per_race": 54.63636363636363,
+              "precision": 0.3277404921700224,
+              "recall": 0.45051194539249145
+            }
+          },
+          "f1": 0.18871103622577928,
+          "n_positives": 293,
+          "n_races": 11,
+          "n_samples": 11681,
+          "precision": 0.12527964205816555,
+          "prevalence": 0.02508346888108895,
+          "recall": 0.3822525597269625,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.11372734228628416,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.09985320062314577,
+              "upper": 0.14083089964827175
+            },
+            "events.1.f1": {
+              "lower": 0.25187754516342087,
+              "upper": 0.33204960679752316
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 43.631818181818176,
+              "upper": 84.27272727272727
+            },
+            "events.1.precision": {
+              "lower": 0.20559088451424218,
+              "upper": 0.25428822001852724
+            },
+            "events.1.recall": {
+              "lower": 0.2848634511894583,
+              "upper": 0.577013108614232
+            },
+            "events.2.f1": {
+              "lower": 0.3139610851772037,
+              "upper": 0.41921928335524283
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 38.356818181818184,
+              "upper": 74.0090909090909
+            },
+            "events.2.precision": {
+              "lower": 0.29378549066908805,
+              "upper": 0.3539332795639114
+            },
+            "events.2.recall": {
+              "lower": 0.30309404481132074,
+              "upper": 0.5976790014560932
+            },
+            "f1": {
+              "lower": 0.15901783417645546,
+              "upper": 0.208372200401441
+            },
+            "precision": {
+              "lower": 0.10705865009525538,
+              "upper": 0.1403204948427908
+            },
+            "prevalence": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "recall": {
+              "lower": 0.2492373980553534,
+              "upper": 0.5115452755905512
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.2965309678441312,
+              "false_alarms_per_race": 63.45454545454545,
+              "precision": 0.22958057395143489,
+              "recall": 0.4186046511627907
+            },
+            "2": {
+              "f1": 0.3722694130952667,
+              "false_alarms_per_race": 55.72727272727273,
+              "precision": 0.32339955849889623,
+              "recall": 0.43853820598006643
+            }
+          },
+          "f1": 0.18558409279204638,
+          "n_positives": 301,
+          "n_races": 11,
+          "n_samples": 12354,
+          "precision": 0.12362030905077263,
+          "prevalence": 0.02436457827424316,
+          "recall": 0.37209302325581395,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.030588162993749883,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.005748173674844322,
+              "upper": 0.1552108879379506
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.2857142857142857,
+              "upper": 3.7142857142857144
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.2857142857142857,
+              "upper": 3.7142857142857144
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "prevalence": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.7142857142857142,
+              "precision": 0.0,
+              "recall": 0.0
+            },
+            "2": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.7142857142857142,
+              "precision": 0.0,
+              "recall": 0.0
+            }
+          },
+          "f1": 0.0,
+          "n_positives": 8,
+          "n_races": 7,
+          "n_samples": 673,
+          "precision": 0.0,
+          "prevalence": 0.01188707280832095,
+          "recall": 0.0,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.12542605224550887,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.12542605224550887,
+              "upper": 0.12542605224550887
+            },
+            "events.1.f1": {
+              "lower": 0.19433198380566802,
+              "upper": 0.19433198380566802
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 21.0,
+              "upper": 21.0
+            },
+            "events.1.precision": {
+              "lower": 0.27586206896551724,
+              "upper": 0.27586206896551724
+            },
+            "events.1.recall": {
+              "lower": 0.15,
+              "upper": 0.15
+            },
+            "events.2.f1": {
+              "lower": 0.20905923344947733,
+              "upper": 0.20905923344947733
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 19.0,
+              "upper": 19.0
+            },
+            "events.2.precision": {
+              "lower": 0.3448275862068966,
+              "upper": 0.3448275862068966
+            },
+            "events.2.recall": {
+              "lower": 0.15,
+              "upper": 0.15
+            },
+            "f1": {
+              "lower": 0.14492753623188406,
+              "upper": 0.14492753623188406
+            },
+            "precision": {
+              "lower": 0.1724137931034483,
+              "upper": 0.1724137931034483
+            },
+            "prevalence": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "recall": {
+              "lower": 0.125,
+              "upper": 0.125
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.19433198380566802,
+              "false_alarms_per_race": 21.0,
+              "precision": 0.27586206896551724,
+              "recall": 0.15
+            },
+            "2": {
+              "f1": 0.20905923344947733,
+              "false_alarms_per_race": 19.0,
+              "precision": 0.3448275862068966,
+              "recall": 0.15
+            }
+          },
+          "f1": 0.14492753623188406,
+          "n_positives": 40,
+          "n_races": 1,
+          "n_samples": 1042,
+          "precision": 0.1724137931034483,
+          "prevalence": 0.03838771593090211,
+          "recall": 0.125,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        }
+      },
+      "val": {
+        "green": {
+          "average_precision": 0.14865876555867635,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.08588515317201734,
+              "upper": 0.21355438887333972
+            },
+            "events.1.f1": {
+              "lower": 0.2640585599005522,
+              "upper": 0.443925370399991
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 30.4975,
+              "upper": 79.80499999999999
+            },
+            "events.1.precision": {
+              "lower": 0.2166441908713693,
+              "upper": 0.37237946236071073
+            },
+            "events.1.recall": {
+              "lower": 0.3322253505264936,
+              "upper": 0.5942185157421289
+            },
+            "events.2.f1": {
+              "lower": 0.3233236106679066,
+              "upper": 0.5349750015191266
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 24.9975,
+              "upper": 67.2025
+            },
+            "events.2.precision": {
+              "lower": 0.30204229565537555,
+              "upper": 0.5033418884202165
+            },
+            "events.2.recall": {
+              "lower": 0.3466813170802778,
+              "upper": 0.6196789801599575
+            },
+            "f1": {
+              "lower": 0.16994568057427323,
+              "upper": 0.2955957367713056
+            },
+            "precision": {
+              "lower": 0.1203326635020045,
+              "upper": 0.2113870932695964
+            },
+            "prevalence": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "recall": {
+              "lower": 0.2841924143394732,
+              "upper": 0.5632530995738085
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.3682063334237248,
+              "false_alarms_per_race": 52.6,
+              "precision": 0.2977303070761015,
+              "recall": 0.4823943661971831
+            },
+            "2": {
+              "f1": 0.4504768892149669,
+              "false_alarms_per_race": 44.2,
+              "precision": 0.4098798397863818,
+              "recall": 0.5
+            }
+          },
+          "f1": 0.24007744433688286,
+          "n_positives": 284,
+          "n_races": 10,
+          "n_samples": 9805,
+          "precision": 0.16555407209612816,
+          "prevalence": 0.028964813870474247,
+          "recall": 0.43661971830985913,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.14377621364289978,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.08409749081900596,
+              "upper": 0.20826180742158243
+            },
+            "events.1.f1": {
+              "lower": 0.2597955455084978,
+              "upper": 0.43250311623943377
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 31.397499999999997,
+              "upper": 80.41749999999999
+            },
+            "events.1.precision": {
+              "lower": 0.21484659798482963,
+              "upper": 0.36453516631406224
+            },
+            "events.1.recall": {
+              "lower": 0.31947857112829997,
+              "upper": 0.5782768465976825
+            },
+            "events.2.f1": {
+              "lower": 0.31789660234657524,
+              "upper": 0.5241075407598538
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 25.9,
+              "upper": 67.9125
+            },
+            "events.2.precision": {
+              "lower": 0.2995452939665139,
+              "upper": 0.49134785968684896
+            },
+            "events.2.recall": {
+              "lower": 0.332140444015444,
+              "upper": 0.605646803900325
+            },
+            "f1": {
+              "lower": 0.16616220964047052,
+              "upper": 0.2878122613167677
+            },
+            "precision": {
+              "lower": 0.11978016855608592,
+              "upper": 0.20608774625236917
+            },
+            "prevalence": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "recall": {
+              "lower": 0.26643682523616735,
+              "upper": 0.5482925194211128
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.3591531082479075,
+              "false_alarms_per_race": 53.7,
+              "precision": 0.29342105263157897,
+              "recall": 0.46283783783783783
+            },
+            "2": {
+              "f1": 0.44077498899163364,
+              "false_alarms_per_race": 45.2,
+              "precision": 0.4052631578947368,
+              "recall": 0.4831081081081081
+            }
+          },
+          "f1": 0.23484848484848483,
+          "n_positives": 296,
+          "n_races": 10,
+          "n_samples": 10415,
+          "precision": 0.1631578947368421,
+          "prevalence": 0.02842054728756601,
+          "recall": 0.4189189189189189,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.04120151128486275,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.0054388179388179395,
+              "upper": 0.09622093097758032
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.25,
+              "upper": 3.0
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.25,
+              "upper": 3.0
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "prevalence": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.029466461255135287
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.375,
+              "precision": 0.0,
+              "recall": 0.0
+            },
+            "2": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.375,
+              "precision": 0.0,
+              "recall": 0.0
+            }
+          },
+          "f1": 0.0,
+          "n_positives": 12,
+          "n_races": 8,
+          "n_samples": 610,
+          "precision": 0.0,
+          "prevalence": 0.019672131147540985,
+          "recall": 0.0,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.02587843286959303,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.02587843286959303,
+              "upper": 0.02587843286959303
+            },
+            "events.1.f1": {
+              "lower": 0.05940594059405941,
+              "upper": 0.05940594059405941
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 84.0,
+              "upper": 84.0
+            },
+            "events.1.precision": {
+              "lower": 0.045454545454545456,
+              "upper": 0.045454545454545456
+            },
+            "events.1.recall": {
+              "lower": 0.08571428571428572,
+              "upper": 0.08571428571428572
+            },
+            "events.2.f1": {
+              "lower": 0.09380234505862646,
+              "upper": 0.09380234505862646
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 81.0,
+              "upper": 81.0
+            },
+            "events.2.precision": {
+              "lower": 0.07954545454545454,
+              "upper": 0.07954545454545454
+            },
+            "events.2.recall": {
+              "lower": 0.11428571428571428,
+              "upper": 0.11428571428571428
+            },
+            "f1": {
+              "lower": 0.032520325203252036,
+              "upper": 0.032520325203252036
+            },
+            "precision": {
+              "lower": 0.022727272727272728,
+              "upper": 0.022727272727272728
+            },
+            "prevalence": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "recall": {
+              "lower": 0.05714285714285714,
+              "upper": 0.05714285714285714
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.05940594059405941,
+              "false_alarms_per_race": 84.0,
+              "precision": 0.045454545454545456,
+              "recall": 0.08571428571428572
+            },
+            "2": {
+              "f1": 0.09380234505862646,
+              "false_alarms_per_race": 81.0,
+              "precision": 0.07954545454545454,
+              "recall": 0.11428571428571428
+            }
+          },
+          "f1": 0.032520325203252036,
+          "n_positives": 35,
+          "n_races": 1,
+          "n_samples": 1402,
+          "precision": 0.022727272727272728,
+          "prevalence": 0.024964336661911554,
+          "recall": 0.05714285714285714,
+          "threshold": 0.1290556788444519,
+          "undefined": {}
+        }
+      }
+    },
+    "threshold_file_sha256": "9d0256cb9e4017024d9d5d5e9c62efbe9898e5517effc1c050edd08be8df50bd"
+  },
+  "20261125T232702Z_mlp_s42_f9191476": {
+    "bootstrap": {
+      "confidence_level": 0.95,
+      "method": "percentile",
+      "samples": 1000,
+      "seed": 42,
+      "undefined_handling": "omit_per_metric",
+      "undefined_replicates": {
+        "test": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 86,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 86,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 86,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        },
+        "val": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 24,
+            "events.1.f1": 5,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 93,
+            "events.1.recall": 24,
+            "events.2.f1": 5,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 93,
+            "events.2.recall": 24,
+            "f1": 5,
+            "precision": 93,
+            "prevalence": 0,
+            "recall": 24
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        }
+      },
+      "unit": "race"
+    },
+    "data_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+    "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+    "leakage_audit": {
+      "by_split": {
+        "test": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        },
+        "val": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        }
+      },
+      "required": false,
+      "status": "not_triggered"
+    },
+    "run_id": "20261125T232702Z_mlp_s42_f9191476",
+    "schema_version": 1,
+    "split_provenance": {
+      "test": {
+        "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "599962d30e3b13c8ff8ed4640ee5155512d533fc2295f124e7e4f7301973632e",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        },
+        "test_approval": "Single locked test evaluation (T12) of the frozen T11 configs approved by the team; communicated by michalklamecki on 2026-11-26."
+      },
+      "val": {
+        "git_commit": "f91914766761844937bd1e83e77740daa5af8a17",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "03e33c6b3c9cda8d4c5cfc5b4eb4dcf262ea6c11913ffc35382eed3fb81999cc",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        }
+      }
+    },
+    "splits": {
+      "test": {
+        "green": {
+          "average_precision": 0.12058209645036277,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.10310902446014918,
+              "upper": 0.1529445107165751
+            },
+            "events.1.f1": {
+              "lower": 0.23605346911428168,
+              "upper": 0.33125774615464565
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 22.452272727272724,
+              "upper": 60.09772727272727
+            },
+            "events.1.precision": {
+              "lower": 0.22270726672689856,
+              "upper": 0.3087845451683979
+            },
+            "events.1.recall": {
+              "lower": 0.21097984659347271,
+              "upper": 0.4463352172377252
+            },
+            "events.2.f1": {
+              "lower": 0.2909705850863743,
+              "upper": 0.41253331847019487
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 18.545454545454547,
+              "upper": 52.01363636363635
+            },
+            "events.2.precision": {
+              "lower": 0.31964179035889895,
+              "upper": 0.4307109411302141
+            },
+            "events.2.recall": {
+              "lower": 0.2360551730969244,
+              "upper": 0.4816470017779214
+            },
+            "f1": {
+              "lower": 0.16086398140439787,
+              "upper": 0.21564227228347183
+            },
+            "precision": {
+              "lower": 0.12375395914906352,
+              "upper": 0.17202171508997688
+            },
+            "prevalence": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "recall": {
+              "lower": 0.18651599230361673,
+              "upper": 0.40587522224018097
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.285179566990406,
+              "false_alarms_per_race": 40.54545454545455,
+              "precision": 0.25666666666666665,
+              "recall": 0.32081911262798635
+            },
+            "2": {
+              "f1": 0.3547655492422725,
+              "false_alarms_per_race": 34.81818181818182,
+              "precision": 0.3616666666666667,
+              "recall": 0.34812286689419797
+            }
+          },
+          "f1": 0.1881298992161254,
+          "n_positives": 293,
+          "n_races": 11,
+          "n_samples": 11681,
+          "precision": 0.14,
+          "prevalence": 0.02508346888108895,
+          "recall": 0.28668941979522183,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.11710062648671488,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.10067754533677725,
+              "upper": 0.14873642314570393
+            },
+            "events.1.f1": {
+              "lower": 0.22926377184129873,
+              "upper": 0.3262323633856056
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 22.818181818181817,
+              "upper": 60.38181818181817
+            },
+            "events.1.precision": {
+              "lower": 0.22173501077449614,
+              "upper": 0.30291110788863107
+            },
+            "events.1.recall": {
+              "lower": 0.20402546339636773,
+              "upper": 0.4383862712629835
+            },
+            "events.2.f1": {
+              "lower": 0.28268610257363624,
+              "upper": 0.40736077050607394
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 19.35681818181818,
+              "upper": 52.91136363636363
+            },
+            "events.2.precision": {
+              "lower": 0.31855621187419164,
+              "upper": 0.4197318176299174
+            },
+            "events.2.recall": {
+              "lower": 0.22838693957115008,
+              "upper": 0.47408353609083537
+            },
+            "f1": {
+              "lower": 0.1574876904699473,
+              "upper": 0.2116220627252486
+            },
+            "precision": {
+              "lower": 0.12336690044687189,
+              "upper": 0.1686392289420793
+            },
+            "prevalence": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "recall": {
+              "lower": 0.1792102150833379,
+              "upper": 0.39736526347365253
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.27996750860635133,
+              "false_alarms_per_race": 41.18181818181818,
+              "precision": 0.25370675453047775,
+              "recall": 0.3122923588039867
+            },
+            "2": {
+              "f1": 0.34793407267096854,
+              "false_alarms_per_race": 35.45454545454545,
+              "precision": 0.357495881383855,
+              "recall": 0.3388704318936877
+            }
+          },
+          "f1": 0.18502202643171803,
+          "n_positives": 301,
+          "n_races": 11,
+          "n_samples": 12354,
+          "precision": 0.13838550247116968,
+          "prevalence": 0.02436457827424316,
+          "recall": 0.27906976744186046,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.02004386104574725,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.006315083672215052,
+              "upper": 0.0880852270104654
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 2.2857142857142856
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 2.2857142857142856
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "prevalence": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.0,
+              "precision": 0.0,
+              "recall": 0.0
+            },
+            "2": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.0,
+              "precision": 0.0,
+              "recall": 0.0
+            }
+          },
+          "f1": 0.0,
+          "n_positives": 8,
+          "n_races": 7,
+          "n_samples": 673,
+          "precision": 0.0,
+          "prevalence": 0.01188707280832095,
+          "recall": 0.0,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.11403116639148855,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.11403116639148855,
+              "upper": 0.11403116639148855
+            },
+            "events.1.f1": {
+              "lower": 0.0888888888888889,
+              "upper": 0.0888888888888889
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 3.0,
+              "upper": 3.0
+            },
+            "events.1.precision": {
+              "lower": 0.4,
+              "upper": 0.4
+            },
+            "events.1.recall": {
+              "lower": 0.05,
+              "upper": 0.05
+            },
+            "events.2.f1": {
+              "lower": 0.0888888888888889,
+              "upper": 0.0888888888888889
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 3.0,
+              "upper": 3.0
+            },
+            "events.2.precision": {
+              "lower": 0.4,
+              "upper": 0.4
+            },
+            "events.2.recall": {
+              "lower": 0.05,
+              "upper": 0.05
+            },
+            "f1": {
+              "lower": 0.04444444444444445,
+              "upper": 0.04444444444444445
+            },
+            "precision": {
+              "lower": 0.2,
+              "upper": 0.2
+            },
+            "prevalence": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "recall": {
+              "lower": 0.025,
+              "upper": 0.025
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0888888888888889,
+              "false_alarms_per_race": 3.0,
+              "precision": 0.4,
+              "recall": 0.05
+            },
+            "2": {
+              "f1": 0.0888888888888889,
+              "false_alarms_per_race": 3.0,
+              "precision": 0.4,
+              "recall": 0.05
+            }
+          },
+          "f1": 0.04444444444444445,
+          "n_positives": 40,
+          "n_races": 1,
+          "n_samples": 1042,
+          "precision": 0.2,
+          "prevalence": 0.03838771593090211,
+          "recall": 0.025,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        }
+      },
+      "val": {
+        "green": {
+          "average_precision": 0.1606584982546311,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.10682241896947871,
+              "upper": 0.20358544399201367
+            },
+            "events.1.f1": {
+              "lower": 0.2556489224420313,
+              "upper": 0.40704432887038433
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 19.397499999999997,
+              "upper": 47.7
+            },
+            "events.1.precision": {
+              "lower": 0.2540773871437487,
+              "upper": 0.39908256479613846
+            },
+            "events.1.recall": {
+              "lower": 0.24150618087182824,
+              "upper": 0.4581508847406185
+            },
+            "events.2.f1": {
+              "lower": 0.2901848704062768,
+              "upper": 0.4787423156340072
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 16.4,
+              "upper": 39.4
+            },
+            "events.2.precision": {
+              "lower": 0.3333129584352078,
+              "upper": 0.5139514050061613
+            },
+            "events.2.recall": {
+              "lower": 0.24154498222586818,
+              "upper": 0.4745444815704291
+            },
+            "f1": {
+              "lower": 0.1859944054409829,
+              "upper": 0.2835193909094943
+            },
+            "precision": {
+              "lower": 0.15343873374811384,
+              "upper": 0.22857322325915289
+            },
+            "prevalence": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "recall": {
+              "lower": 0.22221141374837872,
+              "upper": 0.43261360550934264
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.3457627118644068,
+              "false_alarms_per_race": 32.8,
+              "precision": 0.3333333333333333,
+              "recall": 0.3591549295774648
+            },
+            "2": {
+              "f1": 0.40309231148522523,
+              "false_alarms_per_race": 27.4,
+              "precision": 0.44308943089430897,
+              "recall": 0.36971830985915494
+            }
+          },
+          "f1": 0.2448453608247423,
+          "n_positives": 284,
+          "n_races": 10,
+          "n_samples": 9805,
+          "precision": 0.19308943089430894,
+          "prevalence": 0.028964813870474247,
+          "recall": 0.3345070422535211,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.15486009736587592,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.10317294776518511,
+              "upper": 0.19853275333431616
+            },
+            "events.1.f1": {
+              "lower": 0.24748649519601998,
+              "upper": 0.39890397899546154
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 19.795,
+              "upper": 48.30499999999999
+            },
+            "events.1.precision": {
+              "lower": 0.25230681818181816,
+              "upper": 0.3947521419828641
+            },
+            "events.1.recall": {
+              "lower": 0.23412286612758312,
+              "upper": 0.44153857709409927
+            },
+            "events.2.f1": {
+              "lower": 0.27721880706393454,
+              "upper": 0.47136090614373416
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 16.697499999999998,
+              "upper": 40.2025
+            },
+            "events.2.precision": {
+              "lower": 0.3283733620566871,
+              "upper": 0.5081356598172188
+            },
+            "events.2.recall": {
+              "lower": 0.2381792373373606,
+              "upper": 0.45394042817251007
+            },
+            "f1": {
+              "lower": 0.18090420254136924,
+              "upper": 0.27895845697329374
+            },
+            "precision": {
+              "lower": 0.15120860834321234,
+              "upper": 0.22564304461942258
+            },
+            "prevalence": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "recall": {
+              "lower": 0.2157876928370706,
+              "upper": 0.4166666666666667
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.33712892238860115,
+              "false_alarms_per_race": 33.3,
+              "precision": 0.3299798792756539,
+              "recall": 0.34459459459459457
+            },
+            "2": {
+              "f1": 0.3922442230085766,
+              "false_alarms_per_race": 27.9,
+              "precision": 0.4386317907444668,
+              "recall": 0.3547297297297297
+            }
+          },
+          "f1": 0.2395964691046658,
+          "n_positives": 296,
+          "n_races": 10,
+          "n_samples": 10415,
+          "precision": 0.19114688128772636,
+          "prevalence": 0.02842054728756601,
+          "recall": 0.32094594594594594,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.050254887779403644,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.009900990099009901,
+              "upper": 0.08813538153579527
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 1.3781249999999972
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 1.3781249999999972
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "prevalence": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.029466461255135287
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0,
+              "false_alarms_per_race": 0.625,
+              "precision": 0.0,
+              "recall": 0.0
+            },
+            "2": {
+              "f1": 0.0,
+              "false_alarms_per_race": 0.625,
+              "precision": 0.0,
+              "recall": 0.0
+            }
+          },
+          "f1": 0.0,
+          "n_positives": 12,
+          "n_races": 8,
+          "n_samples": 610,
+          "precision": 0.0,
+          "prevalence": 0.019672131147540985,
+          "recall": 0.0,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.028391992872953013,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.028391992872953013,
+              "upper": 0.028391992872953013
+            },
+            "events.1.f1": {
+              "lower": 0.048780487804878044,
+              "upper": 0.048780487804878044
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 45.0,
+              "upper": 45.0
+            },
+            "events.1.precision": {
+              "lower": 0.0425531914893617,
+              "upper": 0.0425531914893617
+            },
+            "events.1.recall": {
+              "lower": 0.05714285714285714,
+              "upper": 0.05714285714285714
+            },
+            "events.2.f1": {
+              "lower": 0.048780487804878044,
+              "upper": 0.048780487804878044
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 45.0,
+              "upper": 45.0
+            },
+            "events.2.precision": {
+              "lower": 0.0425531914893617,
+              "upper": 0.0425531914893617
+            },
+            "events.2.recall": {
+              "lower": 0.05714285714285714,
+              "upper": 0.05714285714285714
+            },
+            "f1": {
+              "lower": 0.048780487804878044,
+              "upper": 0.048780487804878044
+            },
+            "precision": {
+              "lower": 0.0425531914893617,
+              "upper": 0.0425531914893617
+            },
+            "prevalence": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "recall": {
+              "lower": 0.05714285714285714,
+              "upper": 0.05714285714285714
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.048780487804878044,
+              "false_alarms_per_race": 45.0,
+              "precision": 0.0425531914893617,
+              "recall": 0.05714285714285714
+            },
+            "2": {
+              "f1": 0.048780487804878044,
+              "false_alarms_per_race": 45.0,
+              "precision": 0.0425531914893617,
+              "recall": 0.05714285714285714
+            }
+          },
+          "f1": 0.048780487804878044,
+          "n_positives": 35,
+          "n_races": 1,
+          "n_samples": 1402,
+          "precision": 0.0425531914893617,
+          "prevalence": 0.024964336661911554,
+          "recall": 0.05714285714285714,
+          "threshold": 0.12249983102083206,
+          "undefined": {}
+        }
+      }
+    },
+    "threshold_file_sha256": "d75f30ad7cce77a30d83ebca0d6f8de0e83a5d3953e2b8dd725bad420b8eeb58"
+  },
+  "20261125T232759Z_lightgbm_s42_f9191476": {
+    "bootstrap": {
+      "confidence_level": 0.95,
+      "method": "percentile",
+      "samples": 1000,
+      "seed": 42,
+      "undefined_handling": "omit_per_metric",
+      "undefined_replicates": {
+        "test": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 330,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 330,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 330,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        },
+        "val": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 24,
+            "events.1.f1": 5,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 93,
+            "events.1.recall": 24,
+            "events.2.f1": 5,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 93,
+            "events.2.recall": 24,
+            "f1": 5,
+            "precision": 93,
+            "prevalence": 0,
+            "recall": 24
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        }
+      },
+      "unit": "race"
+    },
+    "data_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+    "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+    "leakage_audit": {
+      "by_split": {
+        "test": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        },
+        "val": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        }
+      },
+      "required": false,
+      "status": "not_triggered"
+    },
+    "run_id": "20261125T232759Z_lightgbm_s42_f9191476",
+    "schema_version": 1,
+    "split_provenance": {
+      "test": {
+        "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "d79fa8621936c4ab79667867b82dac940f4b6c941e2be6715bde130f545ea88e",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        },
+        "test_approval": "Single locked test evaluation (T12) of the frozen T11 configs approved by the team; communicated by michalklamecki on 2026-11-26."
+      },
+      "val": {
+        "git_commit": "f91914766761844937bd1e83e77740daa5af8a17",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "1739ad57f1806da8890d6b1bfdc04dd53b8c4650798a50ab2dec658aa7f1c5e3",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        }
+      }
+    },
+    "splits": {
+      "test": {
+        "green": {
+          "average_precision": 0.11383920220583524,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.09373900372464423,
+              "upper": 0.1448002635076727
+            },
+            "events.1.f1": {
+              "lower": 0.19816362807575866,
+              "upper": 0.31661669264132375
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 13.361363636363636,
+              "upper": 40.91136363636363
+            },
+            "events.1.precision": {
+              "lower": 0.23472271843118575,
+              "upper": 0.359468182434264
+            },
+            "events.1.recall": {
+              "lower": 0.1524522178146412,
+              "upper": 0.33838142653932124
+            },
+            "events.2.f1": {
+              "lower": 0.22812083106561254,
+              "upper": 0.38770465012435207
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 10.990909090909092,
+              "upper": 35.09090909090909
+            },
+            "events.2.precision": {
+              "lower": 0.33398038895552196,
+              "upper": 0.4851448955110802
+            },
+            "events.2.recall": {
+              "lower": 0.16071428571428573,
+              "upper": 0.3646386341698841
+            },
+            "f1": {
+              "lower": 0.1314642609299098,
+              "upper": 0.1971854939158762
+            },
+            "precision": {
+              "lower": 0.11709969172182429,
+              "upper": 0.18853588485865494
+            },
+            "prevalence": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "recall": {
+              "lower": 0.12117327117327117,
+              "upper": 0.2829145670026129
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.25541324073770766,
+              "false_alarms_per_race": 26.545454545454547,
+              "precision": 0.27901234567901234,
+              "recall": 0.2354948805460751
+            },
+            "2": {
+              "f1": 0.3058535493806847,
+              "false_alarms_per_race": 22.545454545454547,
+              "precision": 0.38765432098765434,
+              "recall": 0.2525597269624573
+            }
+          },
+          "f1": 0.16332378223495703,
+          "n_positives": 293,
+          "n_races": 11,
+          "n_samples": 11681,
+          "precision": 0.14074074074074075,
+          "prevalence": 0.02508346888108895,
+          "recall": 0.1945392491467577,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.11043124376509411,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.09186569712038059,
+              "upper": 0.14196597884360643
+            },
+            "events.1.f1": {
+              "lower": 0.1906657145406957,
+              "upper": 0.31448344595472105
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 14.720454545454546,
+              "upper": 41.184090909090905
+            },
+            "events.1.precision": {
+              "lower": 0.2305540595787504,
+              "upper": 0.3395892591087633
+            },
+            "events.1.recall": {
+              "lower": 0.14625435540069687,
+              "upper": 0.33336267605633796
+            },
+            "events.2.f1": {
+              "lower": 0.21800430429946316,
+              "upper": 0.38249838399918756
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 12.181818181818182,
+              "upper": 35.45454545454545
+            },
+            "events.2.precision": {
+              "lower": 0.32535845588235296,
+              "upper": 0.4579687570544945
+            },
+            "events.2.recall": {
+              "lower": 0.1545021305225387,
+              "upper": 0.3558988764044943
+            },
+            "f1": {
+              "lower": 0.12728618743065978,
+              "upper": 0.19341810780328483
+            },
+            "precision": {
+              "lower": 0.11622204934735914,
+              "upper": 0.17677960438385454
+            },
+            "prevalence": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "recall": {
+              "lower": 0.11604587300676839,
+              "upper": 0.2814822595704949
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.24864071942216623,
+              "false_alarms_per_race": 27.545454545454547,
+              "precision": 0.27163461538461536,
+              "recall": 0.2292358803986711
+            },
+            "2": {
+              "f1": 0.297740931049064,
+              "false_alarms_per_race": 23.545454545454547,
+              "precision": 0.37740384615384615,
+              "recall": 0.24584717607973422
+            }
+          },
+          "f1": 0.1589958158995816,
+          "n_positives": 301,
+          "n_races": 11,
+          "n_samples": 12354,
+          "precision": 0.13701923076923078,
+          "prevalence": 0.02436457827424316,
+          "recall": 0.1893687707641196,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.026592882073749213,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.006479840070041177,
+              "upper": 0.3244509080442826
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 4.714285714285714
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 4.714285714285714
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "prevalence": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.5714285714285714,
+              "precision": 0.0,
+              "recall": 0.0
+            },
+            "2": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.5714285714285714,
+              "precision": 0.0,
+              "recall": 0.0
+            }
+          },
+          "f1": 0.0,
+          "n_positives": 8,
+          "n_races": 7,
+          "n_samples": 673,
+          "precision": 0.0,
+          "prevalence": 0.01188707280832095,
+          "recall": 0.0,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.11484462646953723,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.11484462646953723,
+              "upper": 0.11484462646953723
+            },
+            "events.1.f1": {
+              "lower": 0.04878048780487806,
+              "upper": 0.04878048780487806
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.precision": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.1.recall": {
+              "lower": 0.025,
+              "upper": 0.025
+            },
+            "events.2.f1": {
+              "lower": 0.04878048780487806,
+              "upper": 0.04878048780487806
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.precision": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.recall": {
+              "lower": 0.025,
+              "upper": 0.025
+            },
+            "f1": {
+              "lower": 0.047619047619047616,
+              "upper": 0.047619047619047616
+            },
+            "precision": {
+              "lower": 0.5,
+              "upper": 0.5
+            },
+            "prevalence": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "recall": {
+              "lower": 0.025,
+              "upper": 0.025
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.04878048780487806,
+              "false_alarms_per_race": 0.0,
+              "precision": 1.0,
+              "recall": 0.025
+            },
+            "2": {
+              "f1": 0.04878048780487806,
+              "false_alarms_per_race": 0.0,
+              "precision": 1.0,
+              "recall": 0.025
+            }
+          },
+          "f1": 0.047619047619047616,
+          "n_positives": 40,
+          "n_races": 1,
+          "n_samples": 1042,
+          "precision": 0.5,
+          "prevalence": 0.03838771593090211,
+          "recall": 0.025,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        }
+      },
+      "val": {
+        "green": {
+          "average_precision": 0.15162240878432554,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.10171740369621372,
+              "upper": 0.19496288743646767
+            },
+            "events.1.f1": {
+              "lower": 0.1856032724585846,
+              "upper": 0.36278099125804225
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 9.297500000000001,
+              "upper": 27.204999999999995
+            },
+            "events.1.precision": {
+              "lower": 0.2694042572280914,
+              "upper": 0.44218964265548116
+            },
+            "events.1.recall": {
+              "lower": 0.14126287635857998,
+              "upper": 0.32880495985115554
+            },
+            "events.2.f1": {
+              "lower": 0.20182413701731491,
+              "upper": 0.41117690615487723
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 8.2,
+              "upper": 22.902499999999996
+            },
+            "events.2.precision": {
+              "lower": 0.3201466636811464,
+              "upper": 0.5454793840039741
+            },
+            "events.2.recall": {
+              "lower": 0.14473304473304474,
+              "upper": 0.34629322311963656
+            },
+            "f1": {
+              "lower": 0.15570605091296813,
+              "upper": 0.27002906796957143
+            },
+            "precision": {
+              "lower": 0.17315215648548982,
+              "upper": 0.28860854332869024
+            },
+            "prevalence": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "recall": {
+              "lower": 0.13070098039215688,
+              "upper": 0.29334323432343234
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.28759398496240596,
+              "false_alarms_per_race": 17.6,
+              "precision": 0.36,
+              "recall": 0.23943661971830985
+            },
+            "2": {
+              "f1": 0.3216601815823606,
+              "false_alarms_per_race": 15.1,
+              "precision": 0.4509090909090909,
+              "recall": 0.25
+            }
+          },
+          "f1": 0.22182468694096602,
+          "n_positives": 284,
+          "n_races": 10,
+          "n_samples": 9805,
+          "precision": 0.22545454545454546,
+          "prevalence": 0.028964813870474247,
+          "recall": 0.21830985915492956,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.14288748527866027,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.09779838685440252,
+              "upper": 0.1845955934768866
+            },
+            "events.1.f1": {
+              "lower": 0.17901870968719805,
+              "upper": 0.35079124037208254
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 9.8975,
+              "upper": 28.804999999999996
+            },
+            "events.1.precision": {
+              "lower": 0.25618873726696134,
+              "upper": 0.4212243132518321
+            },
+            "events.1.recall": {
+              "lower": 0.13558389297516257,
+              "upper": 0.31694392523364484
+            },
+            "events.2.f1": {
+              "lower": 0.19152547418226082,
+              "upper": 0.3975423534705163
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 8.797500000000001,
+              "upper": 24.5
+            },
+            "events.2.precision": {
+              "lower": 0.30531302432885904,
+              "upper": 0.521594012925253
+            },
+            "events.2.recall": {
+              "lower": 0.14046243547567466,
+              "upper": 0.33174563058227635
+            },
+            "f1": {
+              "lower": 0.1483246397100421,
+              "upper": 0.2619189649829563
+            },
+            "precision": {
+              "lower": 0.16666666666666666,
+              "upper": 0.2752954281286323
+            },
+            "prevalence": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "recall": {
+              "lower": 0.12414346673295219,
+              "upper": 0.28526785714285713
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.276173285198556,
+              "false_alarms_per_race": 18.7,
+              "precision": 0.34615384615384615,
+              "recall": 0.22972972972972974
+            },
+            "2": {
+              "f1": 0.3088580950710401,
+              "false_alarms_per_race": 16.2,
+              "precision": 0.43356643356643354,
+              "recall": 0.23986486486486486
+            }
+          },
+          "f1": 0.21305841924398627,
+          "n_positives": 296,
+          "n_races": 10,
+          "n_samples": 10415,
+          "precision": 0.21678321678321677,
+          "prevalence": 0.02842054728756601,
+          "recall": 0.20945945945945946,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.04967031063684488,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.0064516129032258064,
+              "upper": 0.0723218781983907
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 3.0
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.0,
+              "upper": 3.0
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.0
+            },
+            "prevalence": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.029466461255135287
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.375,
+              "precision": 0.0,
+              "recall": 0.0
+            },
+            "2": {
+              "f1": 0.0,
+              "false_alarms_per_race": 1.375,
+              "precision": 0.0,
+              "recall": 0.0
+            }
+          },
+          "f1": 0.0,
+          "n_positives": 12,
+          "n_races": 8,
+          "n_samples": 610,
+          "precision": 0.0,
+          "prevalence": 0.019672131147540985,
+          "recall": 0.0,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.03691088075305376,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.03691088075305376,
+              "upper": 0.03691088075305376
+            },
+            "events.1.f1": {
+              "lower": 0.04081632653061224,
+              "upper": 0.04081632653061224
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 26.0,
+              "upper": 26.0
+            },
+            "events.1.precision": {
+              "lower": 0.07142857142857142,
+              "upper": 0.07142857142857142
+            },
+            "events.1.recall": {
+              "lower": 0.02857142857142857,
+              "upper": 0.02857142857142857
+            },
+            "events.2.f1": {
+              "lower": 0.04081632653061224,
+              "upper": 0.04081632653061224
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 26.0,
+              "upper": 26.0
+            },
+            "events.2.precision": {
+              "lower": 0.07142857142857142,
+              "upper": 0.07142857142857142
+            },
+            "events.2.recall": {
+              "lower": 0.02857142857142857,
+              "upper": 0.02857142857142857
+            },
+            "f1": {
+              "lower": 0.031746031746031744,
+              "upper": 0.031746031746031744
+            },
+            "precision": {
+              "lower": 0.03571428571428571,
+              "upper": 0.03571428571428571
+            },
+            "prevalence": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "recall": {
+              "lower": 0.02857142857142857,
+              "upper": 0.02857142857142857
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.04081632653061224,
+              "false_alarms_per_race": 26.0,
+              "precision": 0.07142857142857142,
+              "recall": 0.02857142857142857
+            },
+            "2": {
+              "f1": 0.04081632653061224,
+              "false_alarms_per_race": 26.0,
+              "precision": 0.07142857142857142,
+              "recall": 0.02857142857142857
+            }
+          },
+          "f1": 0.031746031746031744,
+          "n_positives": 35,
+          "n_races": 1,
+          "n_samples": 1402,
+          "precision": 0.03571428571428571,
+          "prevalence": 0.024964336661911554,
+          "recall": 0.02857142857142857,
+          "threshold": 0.13694703338644984,
+          "undefined": {}
+        }
+      }
+    },
+    "threshold_file_sha256": "4cddc800321a03a15682346ec9af734f762ab06136a1c157bf0ef879354f87de"
+  },
+  "20261125T232816Z_logreg_s42_f9191476": {
+    "bootstrap": {
+      "confidence_level": 0.95,
+      "method": "percentile",
+      "samples": 1000,
+      "seed": 42,
+      "undefined_handling": "omit_per_metric",
+      "undefined_replicates": {
+        "test": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        },
+        "val": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 24,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 24,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 24,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 24
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        }
+      },
+      "unit": "race"
+    },
+    "data_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+    "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+    "leakage_audit": {
+      "by_split": {
+        "test": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        },
+        "val": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        }
+      },
+      "required": false,
+      "status": "not_triggered"
+    },
+    "run_id": "20261125T232816Z_logreg_s42_f9191476",
+    "schema_version": 1,
+    "split_provenance": {
+      "test": {
+        "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "0236b27838219a8a231136f0493c0501e3112336b7def9a9dafef7d9b0f34fac",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        },
+        "test_approval": "Single locked test evaluation (T12) of the frozen T11 configs approved by the team; communicated by michalklamecki on 2026-11-26."
+      },
+      "val": {
+        "git_commit": "f91914766761844937bd1e83e77740daa5af8a17",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "fc3d0066495fab52c1b3839ff4ac4b4b6eb40214560d4aec086ca9e32bf773b1",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        }
+      }
+    },
+    "splits": {
+      "test": {
+        "green": {
+          "average_precision": 0.10199158810265742,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.08945846507861759,
+              "upper": 0.13106439243020554
+            },
+            "events.1.f1": {
+              "lower": 0.2367323444046236,
+              "upper": 0.3150696706947746
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 60.815909090909095,
+              "upper": 135.45454545454547
+            },
+            "events.1.precision": {
+              "lower": 0.16037017931973369,
+              "upper": 0.23109505770827693
+            },
+            "events.1.recall": {
+              "lower": 0.36082458841271836,
+              "upper": 0.6062154978531997
+            },
+            "events.2.f1": {
+              "lower": 0.29683598672420525,
+              "upper": 0.4030470646254299
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 55.081818181818186,
+              "upper": 123.63863636363637
+            },
+            "events.2.precision": {
+              "lower": 0.22937665016869216,
+              "upper": 0.3278113343400302
+            },
+            "events.2.recall": {
+              "lower": 0.3638918562272213,
+              "upper": 0.6105585165445259
+            },
+            "f1": {
+              "lower": 0.13982983857684617,
+              "upper": 0.18761029036995647
+            },
+            "precision": {
+              "lower": 0.08249027542505803,
+              "upper": 0.1197863677081354
+            },
+            "prevalence": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "recall": {
+              "lower": 0.3231971418980482,
+              "upper": 0.5564016575529733
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.270132654428514,
+              "false_alarms_per_race": 100.0909090909091,
+              "precision": 0.18625277161862527,
+              "recall": 0.49146757679180886
+            },
+            "2": {
+              "f1": 0.3454534595118325,
+              "false_alarms_per_race": 90.36363636363636,
+              "precision": 0.2653362897265336,
+              "recall": 0.4948805460750853
+            }
+          },
+          "f1": 0.15795868772782504,
+          "n_positives": 293,
+          "n_races": 11,
+          "n_samples": 11681,
+          "precision": 0.09608277900960828,
+          "prevalence": 0.02508346888108895,
+          "recall": 0.44368600682593856,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.09522097622161353,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.08613169482135814,
+              "upper": 0.12000003810905575
+            },
+            "events.1.f1": {
+              "lower": 0.23027349249070442,
+              "upper": 0.30015802478067843
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 67.9090909090909,
+              "upper": 140.63636363636363
+            },
+            "events.1.precision": {
+              "lower": 0.15632764904377602,
+              "upper": 0.21852596788548542
+            },
+            "events.1.recall": {
+              "lower": 0.35691812865497075,
+              "upper": 0.6007604562737643
+            },
+            "events.2.f1": {
+              "lower": 0.28769800776793847,
+              "upper": 0.38318429566086254
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 61.25681818181818,
+              "upper": 128.09545454545454
+            },
+            "events.2.precision": {
+              "lower": 0.22216015543520368,
+              "upper": 0.3081509430942454
+            },
+            "events.2.recall": {
+              "lower": 0.3596169391054428,
+              "upper": 0.6008122447640759
+            },
+            "f1": {
+              "lower": 0.13625291766705383,
+              "upper": 0.1787116351855498
+            },
+            "precision": {
+              "lower": 0.08100631595861582,
+              "upper": 0.11455437861275564
+            },
+            "prevalence": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "recall": {
+              "lower": 0.3190098009053751,
+              "upper": 0.5481750022447697
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.2613375696354026,
+              "false_alarms_per_race": 105.27272727272727,
+              "precision": 0.1793054571226081,
+              "recall": 0.48172757475083056
+            },
+            "2": {
+              "f1": 0.3343873065153356,
+              "false_alarms_per_race": 95.54545454545455,
+              "precision": 0.25513819985825653,
+              "recall": 0.4850498338870432
+            }
+          },
+          "f1": 0.1530373831775701,
+          "n_positives": 301,
+          "n_races": 11,
+          "n_samples": 12354,
+          "precision": 0.09284195605953224,
+          "prevalence": 0.02436457827424316,
+          "recall": 0.43521594684385384,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.028493159703581492,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.005504513213352086,
+              "upper": 0.1605903598764255
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.07273835920177382
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 2.425,
+              "upper": 14.717857142857138
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.041666666666666664
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.3333333333333333
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.07273835920177382
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 2.425,
+              "upper": 14.717857142857138
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.041666666666666664
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.3333333333333333
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.07273835920177382
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.041666666666666664
+            },
+            "prevalence": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.3333333333333333
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0303030303030303,
+              "false_alarms_per_race": 8.142857142857142,
+              "precision": 0.017241379310344827,
+              "recall": 0.125
+            },
+            "2": {
+              "f1": 0.0303030303030303,
+              "false_alarms_per_race": 8.142857142857142,
+              "precision": 0.017241379310344827,
+              "recall": 0.125
+            }
+          },
+          "f1": 0.0303030303030303,
+          "n_positives": 8,
+          "n_races": 7,
+          "n_samples": 673,
+          "precision": 0.017241379310344827,
+          "prevalence": 0.01188707280832095,
+          "recall": 0.125,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.12119059544299916,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.12119059544299916,
+              "upper": 0.12119059544299916
+            },
+            "events.1.f1": {
+              "lower": 0.1188118811881188,
+              "upper": 0.1188118811881188
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 35.0,
+              "upper": 35.0
+            },
+            "events.1.precision": {
+              "lower": 0.14634146341463414,
+              "upper": 0.14634146341463414
+            },
+            "events.1.recall": {
+              "lower": 0.1,
+              "upper": 0.1
+            },
+            "events.2.f1": {
+              "lower": 0.1188118811881188,
+              "upper": 0.1188118811881188
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 35.0,
+              "upper": 35.0
+            },
+            "events.2.precision": {
+              "lower": 0.14634146341463414,
+              "upper": 0.14634146341463414
+            },
+            "events.2.recall": {
+              "lower": 0.1,
+              "upper": 0.1
+            },
+            "f1": {
+              "lower": 0.09876543209876544,
+              "upper": 0.09876543209876544
+            },
+            "precision": {
+              "lower": 0.0975609756097561,
+              "upper": 0.0975609756097561
+            },
+            "prevalence": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "recall": {
+              "lower": 0.1,
+              "upper": 0.1
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.1188118811881188,
+              "false_alarms_per_race": 35.0,
+              "precision": 0.14634146341463414,
+              "recall": 0.1
+            },
+            "2": {
+              "f1": 0.1188118811881188,
+              "false_alarms_per_race": 35.0,
+              "precision": 0.14634146341463414,
+              "recall": 0.1
+            }
+          },
+          "f1": 0.09876543209876544,
+          "n_positives": 40,
+          "n_races": 1,
+          "n_samples": 1042,
+          "precision": 0.0975609756097561,
+          "prevalence": 0.03838771593090211,
+          "recall": 0.1,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        }
+      },
+      "val": {
+        "green": {
+          "average_precision": 0.09139408737992158,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.05706562639005575,
+              "upper": 0.15743972853779958
+            },
+            "events.1.f1": {
+              "lower": 0.19799533985179357,
+              "upper": 0.357135402047978
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 41.5,
+              "upper": 131.83999999999997
+            },
+            "events.1.precision": {
+              "lower": 0.13202323991797676,
+              "upper": 0.3019877306599344
+            },
+            "events.1.recall": {
+              "lower": 0.3791023166023166,
+              "upper": 0.48620925838450635
+            },
+            "events.2.f1": {
+              "lower": 0.24996470501947743,
+              "upper": 0.4349778544643072
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 35.995,
+              "upper": 123.405
+            },
+            "events.2.precision": {
+              "lower": 0.18051359816048207,
+              "upper": 0.4059216742252456
+            },
+            "events.2.recall": {
+              "lower": 0.4043391304347826,
+              "upper": 0.4981456447999199
+            },
+            "f1": {
+              "lower": 0.1169786666549394,
+              "upper": 0.2417899603511351
+            },
+            "precision": {
+              "lower": 0.07051000782110421,
+              "upper": 0.16904615398043166
+            },
+            "prevalence": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "recall": {
+              "lower": 0.3357404636105427,
+              "upper": 0.4760472514363285
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.2778204061341605,
+              "false_alarms_per_race": 81.3,
+              "precision": 0.2045009784735812,
+              "recall": 0.43309859154929575
+            },
+            "2": {
+              "f1": 0.3440648414306583,
+              "false_alarms_per_race": 73.9,
+              "precision": 0.27690802348336596,
+              "recall": 0.45422535211267606
+            }
+          },
+          "f1": 0.1776416539050536,
+          "n_positives": 284,
+          "n_races": 10,
+          "n_samples": 9805,
+          "precision": 0.11350293542074363,
+          "prevalence": 0.028964813870474247,
+          "recall": 0.4084507042253521,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.0870508289082328,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.05535729936830808,
+              "upper": 0.1461697501630305
+            },
+            "events.1.f1": {
+              "lower": 0.19375891296374942,
+              "upper": 0.3453668732792832
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 44.8975,
+              "upper": 136.0125
+            },
+            "events.1.precision": {
+              "lower": 0.13000927553407393,
+              "upper": 0.2885408776715485
+            },
+            "events.1.recall": {
+              "lower": 0.37035480859010267,
+              "upper": 0.47200981595092023
+            },
+            "events.2.f1": {
+              "lower": 0.24431481827489476,
+              "upper": 0.4212797878794387
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 38.9,
+              "upper": 128.605
+            },
+            "events.2.precision": {
+              "lower": 0.17588211067261708,
+              "upper": 0.39134094112544726
+            },
+            "events.2.recall": {
+              "lower": 0.39044230060784674,
+              "upper": 0.48467564189956824
+            },
+            "f1": {
+              "lower": 0.11462136352137617,
+              "upper": 0.23311741363211952
+            },
+            "precision": {
+              "lower": 0.06952679622573667,
+              "upper": 0.16202147816577228
+            },
+            "prevalence": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "recall": {
+              "lower": 0.328125,
+              "upper": 0.4620988932946677
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.2702222589440635,
+              "false_alarms_per_race": 84.7,
+              "precision": 0.1994328922495274,
+              "recall": 0.4189189189189189
+            },
+            "2": {
+              "f1": 0.3339342045966652,
+              "false_alarms_per_race": 77.3,
+              "precision": 0.26937618147448017,
+              "recall": 0.4391891891891892
+            }
+          },
+          "f1": 0.17282127031019204,
+          "n_positives": 296,
+          "n_races": 10,
+          "n_samples": 10415,
+          "precision": 0.11058601134215501,
+          "prevalence": 0.02842054728756601,
+          "recall": 0.3952702702702703,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.028533588434812795,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.003497149330739204,
+              "upper": 0.05750907123451731
+            },
+            "events.1.f1": {
+              "lower": 0.0,
+              "upper": 0.09374999999999999
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 0.625,
+              "upper": 10.125
+            },
+            "events.1.precision": {
+              "lower": 0.0,
+              "upper": 0.07407407407407407
+            },
+            "events.1.recall": {
+              "lower": 0.0,
+              "upper": 0.14285714285714285
+            },
+            "events.2.f1": {
+              "lower": 0.0,
+              "upper": 0.09374999999999999
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 0.625,
+              "upper": 10.125
+            },
+            "events.2.precision": {
+              "lower": 0.0,
+              "upper": 0.07407407407407407
+            },
+            "events.2.recall": {
+              "lower": 0.0,
+              "upper": 0.14285714285714285
+            },
+            "f1": {
+              "lower": 0.0,
+              "upper": 0.057142857142857134
+            },
+            "precision": {
+              "lower": 0.0,
+              "upper": 0.037037037037037035
+            },
+            "prevalence": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.029466461255135287
+            },
+            "recall": {
+              "lower": 0.0,
+              "upper": 0.14285714285714285
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.06666666666666667,
+              "false_alarms_per_race": 4.25,
+              "precision": 0.05555555555555555,
+              "recall": 0.08333333333333333
+            },
+            "2": {
+              "f1": 0.06666666666666667,
+              "false_alarms_per_race": 4.25,
+              "precision": 0.05555555555555555,
+              "recall": 0.08333333333333333
+            }
+          },
+          "f1": 0.041666666666666664,
+          "n_positives": 12,
+          "n_races": 8,
+          "n_samples": 610,
+          "precision": 0.027777777777777776,
+          "prevalence": 0.019672131147540985,
+          "recall": 0.08333333333333333,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.029689736890198652,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.029689736890198652,
+              "upper": 0.029689736890198652
+            },
+            "events.1.f1": {
+              "lower": 0.0903954802259887,
+              "upper": 0.0903954802259887
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 282.0,
+              "upper": 282.0
+            },
+            "events.1.precision": {
+              "lower": 0.053691275167785234,
+              "upper": 0.053691275167785234
+            },
+            "events.1.recall": {
+              "lower": 0.2857142857142857,
+              "upper": 0.2857142857142857
+            },
+            "events.2.f1": {
+              "lower": 0.12821758135016997,
+              "upper": 0.12821758135016997
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 274.0,
+              "upper": 274.0
+            },
+            "events.2.precision": {
+              "lower": 0.08053691275167785,
+              "upper": 0.08053691275167785
+            },
+            "events.2.recall": {
+              "lower": 0.3142857142857143,
+              "upper": 0.3142857142857143
+            },
+            "f1": {
+              "lower": 0.042042042042042045,
+              "upper": 0.042042042042042045
+            },
+            "precision": {
+              "lower": 0.02348993288590604,
+              "upper": 0.02348993288590604
+            },
+            "prevalence": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "recall": {
+              "lower": 0.2,
+              "upper": 0.2
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0903954802259887,
+              "false_alarms_per_race": 282.0,
+              "precision": 0.053691275167785234,
+              "recall": 0.2857142857142857
+            },
+            "2": {
+              "f1": 0.12821758135016997,
+              "false_alarms_per_race": 274.0,
+              "precision": 0.08053691275167785,
+              "recall": 0.3142857142857143
+            }
+          },
+          "f1": 0.042042042042042045,
+          "n_positives": 35,
+          "n_races": 1,
+          "n_samples": 1402,
+          "precision": 0.02348993288590604,
+          "prevalence": 0.024964336661911554,
+          "recall": 0.2,
+          "threshold": 0.08474785089492798,
+          "undefined": {}
+        }
+      }
+    },
+    "threshold_file_sha256": "f79769ac2337315ee45fd1587dc847a8ff3000793fa69cb0df672880abd1dbfe"
+  },
+  "20261125T232827Z_constant_s42_f9191476": {
+    "bootstrap": {
+      "confidence_level": 0.95,
+      "method": "percentile",
+      "samples": 1000,
+      "seed": 42,
+      "undefined_handling": "omit_per_metric",
+      "undefined_replicates": {
+        "test": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        },
+        "val": {
+          "green": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "overall": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          },
+          "sc_vsc": {
+            "average_precision": 24,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 24,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 24,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 24
+          },
+          "special_tyre_rule": {
+            "average_precision": 0,
+            "events.1.f1": 0,
+            "events.1.false_alarms_per_race": 0,
+            "events.1.precision": 0,
+            "events.1.recall": 0,
+            "events.2.f1": 0,
+            "events.2.false_alarms_per_race": 0,
+            "events.2.precision": 0,
+            "events.2.recall": 0,
+            "f1": 0,
+            "precision": 0,
+            "prevalence": 0,
+            "recall": 0
+          }
+        }
+      },
+      "unit": "race"
+    },
+    "data_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+    "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+    "leakage_audit": {
+      "by_split": {
+        "test": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        },
+        "val": {
+          "evidence": {
+            "cutoff": 0.6,
+            "triggered_metrics": []
+          },
+          "required": false,
+          "status": "not_triggered"
+        }
+      },
+      "required": false,
+      "status": "not_triggered"
+    },
+    "run_id": "20261125T232827Z_constant_s42_f9191476",
+    "schema_version": 1,
+    "split_provenance": {
+      "test": {
+        "git_commit": "75b39bc7d1c3ceaf01cd53ae904dabbaf81041f9",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "8506961d7f13356ed79a902e6dd0faf2b0edffd544f9059e6b08e0ae0298a3c6",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        },
+        "test_approval": "Single locked test evaluation (T12) of the frozen T11 configs approved by the team; communicated by michalklamecki on 2026-11-26."
+      },
+      "val": {
+        "git_commit": "f91914766761844937bd1e83e77740daa5af8a17",
+        "git_dirty": false,
+        "inputs": {
+          "data_manifest_sha256": "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5",
+          "predictions_sha256": "cf6f3460394cfc23695906b1c0f817221e53003400026258c0afdd402bb167ea",
+          "samples_sha256": "8a45369ed71692070c063edd1faa85074fad5934f6988e0a9151b2d05e489c01",
+          "source": "project"
+        }
+      }
+    },
+    "splits": {
+      "test": {
+        "green": {
+          "average_precision": 0.02508346888108895,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "events.1.f1": {
+              "lower": 0.08035831897214311,
+              "upper": 0.10896580048304355
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 916.2386363636364,
+              "upper": 1098.3681818181817
+            },
+            "events.1.precision": {
+              "lower": 0.041861103446226476,
+              "upper": 0.057622332035403866
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.11762659359669718,
+              "upper": 0.15833973866256726
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 892.725,
+              "upper": 1071.7613636363635
+            },
+            "events.2.precision": {
+              "lower": 0.062488448472526104,
+              "upper": 0.08597662771285476
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.04163705690784703,
+              "upper": 0.0568171675123318
+            },
+            "precision": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "prevalence": {
+              "lower": 0.021261154429283082,
+              "upper": 0.029239228868229838
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.09429806672648666,
+              "false_alarms_per_race": 1009.3636363636364,
+              "precision": 0.04948206489170448,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.13729867644713764,
+              "false_alarms_per_race": 983.6363636363636,
+              "precision": 0.07370944268470166,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.04893936863203608,
+          "n_positives": 293,
+          "n_races": 11,
+          "n_samples": 11681,
+          "precision": 0.02508346888108895,
+          "prevalence": 0.02508346888108895,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.02436457827424316,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "events.1.f1": {
+              "lower": 0.0796171980568531,
+              "upper": 0.10411916839088818
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 977.8659090909091,
+              "upper": 1159.0159090909092
+            },
+            "events.1.precision": {
+              "lower": 0.04145902478022822,
+              "upper": 0.054918625506003425
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.11636897133830379,
+              "upper": 0.15149995620081477
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 952.9818181818182,
+              "upper": 1130.3636363636363
+            },
+            "events.2.precision": {
+              "lower": 0.06177906930657662,
+              "upper": 0.08195832032246604
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.04131504719360575,
+              "upper": 0.05424038447459412
+            },
+            "precision": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "prevalence": {
+              "lower": 0.021093258091028615,
+              "upper": 0.027876200334262306
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0916042326407662,
+              "false_alarms_per_race": 1069.1818181818182,
+              "precision": 0.04800064756354217,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.13355491766127814,
+              "false_alarms_per_race": 1042.7272727272727,
+              "precision": 0.07155577141006961,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.04757013038324773,
+          "n_positives": 301,
+          "n_races": 11,
+          "n_samples": 12354,
+          "precision": 0.02436457827424316,
+          "prevalence": 0.02436457827424316,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.01188707280832095,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "events.1.f1": {
+              "lower": 0.01812688821752266,
+              "upper": 0.041121735578886674
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 48.84285714285714,
+              "upper": 163.14642857142857
+            },
+            "events.1.precision": {
+              "lower": 0.009146341463414634,
+              "upper": 0.020992491635110497
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.023041474654377885,
+              "upper": 0.0451986528298787
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 48.84285714285714,
+              "upper": 162.14642857142857
+            },
+            "events.2.precision": {
+              "lower": 0.011655011655011656,
+              "upper": 0.023121864997850284
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.013816925734024179,
+              "upper": 0.041005258339897384
+            },
+            "precision": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "prevalence": {
+              "lower": 0.006956521739130435,
+              "upper": 0.02093178590449139
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.029282576866764276,
+              "false_alarms_per_race": 94.71428571428571,
+              "precision": 0.014858841010401188,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.037900874635568516,
+              "false_alarms_per_race": 94.28571428571429,
+              "precision": 0.019316493313521546,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.023494860499265784,
+          "n_positives": 8,
+          "n_races": 7,
+          "n_samples": 673,
+          "precision": 0.01188707280832095,
+          "prevalence": 0.01188707280832095,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.03838771593090211,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "events.1.f1": {
+              "lower": 0.14094558429973236,
+              "upper": 0.14094558429973236
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 963.0,
+              "upper": 963.0
+            },
+            "events.1.precision": {
+              "lower": 0.07581573896353166,
+              "upper": 0.07581573896353166
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.20344827586206898,
+              "upper": 0.20344827586206898
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 924.0,
+              "upper": 924.0
+            },
+            "events.2.precision": {
+              "lower": 0.11324376199616124,
+              "upper": 0.11324376199616124
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.07393715341959334,
+              "upper": 0.07393715341959334
+            },
+            "precision": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "prevalence": {
+              "lower": 0.03838771593090211,
+              "upper": 0.03838771593090211
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.14094558429973236,
+              "false_alarms_per_race": 963.0,
+              "precision": 0.07581573896353166,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.20344827586206898,
+              "false_alarms_per_race": 924.0,
+              "precision": 0.11324376199616124,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.07393715341959334,
+          "n_positives": 40,
+          "n_races": 1,
+          "n_samples": 1042,
+          "precision": 0.03838771593090211,
+          "prevalence": 0.03838771593090211,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        }
+      },
+      "val": {
+        "green": {
+          "average_precision": 0.028964813870474247,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "events.1.f1": {
+              "lower": 0.09273109979607923,
+              "upper": 0.12993488667516562
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 714.2824999999999,
+              "upper": 1065.7649999999999
+            },
+            "events.1.precision": {
+              "lower": 0.04861983530355058,
+              "upper": 0.0694814773424413
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.1357914648776208,
+              "upper": 0.1885747142213467
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 693.3774999999999,
+              "upper": 1034.02
+            },
+            "events.2.precision": {
+              "lower": 0.07284134919474398,
+              "upper": 0.10410294995861606
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.04746594215549462,
+              "upper": 0.06714868247888668
+            },
+            "precision": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "prevalence": {
+              "lower": 0.02430991765177529,
+              "upper": 0.03474073867122065
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.10951508724573412,
+              "false_alarms_per_race": 923.7,
+              "precision": 0.057929627740948494,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.1597222222222222,
+              "false_alarms_per_race": 895.4,
+              "precision": 0.08679245283018867,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.05629893943899296,
+          "n_positives": 284,
+          "n_races": 10,
+          "n_samples": 9805,
+          "precision": 0.028964813870474247,
+          "prevalence": 0.028964813870474247,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        },
+        "overall": {
+          "average_precision": 0.02842054728756601,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "events.1.f1": {
+              "lower": 0.09087670365724129,
+              "upper": 0.12679621941664138
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 768.29,
+              "upper": 1129.7175
+            },
+            "events.1.precision": {
+              "lower": 0.04760127572280275,
+              "upper": 0.06768949606392807
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.13257984910746579,
+              "upper": 0.1840916004223382
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 745.7924999999999,
+              "upper": 1092.8325
+            },
+            "events.2.precision": {
+              "lower": 0.07099626142032398,
+              "upper": 0.10137714165688083
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.04659159533730409,
+              "upper": 0.06557048506393948
+            },
+            "precision": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "prevalence": {
+              "lower": 0.023851435989486504,
+              "upper": 0.033896549115802095
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.10739596583681628,
+              "false_alarms_per_race": 982.4,
+              "precision": 0.05674507921267403,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.15647402424993362,
+              "false_alarms_per_race": 953.1,
+              "precision": 0.08487758041286605,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.05527028288675193,
+          "n_positives": 296,
+          "n_races": 10,
+          "n_samples": 10415,
+          "precision": 0.02842054728756601,
+          "prevalence": 0.02842054728756601,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        },
+        "sc_vsc": {
+          "average_precision": 0.019672131147540985,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.002674731182795699,
+              "upper": 0.029479210936393257
+            },
+            "events.1.f1": {
+              "lower": 0.004068559808264944,
+              "upper": 0.06679345614555386
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 42.0,
+              "upper": 113.64062499999999
+            },
+            "events.1.precision": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.03455060534475122
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.004068559808264944,
+              "upper": 0.06679345614555386
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 42.0,
+              "upper": 113.64062499999999
+            },
+            "events.2.precision": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.03455060534475122
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.004068559808264944,
+              "upper": 0.0572460830026934
+            },
+            "precision": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.029466461255135287
+            },
+            "prevalence": {
+              "lower": 0.0020384283105322446,
+              "upper": 0.029466461255135287
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.04487179487179487,
+              "false_alarms_per_race": 74.5,
+              "precision": 0.022950819672131147,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.04487179487179487,
+              "false_alarms_per_race": 74.5,
+              "precision": 0.022950819672131147,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.03858520900321544,
+          "n_positives": 12,
+          "n_races": 8,
+          "n_samples": 610,
+          "precision": 0.019672131147540985,
+          "prevalence": 0.019672131147540985,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        },
+        "special_tyre_rule": {
+          "average_precision": 0.024964336661911554,
+          "confidence_intervals": {
+            "average_precision": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "events.1.f1": {
+              "lower": 0.0951086956521739,
+              "upper": 0.0951086956521739
+            },
+            "events.1.false_alarms_per_race": {
+              "lower": 1332.0,
+              "upper": 1332.0
+            },
+            "events.1.precision": {
+              "lower": 0.04992867332382311,
+              "upper": 0.04992867332382311
+            },
+            "events.1.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "events.2.f1": {
+              "lower": 0.13811420982735725,
+              "upper": 0.13811420982735725
+            },
+            "events.2.false_alarms_per_race": {
+              "lower": 1298.0,
+              "upper": 1298.0
+            },
+            "events.2.precision": {
+              "lower": 0.07417974322396577,
+              "upper": 0.07417974322396577
+            },
+            "events.2.recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            },
+            "f1": {
+              "lower": 0.048712595685455815,
+              "upper": 0.048712595685455815
+            },
+            "precision": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "prevalence": {
+              "lower": 0.024964336661911554,
+              "upper": 0.024964336661911554
+            },
+            "recall": {
+              "lower": 1.0,
+              "upper": 1.0
+            }
+          },
+          "events": {
+            "1": {
+              "f1": 0.0951086956521739,
+              "false_alarms_per_race": 1332.0,
+              "precision": 0.04992867332382311,
+              "recall": 1.0
+            },
+            "2": {
+              "f1": 0.13811420982735725,
+              "false_alarms_per_race": 1298.0,
+              "precision": 0.07417974322396577,
+              "recall": 1.0
+            }
+          },
+          "f1": 0.048712595685455815,
+          "n_positives": 35,
+          "n_races": 1,
+          "n_samples": 1402,
+          "precision": 0.024964336661911554,
+          "prevalence": 0.024964336661911554,
+          "recall": 1.0,
+          "threshold": 0.030575120526193166,
+          "undefined": {}
+        }
+      }
+    },
+    "threshold_file_sha256": "275f7b9ca9a7bfb356a887e568f77643a74a41a551decf4fd8e6908a2e012177"
+  }
+}
