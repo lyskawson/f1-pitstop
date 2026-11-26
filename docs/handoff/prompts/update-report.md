@@ -24,9 +24,11 @@ Establish the evidence:
   accepted task evidence. Use available author reports and verified CI records.
   Reuse saved measurements. Application testing/training and predictive
   evaluation belong to their implementation tasks.
-- The 2026-11-24 checkpoint includes T2c, published data-v1, T3 labels/splits
-  and T5 metrics/evaluation on synthetic inputs. T4c and later work count as
-  completed only when present in the accepted main you inspect.
+- The 2026-11-26 checkpoint (228f320) adds T4c/T4d contracts, T4 features and
+  windows, T6 baselines, T8–T10 MLP/GRU/TCN and the T11 validation study
+  (reports/validation-v1.md, val only) to T2c, data-v1, T3 and T5. The report
+  still documents T2. T12 and later work count as completed only when present
+  in the accepted main you inspect. Test results exist only after T12.
   Current source checkpoint and baseline evidence are in docs/handoff/.
 - Keep producing revisions and data limitations accurate. Existing sources
   may have unknown acquisition dates with documented explanations. The shared
