@@ -27,7 +27,7 @@ Do not put snapshots, caches, credentials, or runs into Git.
 The stage order is below. T2 implements the configured cache-only `download`
 and snapshot `verify-data` commands. T3 provides the Python interfaces for
 fixed splits, exclusions and labels. T5 implements file-based evaluation.
-T4 implements `build-dataset`. Training, prediction and demo export remain CLI stubs.
+T4 implements `build-dataset`; T12b implements `export-demo`.
 
 ```sh
 uv run pitstop download
@@ -381,8 +381,24 @@ PITSTOP_DEMO_DIR=demo uv run --group app streamlit run app/streamlit_app.py
 
 The app reads a precomputed pack (`predictions.parquet`, `samples.parquet`,
 `thresholds.json`) from `demo/`, or from the directory in `PITSTOP_DEMO_DIR`. Without
-a pack it shows an info message. The real pack comes in T12b; tests use a synthetic
-pack. `demo/` is never committed.
+a pack it shows an info message. The real pack is exported in T12b and committed to
+`demo/`; tests use a synthetic pack.
+
+## T12b: demo pack
+
+```sh
+uv run --offline --no-sync pitstop export-demo   # needs runs/, data/processed/v1, data/raw/v1
+```
+
+Run it from a clean committed revision. It only reads saved files (no training,
+prediction or evaluation) and writes `demo/{predictions,samples}.parquet`,
+`metrics.json`, `thresholds.json` and `metadata.json`. Rule `seed42_one_run_per_model`
+v1: the seed-42 run of each of the six models listed in `reports/test-v1.json`; a run
+without test metrics and a recorded `test_approval` is refused. Races: the first three
+test races of `samples.parquet` in ascending `race_id`. Metrics and thresholds are
+copied unchanged. A second export gives byte-identical files; `metadata.json` records
+the last commit that changed code (`src`, `pyproject.toml`, `uv.lock`), so committing
+`demo/` does not change it.
 
 ## T12: locked test evaluation
 
