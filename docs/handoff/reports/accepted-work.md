@@ -126,3 +126,22 @@ unchanged. No leak alarm was triggered. An independent reviewer approved
 after recomputing all 15 paired-bootstrap rows. Results are in
 `reports/test-v1.{json,md}`; the runs are in the runs-v1 release
 (SHA-256 122b60c8…86f6).
+
+## T12b demo pack
+
+PR #23, head 85aad68, merged as 1c76890; 363 tests in CI. `pitstop
+export-demo --output-dir demo` copies, without recomputation, the seed-42
+run of each model for the first three retained test races (2025_14_R,
+2025_15_R, 2025_16_R) into the committed `demo/` pack (329 kB). The pack
+holds predictions, samples, metrics, thresholds and metadata with payload
+hashes. The orchestrator confirmed that the scores and thresholds equal the
+runs, that the hashes match, and that the pack contains only test rows of
+those races. An independent reviewer re-exported the pack byte-identically
+and approved.
+
+## Report update
+
+The report repository's PR #1 (merged as ee55629) rewrote the Polish report
+through application 1c76890. The orchestrator cross-checked the chapter
+numbers against `reports/` and the handoff files and corrected two values
+before publishing. The PDF is compiled in Overleaf.
