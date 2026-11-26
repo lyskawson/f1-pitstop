@@ -390,7 +390,7 @@ Only with explicit human approval, once, from one clean commit, after `reports/t
 is committed. Nothing is retrained or re-thresholded.
 
 ```sh
-for run in $(jq -r '.[]' runs/final.json); do
+for run in $(grep -oE '[0-9]{8}T[^"]*' runs/final.json); do
   uv run --offline --no-sync pitstop predict --run-dir "runs/$run" --test-approval "<approval>"
 done
 uv run --offline --no-sync python -m pitstop.experiments test --test-approval "<approval>"
