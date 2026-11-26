@@ -360,3 +360,15 @@ uv run --offline --no-sync pitstop train --config configs/tcn.yaml
 two convolutions (32 channels, kernel 3, dilations 1, 2, 4), padded on the left
 only. The logit comes from the last time step. `causal: false` raises. It trains
 through `fit_torch` like the GRU. Evaluate on val as above.
+
+## T11: validation experiments
+
+```sh
+uv run --offline --no-sync python -m pitstop.experiments tune     # D6 grid, writes configs/final/
+uv run --offline --no-sync python -m pitstop.experiments final    # 6 models x seeds 42, 43, 44
+uv run --offline --no-sync python -m pitstop.experiments summary  # reports/validation-v1.{json,md}
+```
+
+Val split only. `--workers 3 --threads 4` are the defaults (parallel processes,
+torch threads each). Run from one clean commit: `summary` refuses runs from several
+revisions or a dirty tree. A val AP or F1 above 0.6 raises the D8 leak alarm and stops.
