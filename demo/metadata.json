@@ -1,0 +1,42 @@
+{
+  "data_sha256": [
+    "36ee960d81516ad4c3a4b514686d13da667f393868d567b39c99557ea376f0f5"
+  ],
+  "event_names": {
+    "2025_14_R": "Hungarian Grand Prix",
+    "2025_15_R": "Dutch Grand Prix",
+    "2025_16_R": "Italian Grand Prix"
+  },
+  "export_git_commit": "0b0b55e5fa32b604fc8548dd127337e89e85b8e6",
+  "packages": {
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "pyarrow": "26.0.0"
+  },
+  "payload_sha256": {
+    "metrics.json": "c777c4091e4919ca5e2ef467a0f0a2a674d0a30d8ab29a0f1942337a1ac52805",
+    "predictions.parquet": "f0c28ffe3d2e5a63ffe68daf7d0a5658400f481b64ee82f3466484f6b8f2b13d",
+    "samples.parquet": "436c8b905fb1a405b403e49d3fe5e958bd087f93585e0e9908e11c3e63a4a077",
+    "thresholds.json": "54e618a83270f6b4aab5f4f441aa6acbbab6734c43f068a6032cc59d327a3e72"
+  },
+  "race_ids": [
+    "2025_14_R",
+    "2025_15_R",
+    "2025_16_R"
+  ],
+  "rule": {
+    "name": "seed42_one_run_per_model",
+    "version": 1
+  },
+  "run_git_commits": [
+    "f91914766761844937bd1e83e77740daa5af8a17"
+  ],
+  "run_ids": [
+    "20261125T231912Z_tcn_s42_f9191476",
+    "20261125T232400Z_gru_s42_f9191476",
+    "20261125T232702Z_mlp_s42_f9191476",
+    "20261125T232759Z_lightgbm_s42_f9191476",
+    "20261125T232816Z_logreg_s42_f9191476",
+    "20261125T232827Z_constant_s42_f9191476"
+  ]
+}
