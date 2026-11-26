@@ -33,7 +33,7 @@ Frozen models and val thresholds; nothing was retrained or retuned. Mean over se
 | mlp | 0.119 | 0.193 | 0.023 | 0.000 |
 | tcn | 0.107 | 0.189 | 0.040 | 0.070 |
 
-Group counts are on the test split. SC/VSC and special-tyre-rule groups can have few positives, so their metrics are noisy; no claim is made for them.
+Group counts are on the test split. SC/VSC and special-tyre-rule groups have few positives or races, so their metrics are noisy; no claim is made for them.
 
 ## AP difference vs LightGBM (paired race bootstrap, 95% CI)
 
@@ -55,4 +55,4 @@ Group counts are on the test split. SC/VSC and special-tyre-rule groups can have
 | constant | 43 | -0.0860 | [-0.1135, -0.0704] | differs |
 | constant | 44 | -0.0830 | [-0.1140, -0.0666] | differs |
 
-A CI containing 0 is a tie.
+A CI containing 0 is a tie. The test split has only 11 races, so CIs are wide; a `differs` row at a single seed does not establish a ranking, and no model ranking is claimed.

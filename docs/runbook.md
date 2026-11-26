@@ -390,12 +390,15 @@ Only with explicit human approval, once, from one clean commit, after `reports/t
 is committed. Nothing is retrained or re-thresholded.
 
 ```sh
-for run in $(grep -oE '[0-9]{8}T[^"]*' runs/final.json); do
+for run in $(uv run --offline --no-sync python -c "import json; print(*json.load(open('runs/final.json')))"); do
   uv run --offline --no-sync pitstop predict --run-dir "runs/$run" --test-approval "<approval>"
 done
 uv run --offline --no-sync python -m pitstop.experiments test --test-approval "<approval>"
 ```
 
-`predict` adds test rows only with `--test-approval`. The `test` step runs
+`predict` adds test rows only with `--test-approval`. Run it once per run and never
+repeat it: a rewrite of `predictions.parquet` no longer matches the test
+`predictions_sha256` recorded in `metrics.json`. The `test` step runs
 `evaluate --split test` for the 18 runs (frozen val thresholds), stops on the D8 leak
-alarm, and writes `reports/test-v1.{json,md}`. Running it again only rebuilds the summary.
+alarm, and writes `reports/test-v1.{json,md}`. Running the `test` step again only
+rebuilds the summary from the saved metrics.

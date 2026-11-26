@@ -346,11 +346,14 @@ def markdown_test(doc):
                 "## Test groups",
                 _table(["group", "laps", "positives", "races"], groups),
                 _table(["model", "green AP", "green F1", "SC/VSC AP", "SC/VSC F1"], split),
-                "Group counts are on the test split. SC/VSC and special-tyre-rule groups can "
-                "have few positives, so their metrics are noisy; no claim is made for them.",
+                "Group counts are on the test split. SC/VSC and special-tyre-rule groups have "
+                "few positives or races, so their metrics are noisy; no claim is made for them.",
                 "## AP difference vs LightGBM (paired race bootstrap, 95% CI)",
                 _table(["model", "seed", "AP difference", "95% CI", "result"], paired),
-                "A CI containing 0 is a tie.",
+                f"A CI containing 0 is a tie. The test split has only "
+                f"{doc['test_groups']['overall']['n_races']} races, so CIs are wide; a "
+                "`differs` row at a single seed does not establish a ranking, and no model "
+                "ranking is claimed.",
             ]
         )
         + "\n"
