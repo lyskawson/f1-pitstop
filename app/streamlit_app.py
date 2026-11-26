@@ -46,10 +46,15 @@ def make_chart(rows, threshold):
     return (bands + line + pits + rule.encode(y="threshold:Q")).properties(height=350)
 
 
+def by_number(drivers):
+    """Driver numbers are strings; order them 1, 4, 10, 44 instead of 1, 10, 4, 44."""
+    return sorted(drivers.unique(), key=int)
+
+
 def make_heatmap(rows, threshold):
     base = alt.Chart(rows).encode(
         x=alt.X("target_lap:O", title="Target lap (t+1)"),
-        y=alt.Y("driver_number:N", title="Driver"),
+        y=alt.Y("driver_number:N", title="Driver", sort=by_number(rows.driver_number)),
     )
     cells = base.mark_rect().encode(
         color=alt.Color("score:Q", scale=alt.Scale(domain=[0, 1], scheme="blues"), title="Score")
@@ -105,7 +110,7 @@ def make_ap_chart(table):
 
 def race_tab(df, race_id, run_id, threshold):
     race = df[df.race_id == race_id]
-    driver = st.selectbox("Driver", sorted(race.driver_number.unique()))
+    driver = st.selectbox("Driver", by_number(race.driver_number))
     rows = filter_rows(df, race_id, driver, run_id)
     st.altair_chart(make_chart(rows, threshold), width="stretch")
     st.caption(
@@ -130,7 +135,7 @@ def comparison_tab(pack_dir):
     except FileNotFoundError:
         st.info("`metrics.json` not found in the demo pack, so there is no comparison.")
         return
-    except (KeyError, ValueError) as err:
+    except (KeyError, ValueError, TypeError, AttributeError) as err:
         st.error(f"Inconsistent `metrics.json`: {err!r}.")
         return
     st.dataframe(table.drop(columns="run_id"), hide_index=True)
@@ -157,7 +162,7 @@ def main():
         return
     try:
         names = json.loads((pack_dir / "metadata.json").read_text())["event_names"]
-    except (FileNotFoundError, KeyError, ValueError):
+    except (FileNotFoundError, KeyError, ValueError, TypeError):
         names = {}  # fall back to race_id
     race_id = st.selectbox(
         "Race", sorted(df.race_id.unique()), format_func=lambda r: names.get(r, r)
